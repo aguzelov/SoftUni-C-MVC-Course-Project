@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Dialog.Data;
+using Dialog.Models;
 using Dialog.Models.Blog;
 using Dialog.Services.Contracts;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace Dialog.Services
 
         public ICollection<T> All<T>()
         {
-            var posts = this.context.Post.OrderByDescending(p => p.CreatedOn).ToList();
+            var posts = this.context.Posts.OrderByDescending(p => p.CreatedOn).ToList();
 
             var models = posts
                 .Select(p => this.mapper.Map<T>(p))
@@ -30,9 +32,51 @@ namespace Dialog.Services
             return models;
         }
 
+        public ICollection<T> All<T>(string authorName)
+        {
+            var posts = this.context.Posts
+                .Where(p => p.Author.UserName == authorName)
+                .OrderByDescending(p => p.CreatedOn)
+                .ToList();
+
+            var models = posts
+                .Select(p => this.mapper.Map<T>(p))
+                .ToList();
+
+            return models;
+        }
+
+        public ICollection<T> All<T>(DateTime date)
+        {
+            var posts = this.context.Posts
+                .Where(p => p.CreatedOn == date)
+                .OrderByDescending(p => p.CreatedOn)
+                .ToList();
+
+            var models = posts
+                .Select(p => this.mapper.Map<T>(p))
+                .ToList();
+
+            return models;
+        }
+
+        public ICollection<T> RecentBlogs<T>()
+        {
+            var blogs = this.context.Posts
+                .OrderByDescending(p => p.CreatedOn)
+                .Take(3)
+                .ToList();
+
+            var model = blogs
+                .Select(p => this.mapper.Map<T>(p))
+                .ToList();
+
+            return model;
+        }
+
         public T Details<T>(string id)
         {
-            var post = this.context.Post
+            var post = this.context.Posts
                 .FirstOrDefault(p => p.Id == id);
 
             var models = this.mapper.Map<T>(post);
@@ -40,15 +84,18 @@ namespace Dialog.Services
             return models;
         }
 
-        public IServiceResult Create(string authorId, string title, string content, string tagsString)
+        public IServiceResult Create(string authorId, string title, string content)
         {
             var result = new ServiceResult
             {
                 Success = false
             };
 
-            if (title == null ||
-                 context == null)
+            var author = this.context.Users.FirstOrDefault(u => u.Id == authorId);
+
+            if (author == null ||
+                title == null ||
+                context == null)
             {
                 return result;
             }
@@ -59,22 +106,30 @@ namespace Dialog.Services
                 Content = content,
                 CreatedOn = DateTime.UtcNow,
                 IsDeleted = false,
-                AuthorId = authorId,
+                Author = author,
             };
 
-            this.context.Post.Add(post);
-            this.context.SaveChanges();
+            try
+            {
+                this.context.Posts.Add(post);
+                this.context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+                return result;
+            }
 
             result.Success = true;
 
             return result;
         }
 
-        public IServiceResult AddComment(string postId, string authorName, string authorEmail, string message)
+        public IServiceResult AddComment(string postId, string authorName, string message)
         {
-            var result = new ServiceResult { Success = true };
+            var result = new ServiceResult { Success = false };
 
-            var post = this.context.Post.FirstOrDefault(p => p.Id == postId);
+            var post = this.context.Posts.FirstOrDefault(p => p.Id == postId);
             if (post == null)
             {
                 return result;
@@ -89,40 +144,20 @@ namespace Dialog.Services
                 IsDeleted = false,
             };
 
-            this.context.Comments.Add(comment);
-            this.context.SaveChanges();
+            try
+            {
+                this.context.Comments.Add(comment);
+                this.context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+                return result;
+            }
 
             result.Success = true;
 
             return result;
-        }
-
-        public ICollection<T> All<T>(string authorName)
-        {
-            var posts = this.context.Post
-                .Where(p => p.Author.UserName == authorName)
-                .OrderByDescending(p => p.CreatedOn)
-                .ToList();
-
-            var models = posts
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
-
-            return models;
-        }
-
-        public ICollection<T> All<T>(DateTime date)
-        {
-            var posts = this.context.Post
-                .Where(p => p.CreatedOn == date)
-                .OrderByDescending(p => p.CreatedOn)
-                .ToList();
-
-            var models = posts
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
-
-            return models;
         }
     }
 }

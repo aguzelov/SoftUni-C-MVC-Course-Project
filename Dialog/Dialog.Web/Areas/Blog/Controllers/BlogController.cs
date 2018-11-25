@@ -1,6 +1,7 @@
 ﻿using Dialog.Models;
 using Dialog.Services.Contracts;
 using Dialog.Web.Areas.Blog.Models;
+using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,7 +9,7 @@ using System;
 namespace Dialog.Web.Areas.Blog.Controllers
 {
     [Area("Blog")]
-    public class BlogController : Controller
+    public class BlogController : BaseController
     {
         private readonly IBlogService blogService;
         private readonly UserManager<ApplicationUser> userManager;
@@ -69,7 +70,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
             var user = this.User;
             var authorId = this.userManager.GetUserId(user);
 
-            var result = this.blogService.Create(authorId, model.Title, model.Content, model.Tags);
+            var result = this.blogService.Create(authorId, model.Title, model.Content);
 
             if (!result.Success)
             {
@@ -86,7 +87,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 return this.RedirectToAction(nameof(Details), model.PostId);
             }
 
-            var result = this.blogService.AddComment(model.PostId, model.Author, model.Email, model.Message);
+            var result = this.blogService.AddComment(model.PostId, model.Author, model.Message);
 
             if (!result.Success)
             {

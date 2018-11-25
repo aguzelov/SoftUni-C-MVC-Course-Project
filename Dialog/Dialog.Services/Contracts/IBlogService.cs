@@ -13,8 +13,10 @@ namespace Dialog.Services.Contracts
 
         T Details<T>(string id);
 
-        IServiceResult Create(string authorId, string title, string content, string tagsString);
+        IServiceResult Create(string authorId, string title, string content);
 
-        IServiceResult AddComment(string postId, string authorName, string authorEmail, string message);
+        IServiceResult AddComment(string postId, string authorName, string message);
+
+        ICollection<T> RecentBlogs<T>();
     }
 }

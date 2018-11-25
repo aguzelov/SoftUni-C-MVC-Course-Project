@@ -4,6 +4,7 @@ using Dialog.Models;
 using Dialog.Services;
 using Dialog.Services.Contracts;
 using Dialog.Web.Infrastructure.Extensions;
+using Dialog.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -53,7 +54,11 @@ namespace Dialog.Web
             .AddDefaultUI()
            .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(RecentBlogsActionFilter));
+            }
+                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             var mappingConfig = new MapperConfiguration(mc =>
                 mc.AddProfile(new MappingProfile())
@@ -63,6 +68,7 @@ namespace Dialog.Web
             services.AddSingleton(mapper);
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
+            services.AddScoped<RecentBlogsActionFilter>();
 
             services.AddScoped<IBlogService, BlogService>();
         }

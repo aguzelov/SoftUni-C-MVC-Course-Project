@@ -1,7 +1,9 @@
 ﻿using Dialog.Models;
 using Dialog.Models.Blog;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Dialog.Data
 {
@@ -12,8 +14,14 @@ namespace Dialog.Data
         {
         }
 
-        public DbSet<Post> Post { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Tag> Tags { get; set; }
+        public ApplicationDbContext()
+        {
+        }
+
+        public new virtual DbSet<ApplicationUser> Users { get; set; }
+
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
     }
 }
