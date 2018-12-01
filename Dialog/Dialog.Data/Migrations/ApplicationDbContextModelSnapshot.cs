@@ -126,28 +126,14 @@ namespace Dialog.Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Dialog.Models.Blog.PostsTags", b =>
+            modelBuilder.Entity("Dialog.Models.News.News", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("PostId");
+                    b.Property<string>("AuthorId");
 
-                    b.Property<string>("TagId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("PostsTags");
-                });
-
-            modelBuilder.Entity("Dialog.Models.Blog.Tag", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Content");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -157,11 +143,13 @@ namespace Dialog.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -292,15 +280,11 @@ namespace Dialog.Data.Migrations
                         .HasForeignKey("AuthorId");
                 });
 
-            modelBuilder.Entity("Dialog.Models.Blog.PostsTags", b =>
+            modelBuilder.Entity("Dialog.Models.News.News", b =>
                 {
-                    b.HasOne("Dialog.Models.Blog.Post", "Post")
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId");
-
-                    b.HasOne("Dialog.Models.Blog.Tag", "Tag")
-                        .WithMany("Posts")
-                        .HasForeignKey("TagId");
+                    b.HasOne("Dialog.Models.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

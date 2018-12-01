@@ -9,7 +9,6 @@ namespace Dialog.Models.Blog
         public Post()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Tags = new HashSet<PostsTags>();
         }
 
         public string Id { get; set; }
@@ -30,7 +29,5 @@ namespace Dialog.Models.Blog
         public DateTime? DeletedOn { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
-
-        public virtual ICollection<PostsTags> Tags { get; set; }
     }
 }

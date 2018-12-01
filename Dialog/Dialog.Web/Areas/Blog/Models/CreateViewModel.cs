@@ -11,7 +11,5 @@ namespace Dialog.Web.Areas.Blog.Models
         [Required]
         [DataType(DataType.MultilineText)]
         public string Content { get; set; }
-
-        public string Tags { get; set; }
     }
 }

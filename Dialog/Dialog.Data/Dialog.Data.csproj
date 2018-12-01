@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dialog.Common\Dialog.Common.csproj" />
     <ProjectReference Include="..\Dialog.Models\Dialog.Models.csproj" />
   </ItemGroup>
 

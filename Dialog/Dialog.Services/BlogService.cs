@@ -46,20 +46,6 @@ namespace Dialog.Services
             return models;
         }
 
-        public ICollection<T> All<T>(DateTime date)
-        {
-            var posts = this.context.Posts
-                .Where(p => p.CreatedOn == date)
-                .OrderByDescending(p => p.CreatedOn)
-                .ToList();
-
-            var models = posts
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
-
-            return models;
-        }
-
         public ICollection<T> RecentBlogs<T>()
         {
             var blogs = this.context.Posts
@@ -158,6 +144,20 @@ namespace Dialog.Services
             result.Success = true;
 
             return result;
+        }
+
+        public ICollection<T> Search<T>(string searchTerm)
+        {
+            var post = this.context.Posts
+                .Where(n => n.Title.Contains(searchTerm))
+                .OrderByDescending(p => p.CreatedOn)
+                .ToList();
+
+            var models = post
+                .Select(n => this.mapper.Map<T>(n))
+                .ToList();
+
+            return models;
         }
     }
 }

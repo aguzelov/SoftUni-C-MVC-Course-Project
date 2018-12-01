@@ -1,14 +1,15 @@
-﻿<div class="hero-wrap" style="background-image: url('/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-            <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="/">Home</a></span> <span>Contact</span></p>
-                <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Contact Us</h1>
-            </div>
-        </div>
-    </div>
-</div>
+﻿@model ContactViewModel
+
+@{
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = "Contact Us",
+        Current = "Contact",
+        HasSearchField = false
+    };
+}
+
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
 
 <section class="ftco-section contact-section ftco-degree-bg">
     <div class="container">
@@ -18,13 +19,13 @@
             </div>
             <div class="w-100"></div>
             <div class="col-md-4">
-                <p><span>Address:</span> @ViewData["Address"] </p>
+                <p><span>Address:</span> @Model.Address </p>
             </div>
             <div class="col-md-4 text-center">
-                <p><span>Phone:</span> <a href="tel://1234567920">@ViewData["Phone"]</a></p>
+                <p><span>Phone:</span> <a href="tel://@(Model.Phone)">@Model.Phone</a></p>
             </div>
             <div class="col-md-4 text-right">
-                <p><span>Email:</span> <a href="mailto:info@yoursite.com">@ViewData["Email"]</a></p>
+                <p><span>Email:</span> <a href="mailto:@(Model.Email)">@Model.Email</a></p>
             </div>
         </div>
         <div class="row block-9">

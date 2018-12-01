@@ -1,13 +1,25 @@
-﻿namespace Dialog.Web.Areas.Blog.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Dialog.Web.Areas.Blog.Models
 {
     public class CreateCommentViewModel
     {
+        [Required]
         public string PostId { get; set; }
 
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Author")]
         public string Author { get; set; }
 
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Required]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Message")]
         public string Message { get; set; }
     }
 }

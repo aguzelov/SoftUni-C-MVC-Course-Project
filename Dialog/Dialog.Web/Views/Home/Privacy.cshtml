@@ -1,6 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = "Privacy Policy",
+        Current = "Privacy",
+        HasSearchField = false
+    };
 }
-<h2>@ViewData["Title"]</h2>
+
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
 
 <p>Use this page to detail your site's privacy policy.</p>

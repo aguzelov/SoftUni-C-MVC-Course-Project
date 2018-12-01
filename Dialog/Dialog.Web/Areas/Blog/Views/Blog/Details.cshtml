@@ -1,30 +1,22 @@
 ﻿@model PostViewModel
 
-<div class="hero-wrap" style="background-image: url('/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-            <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span class="mr-2"><a href="blog.html">Blog</a></span> <span>Blog Details</span></p>
-                <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Blog Details</h1>
-            </div>
-        </div>
-    </div>
-</div>
+@{
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = Model.Title,
+        Parent = "Blog",
+        Current = "Blog Details",
+        HasSearchField = false
+    };
+}
+
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
 <section class="ftco-section ftco-degree-bg">
     <div class="container">
         <div class="row">
             <div class="col-md-8 ftco-animate">
                 <h2 class="mb-3">@Model.Title</h2>
                 <p>@Model.Content</p>
-                <div class="tag-widget post-tag-container mb-5 mt-5">
-                    <div class="tagcloud">
-                        @foreach (var tag in Model.Tags)
-                        {
-                            <a href="#" class="tag-cloud-link">@(tag.Name)</a>
-                        }
-                    </div>
-                </div>
 
                 <div class="about-author d-flex p-5 bg-light">
                     <div class="bio align-self-md-center mr-5">
@@ -76,18 +68,22 @@
                     <div class="comment-form-wrap pt-5">
                         <h3 class="mb-5">Leave a comment</h3>
                         <form action="/Blog/Blog/AddComment" method="post" class="p-5 bg-light">
-                            <input name="PostId" value="@Model.Id" hidden />
+                            <input type="text" name="PostId" value="@Model.Id" hidden />
+
                             <div class="form-group">
-                                <label for="Author">Author</label>
-                                <input type="text" class="form-control" name="Author" id="Author">
+                                <label asp-for="@Model.CreateComment.Author"></label>
+                                <input class="form-control" asp-for="@Model.CreateComment.Author">
+                                <span asp-validation-for="@Model.CreateComment.Author"></span>
                             </div>
                             <div class="form-group">
-                                <label for="Email">Email</label>
-                                <input type="email" class="form-control" name="Email" id="Email">
+                                <label asp-for="@Model.CreateComment.Email"></label>
+                                <input class="form-control" asp-for="@Model.CreateComment.Email">
+                                <span asp-validation-for="@Model.CreateComment.Email"></span>
                             </div>
                             <div class="form-group">
-                                <label for="Message">Message</label>
-                                <textarea name="Message" id="Message" cols="30" rows="10" class="form-control"></textarea>
+                                <label asp-for="@Model.CreateComment.Message"></label>
+                                <textarea asp-for="@Model.CreateComment.Message" id="Message" cols="30" rows="10" class="form-control"></textarea>
+                                <span asp-validation-for="@Model.CreateComment.Message"></span>
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">

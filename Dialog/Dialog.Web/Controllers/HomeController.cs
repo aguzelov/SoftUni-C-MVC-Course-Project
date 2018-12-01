@@ -22,22 +22,14 @@ namespace Dialog.Web.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
+            var model = new ContactViewModel
+            {
+                Address = "Sredec, 8300, Lilqna Dimitrova 1 str.",
+                Phone = "0888072710",
+                Email = "aguzelov@outlook.com"
+            };
 
-            return View();
-        }
-
-        public IActionResult Blog()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult BlogSingle()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            return View(model);
         }
 
         public IActionResult Causes()

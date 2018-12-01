@@ -1,4 +1,6 @@
-﻿namespace Dialog.Web.Infrastructure
+﻿using System;
+
+namespace Dialog.Common
 {
     public static class GlobalConstants
     {

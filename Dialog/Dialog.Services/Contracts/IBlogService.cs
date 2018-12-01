@@ -9,8 +9,6 @@ namespace Dialog.Services.Contracts
 
         ICollection<T> All<T>(string authorName);
 
-        ICollection<T> All<T>(DateTime date);
-
         T Details<T>(string id);
 
         IServiceResult Create(string authorId, string title, string content);
@@ -18,5 +16,7 @@ namespace Dialog.Services.Contracts
         IServiceResult AddComment(string postId, string authorName, string message);
 
         ICollection<T> RecentBlogs<T>();
+
+        ICollection<T> Search<T>(string searchTerm);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Dialog.Data;
+using Dialog.Data.Seeding;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,33 +11,18 @@ namespace Dialog.Web.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtension
     {
-        public static IApplicationBuilder UseDatabaseMigration(this IApplicationBuilder app)
+        public static IApplicationBuilder UseDatabaseMigration(this IApplicationBuilder app, IHostingEnvironment env)
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var db = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-                db.Database.Migrate();
+                var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                if (!db.Roles.AnyAsync().Result)
+                if (env.IsDevelopment())
                 {
-                    var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-
-                    Task.Run(async () =>
-                    {
-                        var adminRole = GlobalConstants.AdminRole;
-                        var userRole = GlobalConstants.UserRole;
-
-                        await roleManager.CreateAsync(new IdentityRole
-                        {
-                            Name = adminRole
-                        });
-
-                        await roleManager.CreateAsync(new IdentityRole
-                        {
-                            Name = userRole
-                        });
-                    }).Wait();
+                    dbContext.Database.Migrate();
                 }
+
+                ApplicationDbContextSeeder.Seed(dbContext, serviceScope.ServiceProvider);
             }
 
             return app;

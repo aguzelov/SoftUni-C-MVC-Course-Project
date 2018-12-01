@@ -15,5 +15,7 @@ namespace Dialog.Web.Areas.Blog.Models
         public ICollection<TagViewModel> Tags { get; set; }
 
         public ICollection<CommentViewModel> Comments { get; set; }
+
+        public CreateCommentViewModel CreateComment { get; set; }
     }
 }

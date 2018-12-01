@@ -34,13 +34,6 @@ namespace Dialog.Web.Areas.Blog.Controllers
             return this.View("All", model);
         }
 
-        public IActionResult ByDate(DateTime date)
-        {
-            var model = this.blogService.All<PostSummaryViewModel>(date);
-
-            return this.View("All", model);
-        }
-
         public IActionResult Details(string id)
         {
             if (id == null)
@@ -84,7 +77,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return this.RedirectToAction(nameof(Details), model.PostId);
+                return this.RedirectToAction(nameof(Details), routeValues: new { Id = model.PostId });
             }
 
             var result = this.blogService.AddComment(model.PostId, model.Author, model.Message);
@@ -95,6 +88,24 @@ namespace Dialog.Web.Areas.Blog.Controllers
             }
 
             return this.RedirectToAction(actionName: nameof(Details), routeValues: new { id = model.PostId });
+        }
+
+        public IActionResult Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return this.RedirectToAction(nameof(All));
+            }
+
+            var model = this.blogService.Search<PostSummaryViewModel>(searchTerm);
+
+            if (model == null ||
+                model.Count == 0)
+            {
+                return this.RedirectToAction(nameof(All));
+            }
+
+            return this.View("All", model);
         }
     }
 }

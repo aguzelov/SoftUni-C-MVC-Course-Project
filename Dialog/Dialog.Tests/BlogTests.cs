@@ -366,21 +366,6 @@ namespace Tests
         }
 
         [Test]
-        public void BlogServiceGetAllByDatePosts()
-        {
-            //Arrange
-            var expectingPost = this.PostsData.First();
-            var expectingCount = 1;
-            //Act
-            var posts = this.Service.All<PostSummaryViewModel>(expectingPost.CreatedOn).ToList();
-
-            //Assert
-            Assert.AreEqual(expectingCount, posts.Count);
-            Assert.AreEqual(expectingPost.Id, posts[0].Id);
-            Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
-        }
-
-        [Test]
         public void BlogServiceGetRecentPosts()
         {
             //Arrange

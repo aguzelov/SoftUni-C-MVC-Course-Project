@@ -1,0 +1,68 @@
+﻿@model ICollection<NewsSummaryViewModel>
+
+@{
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = "News",
+        Current = "News",
+        HasSearchField = true
+
+    };
+}
+
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
+
+<section class="ftco-section">
+    <div class="container">
+
+        <div class="row">
+
+            @foreach (var news in Model)
+            {
+                <div class="col-md-4 d-flex ftco-animate">
+                    <div class="blog-entry align-self-stretch">
+                        <a asp-area="News" asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="block-20" style="background-image: url('/images/event-1.jpg');">
+                        </a>
+                        <div class="text p-4 d-block">
+                            <div class="meta mb-3">
+                                <div>
+                                    <a area="News" asp-controller="News" asp-action="ByDate" asp-route-author="@news.CreatedOn">@news.CreatedOn.ToString("dd.MM.yyyy")</a>
+                                </div>
+                                <div>
+                                    <a asp-area="News" asp-controller="News" asp-action="ByAuthor" asp-route-author="@news.Author">@news.ShortAuthorName</a>
+                                </div>
+
+                                <h3 class="heading mb-4">
+                                    <a asp-area="News" asp-controller="News" asp-action="Details" asp-route-id="@news.Id">@news.Title</a>
+                                </h3>
+                                <p>@news.ShortContent</p>
+                                <p>
+                                    <a asp-area="News" asp-controller="News" asp-action="Details" asp-route-id="@news.Id">
+                                        View News
+                                        <i class="ion-ios-arrow-forward"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        <li><a href="#">&lt;</a></li>
+                        <li class="active"><span>1</span></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&gt;</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
