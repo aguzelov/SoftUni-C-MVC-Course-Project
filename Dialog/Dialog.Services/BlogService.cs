@@ -4,6 +4,7 @@ using Dialog.Data;
 using Dialog.Models;
 using Dialog.Models.Blog;
 using Dialog.Services.Contracts;
+using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -23,7 +24,7 @@ namespace Dialog.Services
             this.mapper = mapper;
         }
 
-        public AllPostsViewModel All(AllPostsViewModel model)
+        public AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model)
         {
             IQueryable<Post> posts = null;
 
@@ -48,7 +49,7 @@ namespace Dialog.Services
 
             model.TotalPages = (int)Math.Ceiling(totalPosts / (double)model.PageSize);
 
-            model.Posts = currentPosts.Select(p => this.mapper.Map<PostSummaryViewModel>(p)).ToList();
+            model.Entities = currentPosts.Select(p => this.mapper.Map<PostSummaryViewModel>(p)).ToList();
 
             return model;
         }

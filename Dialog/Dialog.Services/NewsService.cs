@@ -2,6 +2,8 @@
 using Dialog.Data;
 using Dialog.Models.News;
 using Dialog.Services.Contracts;
+using Dialog.ViewModels.Base;
+using Dialog.ViewModels.News;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,28 +22,34 @@ namespace Dialog.Services
             this.mapper = mapper;
         }
 
-        public ICollection<T> All<T>()
+        public AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model)
         {
-            var news = this.context.News.OrderByDescending(p => p.CreatedOn).ToList();
+            IQueryable<News> news = null;
 
-            var models = news
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
+            if (!string.IsNullOrEmpty(model.Author))
+            {
+                news = this.context.News
+                .OrderByDescending(p => p.CreatedOn)
+                .Where(p => p.Author.UserName == model.Author);
+            }
+            else
+            {
+                news = this.context.News
+                .OrderByDescending(p => p.CreatedOn);
+            }
 
-            return models;
-        }
+            var currentNews = news
+                 .Skip((model.Page - 1) * model.PageSize)
+                 .Take(model.PageSize)
+                 .ToList();
 
-        public ICollection<T> All<T>(string authorName)
-        {
-            var news = this.context.News
-                .Where(n => n.Author.UserName == authorName)
-                .OrderByDescending(p => p.CreatedOn).ToList();
+            var totalNews = news.Count();
 
-            var models = news
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
+            model.TotalPages = (int)Math.Ceiling(totalNews / (double)model.PageSize);
 
-            return models;
+            model.Entities = currentNews.Select(p => this.mapper.Map<NewsSummaryViewModel>(p)).ToList();
+
+            return model;
         }
 
         public IServiceResult Create(string authorId, string title, string content)

@@ -1,10 +1,10 @@
 ﻿using Dialog.Models;
 using Dialog.Services.Contracts;
+using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 
 namespace Dialog.Web.Areas.Blog.Controllers
@@ -21,7 +21,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult All(AllPostsViewModel model)
+        public IActionResult All(AllViewModel<PostSummaryViewModel> model)
         {
             model = this.blogService.All(model);
 

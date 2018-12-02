@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Dialog.ViewModels.Blog
+namespace Dialog.ViewModels.Base
 {
-    public class AllPostsViewModel
+    public class AllViewModel<T>
     {
         public int PageSize { get; } = 3;
 
@@ -19,6 +19,6 @@ namespace Dialog.ViewModels.Blog
 
         public string Author { get; set; }
 
-        public ICollection<PostSummaryViewModel> Posts { get; set; }
+        public ICollection<T> Entities { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Dialog.ViewModels.Blog;
+﻿using Dialog.ViewModels.Base;
+using Dialog.ViewModels.Blog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Dialog.Services.Contracts
 {
     public interface IBlogService
     {
-        AllPostsViewModel All(AllPostsViewModel model);
+        AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model);
 
         T Details<T>(string id);
 

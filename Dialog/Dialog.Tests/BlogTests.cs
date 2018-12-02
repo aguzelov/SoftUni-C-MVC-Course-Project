@@ -337,34 +337,34 @@ namespace Tests
             Mapper.AssertConfigurationIsValid();
         }
 
-        [Test]
-        public void BlogServiceGetAllPosts()
-        {
-            //Arrange
+        //[Test]
+        //public void BlogServiceGetAllPosts()
+        //{
+        //    //Arrange
 
-            //Act
-            var posts = this.Service.All<PostSummaryViewModel>().ToList();
+        //    //Act
+        //    var posts = this.Service.All<PostSummaryViewModel>().ToList();
 
-            //Assert
-            Assert.AreEqual(this.PostsData.Count(), posts.Count);
-            Assert.IsTrue(posts[0].CreatedOn > posts[1].CreatedOn);
-            Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
-        }
+        //    //Assert
+        //    Assert.AreEqual(this.PostsData.Count(), posts.Count);
+        //    Assert.IsTrue(posts[0].CreatedOn > posts[1].CreatedOn);
+        //    Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
+        //}
 
-        [Test]
-        public void BlogServiceGetAllByAuthorPosts()
-        {
-            //Arrange
-            var expectingPost = this.PostsData.First();
-            var expectingCount = 1;
-            //Act
-            var posts = this.Service.All<PostSummaryViewModel>(expectingPost.Author.UserName).ToList();
+        //[Test]
+        //public void BlogServiceGetAllByAuthorPosts()
+        //{
+        //    //Arrange
+        //    var expectingPost = this.PostsData.First();
+        //    var expectingCount = 1;
+        //    //Act
+        //    var posts = this.Service.All<PostSummaryViewModel>(expectingPost.Author.UserName).ToList();
 
-            //Assert
-            Assert.AreEqual(expectingCount, posts.Count);
-            Assert.AreEqual(expectingPost.Id, posts[0].Id);
-            Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
-        }
+        //    //Assert
+        //    Assert.AreEqual(expectingCount, posts.Count);
+        //    Assert.AreEqual(expectingPost.Id, posts[0].Id);
+        //    Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
+        //}
 
         [Test]
         public void BlogServiceGetRecentPosts()

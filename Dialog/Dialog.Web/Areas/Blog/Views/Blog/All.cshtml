@@ -1,4 +1,4 @@
-﻿@model AllPostsViewModel
+﻿@model AllViewModel<PostSummaryViewModel>
 
 @{
     var partialModel = new JumbotronPartialViewModel
@@ -14,7 +14,7 @@
 <section class="ftco-section">
     <div class="container">
         <div class="row d-flex">
-            @foreach (var post in Model.Posts)
+            @foreach (var post in Model.Entities)
             {
                 <div class="col-md-4 d-flex ftco-animate">
                     <div class="blog-entry align-self-stretch">

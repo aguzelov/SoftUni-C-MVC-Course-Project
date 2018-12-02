@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dialog.ViewModels.Base;
+using Dialog.ViewModels.News;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,9 +8,7 @@ namespace Dialog.Services.Contracts
 {
     public interface INewsService
     {
-        ICollection<T> All<T>();
-
-        ICollection<T> All<T>(string authorName);
+        AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model);
 
         T Details<T>(string id);
 

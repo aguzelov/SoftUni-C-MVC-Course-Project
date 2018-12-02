@@ -1,5 +1,6 @@
 ﻿using Dialog.Models;
 using Dialog.Services.Contracts;
+using Dialog.ViewModels.Base;
 using Dialog.ViewModels.News;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Identity;
@@ -19,18 +20,11 @@ namespace Dialog.Web.Areas.News.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult All()
+        public IActionResult All(AllViewModel<NewsSummaryViewModel> model)
         {
-            var model = this.newsService.All<NewsSummaryViewModel>();
+            model = this.newsService.All(model);
 
             return this.View(model);
-        }
-
-        public IActionResult ByAuthor(string author)
-        {
-            var model = this.newsService.All<NewsSummaryViewModel>(author);
-
-            return this.View("All", model);
         }
 
         public IActionResult Details(string id)
