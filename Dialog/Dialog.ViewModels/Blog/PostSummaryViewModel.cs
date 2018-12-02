@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dialog.Web.Areas.Blog.Models
+namespace Dialog.ViewModels.Blog
 {
     public class PostSummaryViewModel
     {

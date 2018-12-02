@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
-using Dialog.Common;
-using Dialog.Common.Mapping;
 using Dialog.Data;
 using Dialog.Models;
 using Dialog.Services;
 using Dialog.Services.Contracts;
-using Dialog.Web.Areas.Blog.Models;
 using Dialog.Web.Infrastructure.Extensions;
 using Dialog.Web.Infrastructure.Filters;
-using Dialog.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Dialog.Web
 {

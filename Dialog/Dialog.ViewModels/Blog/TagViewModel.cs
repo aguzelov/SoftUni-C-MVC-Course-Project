@@ -1,6 +1,6 @@
-﻿namespace Dialog.Web.Areas.Blog.Models
+﻿namespace Dialog.ViewModels.Blog
 {
-    public class AuthorViewModel
+    public class TagViewModel
     {
         public string Id { get; set; }
 

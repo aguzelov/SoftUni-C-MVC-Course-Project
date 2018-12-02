@@ -1,10 +1,6 @@
-﻿using Dialog.Web.Areas.Blog.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Dialog.ViewModels.Base;
 
-namespace Dialog.Web.Areas.News.Models
+namespace Dialog.ViewModels.News
 {
     public class NewsViewModel
     {

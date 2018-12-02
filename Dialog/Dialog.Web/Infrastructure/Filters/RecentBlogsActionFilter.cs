@@ -1,12 +1,9 @@
 ﻿using Dialog.Services.Contracts;
-using Dialog.Web.Areas.Blog.Models;
-using Dialog.Web.Controllers;
+using Dialog.ViewModels.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Dialog.Web.Infrastructure.Filters
 {
@@ -31,7 +28,7 @@ namespace Dialog.Web.Infrastructure.Filters
             {
                 var recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>();
 
-                controller.ViewData["RecentBlogs"] = recentBlogs;
+                controller.ViewData["RecentBlogs"] = recentBlogs.ToList();
             }
         }
     }

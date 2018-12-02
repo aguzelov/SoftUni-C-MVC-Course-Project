@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Dialog.Web.Areas.Blog.Models
+namespace Dialog.ViewModels.Blog
 {
     public class RichTextEditorViewModel
     {

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Dialog.Data;
 using Dialog.Models;
 using Dialog.Models.Blog;
 using Dialog.Services.Contracts;
+using Dialog.ViewModels.Blog;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -21,32 +23,37 @@ namespace Dialog.Services
             this.mapper = mapper;
         }
 
-        public ICollection<T> All<T>()
+        public AllPostsViewModel All(AllPostsViewModel model)
         {
-            var posts = this.context.Posts.OrderByDescending(p => p.CreatedOn).ToList();
+            IQueryable<Post> posts = null;
 
-            var models = posts
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
-
-            return models;
-        }
-
-        public ICollection<T> All<T>(string authorName)
-        {
-            var posts = this.context.Posts
-                .Where(p => p.Author.UserName == authorName)
+            if (!string.IsNullOrEmpty(model.Author))
+            {
+                posts = this.context.Posts
                 .OrderByDescending(p => p.CreatedOn)
-                .ToList();
+                .Where(p => p.Author.UserName == model.Author);
+            }
+            else
+            {
+                posts = this.context.Posts
+                .OrderByDescending(p => p.CreatedOn);
+            }
 
-            var models = posts
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
+            var currentPosts = posts
+                 .Skip((model.Page - 1) * model.PageSize)
+                 .Take(model.PageSize)
+                 .ToList();
 
-            return models;
+            var totalPosts = posts.Count();
+
+            model.TotalPages = (int)Math.Ceiling(totalPosts / (double)model.PageSize);
+
+            model.Posts = currentPosts.Select(p => this.mapper.Map<PostSummaryViewModel>(p)).ToList();
+
+            return model;
         }
 
-        public ICollection<T> RecentBlogs<T>()
+        public IQueryable<T> RecentBlogs<T>()
         {
             var blogs = this.context.Posts
                 .OrderByDescending(p => p.CreatedOn)
@@ -57,7 +64,7 @@ namespace Dialog.Services
                 .Select(p => this.mapper.Map<T>(p))
                 .ToList();
 
-            return model;
+            return model.AsQueryable<T>();
         }
 
         public T Details<T>(string id)
@@ -146,7 +153,7 @@ namespace Dialog.Services
             return result;
         }
 
-        public ICollection<T> Search<T>(string searchTerm)
+        public IQueryable<T> Search<T>(string searchTerm)
         {
             var post = this.context.Posts
                 .Where(n => n.Title.Contains(searchTerm))
@@ -157,7 +164,7 @@ namespace Dialog.Services
                 .Select(n => this.mapper.Map<T>(n))
                 .ToList();
 
-            return models;
+            return models.AsQueryable<T>();
         }
     }
 }

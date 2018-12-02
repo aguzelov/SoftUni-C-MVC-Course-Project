@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Dialog.Models.Blog;
-using Dialog.Web.Areas.Blog.Models;
+using Dialog.ViewModels.Base;
+using Dialog.ViewModels.Blog;
 
 namespace Tests
 {

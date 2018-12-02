@@ -1,4 +1,4 @@
-﻿@model ICollection<PostSummaryViewModel>
+﻿@model AllPostsViewModel
 
 @{
     var partialModel = new JumbotronPartialViewModel
@@ -7,13 +7,14 @@
         Current = "Blog",
         HasSearchField = true
     };
+
 }
 
 <partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
 <section class="ftco-section">
     <div class="container">
         <div class="row d-flex">
-            @foreach (var post in Model)
+            @foreach (var post in Model.Posts)
             {
                 <div class="col-md-4 d-flex ftco-animate">
                     <div class="blog-entry align-self-stretch">
@@ -22,7 +23,9 @@
                         <div class="text p-4 d-block">
                             <div class="meta mb-3">
                                 <div><p>@post.CreatedOn.ToString("dd.MM.yyyy")</p></div>
-                                <div><a asp-area="Blog" asp-controller="Blog" asp-action="ByAuthor" asp-route-author="@post.AuthorName" class="meta-chat">@post.ShortAuthorName</a></div>
+                                <div>
+                                    <a asp-area="Blog" asp-controller="Blog" asp-action="All" asp-route-author="@post.AuthorName" class="meta-chat">@post.ShortAuthorName</a>
+                                </div>
                                 <div><a class="meta-chat"><span class="icon-chat"></span> @post.CommmentsCount</a></div>
                             </div>
                             <h3 class="heading mt-3"><a asp-area="Blog" asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id">@post.Title</a></h3>
@@ -36,13 +39,26 @@
             <div class="col text-center">
                 <div class="block-27">
                     <ul>
-                        <li><a href="#">&lt;</a></li>
-                        <li class="active"><span>1</span></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&gt;</a></li>
+                        @if (Model.HasPreviousPage)
+                        {
+                            <li><a asp-area="Blog" asp-controller="Blog" asp-action="All" asp-route-page="@(Model.Page-1)">&lt;</a></li>
+                        }
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (Model.Page == i)
+                            {
+                                <li class="active"><span>@i</span></li>
+                            }
+                            else
+                            {
+                                <li><a asp-area="Blog" asp-controller="Blog" asp-action="All" asp-route-page="@i">@i</a></li>
+                            }
+                        }
+                        @if (Model.HasNextPage)
+                        {
+                            <li><a asp-area="Blog" asp-controller="Blog" asp-action="All" asp-route-page="@(Model.Page+1)">&gt;</a></li>
+                        }
                     </ul>
                 </div>
             </div>

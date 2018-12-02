@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Dialog.Web.Models
+namespace Dialog.ViewModels.Base
 {
     public class ContactViewModel
     {

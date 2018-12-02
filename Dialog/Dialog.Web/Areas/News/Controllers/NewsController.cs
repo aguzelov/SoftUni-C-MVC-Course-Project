@@ -1,13 +1,9 @@
 ﻿using Dialog.Models;
 using Dialog.Services.Contracts;
-using Dialog.Web.Areas.News.Models;
+using Dialog.ViewModels.News;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Dialog.Web.Areas.News.Controllers
 {

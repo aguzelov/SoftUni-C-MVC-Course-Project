@@ -1,4 +1,4 @@
-namespace Dialog.Web.Models
+namespace Dialog.ViewModels.Base
 {
     public class ErrorViewModel
     {

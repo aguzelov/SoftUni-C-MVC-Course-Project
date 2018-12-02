@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Dialog.Web.Areas.News.Models
+namespace Dialog.ViewModels.News
 {
     public class CreateViewModel
     {

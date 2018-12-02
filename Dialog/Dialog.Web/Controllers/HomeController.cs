@@ -1,4 +1,4 @@
-﻿using Dialog.Web.Models;
+﻿using Dialog.ViewModels.Base;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

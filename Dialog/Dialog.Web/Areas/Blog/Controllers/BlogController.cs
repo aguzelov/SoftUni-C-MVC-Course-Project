@@ -1,10 +1,11 @@
 ﻿using Dialog.Models;
 using Dialog.Services.Contracts;
-using Dialog.Web.Areas.Blog.Models;
+using Dialog.ViewModels.Blog;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace Dialog.Web.Areas.Blog.Controllers
 {
@@ -20,18 +21,11 @@ namespace Dialog.Web.Areas.Blog.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult All()
+        public IActionResult All(AllPostsViewModel model)
         {
-            var model = this.blogService.All<PostSummaryViewModel>();
+            model = this.blogService.All(model);
 
             return this.View(model);
-        }
-
-        public IActionResult ByAuthor(string author)
-        {
-            var model = this.blogService.All<PostSummaryViewModel>(author);
-
-            return this.View("All", model);
         }
 
         public IActionResult Details(string id)
@@ -100,7 +94,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
             var model = this.blogService.Search<PostSummaryViewModel>(searchTerm);
 
             if (model == null ||
-                model.Count == 0)
+                model.Count() == 0)
             {
                 return this.RedirectToAction(nameof(All));
             }

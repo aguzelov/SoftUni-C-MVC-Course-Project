@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Dialog.Models.Blog;
 using Dialog.Models.News;
-using Dialog.Web.Areas.Blog.Models;
-using Dialog.Web.Areas.News.Models;
+using Dialog.ViewModels.Base;
+using Dialog.ViewModels.Blog;
+using Dialog.ViewModels.News;
 
 namespace Dialog.Web
 {

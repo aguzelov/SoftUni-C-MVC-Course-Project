@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Dialog.ViewModels.Blog;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Dialog.Services.Contracts
 {
     public interface IBlogService
     {
-        ICollection<T> All<T>();
-
-        ICollection<T> All<T>(string authorName);
+        AllPostsViewModel All(AllPostsViewModel model);
 
         T Details<T>(string id);
 
@@ -15,8 +15,8 @@ namespace Dialog.Services.Contracts
 
         IServiceResult AddComment(string postId, string authorName, string message);
 
-        ICollection<T> RecentBlogs<T>();
+        IQueryable<T> RecentBlogs<T>();
 
-        ICollection<T> Search<T>(string searchTerm);
+        IQueryable<T> Search<T>(string searchTerm);
     }
 }

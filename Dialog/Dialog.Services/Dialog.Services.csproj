@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dialog.Data\Dialog.Data.csproj" />
+    <ProjectReference Include="..\Dialog.ViewModels\Dialog.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

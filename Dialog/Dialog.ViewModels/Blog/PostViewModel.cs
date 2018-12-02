@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Dialog.ViewModels.Base;
+using System.Collections.Generic;
 
-namespace Dialog.Web.Areas.Blog.Models
+namespace Dialog.ViewModels.Blog
 {
     public class PostViewModel
     {
