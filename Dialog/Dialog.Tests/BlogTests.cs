@@ -387,7 +387,7 @@ namespace Tests
             var expectedPost = this.PostsData.First();
 
             //Act
-            var post = this.Service.Details<PostViewModel>(expectedPost.Id).GetAwaiter().GetResult();
+            var post = this.Service.Details(expectedPost.Id);
 
             //Assert
             Assert.IsInstanceOf<PostViewModel>(post);

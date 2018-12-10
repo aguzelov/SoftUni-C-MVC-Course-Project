@@ -2,6 +2,7 @@
 using Dialog.ViewModels.News;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,12 +12,12 @@ namespace Dialog.Services.Contracts
     {
         AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model);
 
-        Task<T> Details<T>(string id);
+        NewsViewModel Details(string id);
 
         Task<IServiceResult> Create(string authorId, string title, string content);
 
         ICollection<T> RecentNews<T>();
 
-        ICollection<T> Search<T>(string searchTerm);
+        IQueryable<T> Search<T>(string searchTerm);
     }
 }

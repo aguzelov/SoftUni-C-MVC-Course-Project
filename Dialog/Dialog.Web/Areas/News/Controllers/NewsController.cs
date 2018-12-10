@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Dialog.Data.Models;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
@@ -28,14 +29,14 @@ namespace Dialog.Web.Areas.News.Controllers
             return this.View(model);
         }
 
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = await this.newsService.Details<NewsViewModel>(id);
+            var model = this.newsService.Details(id);
 
             return this.View(model);
         }
@@ -74,7 +75,7 @@ namespace Dialog.Web.Areas.News.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this.newsService.Search<NewsSummaryViewModel>(searchTerm);
+            var model = this.newsService.Search<NewsSummaryViewModel>(searchTerm).ToList();
 
             if (model == null ||
                 model.Count == 0)

@@ -11,7 +11,7 @@ namespace Dialog.Services.Contracts
     {
         AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model);
 
-        Task<T> Details<T>(string id);
+        PostViewModel Details(string id);
 
         Task<IServiceResult> Create(string authorId, string title, string content);
 

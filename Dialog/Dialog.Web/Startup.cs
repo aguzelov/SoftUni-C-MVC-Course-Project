@@ -1,10 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Reflection;
+using AutoMapper;
+using Dialog.Common.Mapping;
 using Dialog.Data;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Repositories;
 using Dialog.Services;
 using Dialog.Services.Contracts;
+using Dialog.ViewModels.Base;
 using Dialog.Web.Infrastructure.Extensions;
 using Dialog.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Builder;
@@ -15,17 +18,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Dialog.Web
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this._configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,7 +45,7 @@ namespace Dialog.Web
             {
                 options.UseLazyLoadingProxies();
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"));
+                    this._configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -62,12 +66,7 @@ namespace Dialog.Web
             }
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var mappingConfig = new MapperConfiguration(mc =>
-                mc.AddProfile(new MappingProfile())
-            );
-
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
             services.AddScoped<RecentBlogsActionFilter>();
@@ -81,8 +80,14 @@ namespace Dialog.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            
+            loggerFactory.AddConsole(this._configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
+            // Seed data on application startup
             app.UseDatabaseMigration(env);
 
             if (env.IsDevelopment())

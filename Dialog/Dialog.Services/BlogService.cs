@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
@@ -17,14 +18,12 @@ namespace Dialog.Services
 {
     public class BlogService : IBlogService
     {
-        private readonly IMapper mapper;
         private readonly IRepository<Post> _postRepository;
         private readonly IRepository<Comment> _commentRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public BlogService( IMapper mapper, IRepository<Post> postRepository,IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager)
+        public BlogService(IRepository<Post> postRepository,IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager)
         {
-            this.mapper = mapper;
             this._postRepository = postRepository;
             this._commentRepository = commentRepository;
             this._userManager = userManager;
@@ -49,13 +48,14 @@ namespace Dialog.Services
             var currentPosts = posts
                  .Skip((model.Page - 1) * model.PageSize)
                  .Take(model.PageSize)
+                 .To<PostSummaryViewModel>()
                  .ToList();
 
             var totalPosts = posts.Count();
 
             model.TotalPages = (int)Math.Ceiling(totalPosts / (double)model.PageSize);
 
-            model.Entities = currentPosts.Select(p => this.mapper.Map<PostSummaryViewModel>(p)).ToList();
+            model.Entities = currentPosts;
 
             return model;
         }
@@ -65,22 +65,43 @@ namespace Dialog.Services
             var blogs = this._postRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
-                .ToList();
+                .To<T>();
 
-            var model = blogs
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
+            //var model = blogs
+            //    .Select(p => this.mapper.Map<T>(p))
+            //    .ToList();
 
-            return model.AsQueryable<T>();
+            return blogs;
         }
 
-        public async Task<T> Details<T>(string id)
+        public PostViewModel Details(string id)
         {
-            var post = await this._postRepository.GetByIdAsync(id);
+            var post =  this._postRepository.GetByIdAsync(id).GetAwaiter().GetResult();
 
-            var models = this.mapper.Map<T>(post);
 
-            return models;
+            //TODO : Reformat this
+            var model = new PostViewModel
+            {
+               Id = post.Id,
+                Content = post.Content,
+                Title = post.Title,
+                Comments = post.Comments.Select(c=> new CommentViewModel
+                {
+                    Id = c.Id,
+                    Content = c.Content,
+                    Author = c.Author,
+                    CreatedOn = c.CreatedOn,
+                    Replies = new List<CommentViewModel>()
+                }).ToList(),
+                Author = new AuthorViewModel
+                {
+                    Id = post.Author.Id,
+                    Name = post.Author.UserName
+                }
+            };
+
+
+            return model;
         }
 
         public async Task<IServiceResult> Create(string authorId, string title, string content)
@@ -164,13 +185,9 @@ namespace Dialog.Services
             var post = this._postRepository.All()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(p => p.CreatedOn)
-                .ToList();
+                .To<T>();
 
-            var models = post
-                .Select(n => this.mapper.Map<T>(n))
-                .ToList();
-
-            return models.AsQueryable<T>();
+            return post;
         }
     }
 }

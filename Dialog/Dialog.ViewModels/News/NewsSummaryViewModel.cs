@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common.Mapping;
 
 namespace Dialog.ViewModels.News
 {
-    public class NewsSummaryViewModel
+    public class NewsSummaryViewModel : IMapFrom<Data.Models.News.News>
     {
         public string Id { get; set; }
 

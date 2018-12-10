@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Dialog.Common.Mapping;
+using Dialog.Data.Models.Blog;
 
 namespace Dialog.ViewModels.Blog
 {
-    public class CommentViewModel
+    public class CommentViewModel : IMapFrom<Comment>
     {
         public string Id { get; set; }
 

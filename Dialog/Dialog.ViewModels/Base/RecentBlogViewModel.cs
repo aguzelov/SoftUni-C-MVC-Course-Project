@@ -1,8 +1,11 @@
 ﻿using System;
+using AutoMapper;
+using Dialog.Common.Mapping;
+using Dialog.Data.Models.Blog;
 
 namespace Dialog.ViewModels.Base
 {
-    public class RecentBlogViewModel
+    public class RecentBlogViewModel : IMapFrom<Post>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -31,6 +34,14 @@ namespace Dialog.ViewModels.Base
                     return this.AuthorName;
                 }
             }
+        }
+
+        public void CreateMappings(IMapperConfigurationExpression configuration)
+        {
+            configuration.CreateMap<Post, RecentBlogViewModel>()
+                .ForMember(e => e.CommmentsCount, opt => opt.MapFrom(src => src.Comments.Count))
+                .ForMember(e => e.AuthorName, opt => opt.MapFrom(src => src.Author.UserName))
+                .ReverseMap();
         }
     }
 }

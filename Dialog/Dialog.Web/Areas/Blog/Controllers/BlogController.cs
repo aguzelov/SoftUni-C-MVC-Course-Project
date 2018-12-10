@@ -29,14 +29,14 @@ namespace Dialog.Web.Areas.Blog.Controllers
             return this.View(model);
         }
 
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = await this.blogService.Details<PostViewModel>(id);
+            var model =  this.blogService.Details(id);
 
             return this.View(model);
         }

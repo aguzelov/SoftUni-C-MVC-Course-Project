@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Dialog.Common.Mapping;
+using Dialog.Data.Models.Blog;
 
 namespace Dialog.ViewModels.Blog
 {
-    public class CreateCommentViewModel
+    public class CreateCommentViewModel : IMapFrom<Comment>
     {
         [Required]
         public string PostId { get; set; }

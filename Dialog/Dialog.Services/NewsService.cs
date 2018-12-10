@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.News;
@@ -19,13 +20,11 @@ namespace Dialog.Services
     {
         private readonly IRepository<News> _newsRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMapper mapper;
 
-        public NewsService(IRepository<News> newsRepository,UserManager<ApplicationUser> userManager, IMapper mapper)
+        public NewsService(IRepository<News> newsRepository,UserManager<ApplicationUser> userManager)
         {
             this._newsRepository = newsRepository;
             this._userManager = userManager;
-            this.mapper = mapper;
         }
 
         public AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model)
@@ -35,25 +34,26 @@ namespace Dialog.Services
             if (!string.IsNullOrEmpty(model.Author))
             {
                 news = this._newsRepository.All()
-                .OrderByDescending(p => p.CreatedOn)
-                .Where(p => p.Author.UserName == model.Author);
+                    .OrderByDescending(p => p.CreatedOn)
+                    .Where(p => p.Author.UserName == model.Author);
             }
             else
             {
                 news = this._newsRepository.All()
-                .OrderByDescending(p => p.CreatedOn);
+                    .OrderByDescending(p => p.CreatedOn);
             }
 
             var currentNews = news
                  .Skip((model.Page - 1) * model.PageSize)
                  .Take(model.PageSize)
+                 .To<NewsSummaryViewModel>()
                  .ToList();
 
             var totalNews = news.Count();
 
             model.TotalPages = (int)Math.Ceiling(totalNews / (double)model.PageSize);
 
-            model.Entities = currentNews.Select(p => this.mapper.Map<NewsSummaryViewModel>(p)).ToList();
+            model.Entities = currentNews;
 
             return model;
         }
@@ -99,13 +99,23 @@ namespace Dialog.Services
             return result;
         }
 
-        public async Task<T> Details<T>(string id)
+        public NewsViewModel Details(string id)
         {
-            var news = await this._newsRepository.GetByIdAsync(id);
+            var news = this._newsRepository.GetByIdAsync(id).GetAwaiter().GetResult();
 
-            var models = this.mapper.Map<T>(news);
+            var model = new NewsViewModel
+            {
+                Id = news.Id,
+                Content = news.Content,
+                Title = news.Title,
+                Author = new AuthorViewModel
+                {
+                    Id = news.Author.Id,
+                    Name = news.Author.UserName
+                }
+            };
 
-            return models;
+            return model;
         }
 
         public ICollection<T> RecentNews<T>()
@@ -113,27 +123,20 @@ namespace Dialog.Services
             var blogs = this._newsRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
+                .To<T>()
                 .ToList();
 
-            var model = blogs
-                .Select(p => this.mapper.Map<T>(p))
-                .ToList();
-
-            return model;
+            return blogs;
         }
 
-        public ICollection<T> Search<T>(string searchTerm)
+        public IQueryable<T> Search<T>(string searchTerm)
         {
             var news = this._newsRepository.All()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(n => n.CreatedOn)
-                .ToList();
+                .To<T>();
 
-            var models = news
-                .Select(n => this.mapper.Map<T>(n))
-                .ToList();
-
-            return models;
+            return news;
         }
     }
 }

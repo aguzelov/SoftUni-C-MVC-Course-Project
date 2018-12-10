@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Dialog.Data.Models\Dialog.Data.Models.csproj" />
+    <ProjectReference Include="..\Dialog.Common\Dialog.Common.csproj" />
+  </ItemGroup>
+
 </Project>

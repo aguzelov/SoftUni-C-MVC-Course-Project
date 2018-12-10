@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Dialog.Common.Mapping;
+using Dialog.Data.Models.Blog;
 
 namespace Dialog.ViewModels.Blog
 {
-    public class CreateViewModel
+    public class CreateViewModel : IMapFrom<Post>
     {
         [Required]
         [DataType(DataType.Text)]
