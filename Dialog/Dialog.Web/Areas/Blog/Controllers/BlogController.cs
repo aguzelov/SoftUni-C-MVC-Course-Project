@@ -1,11 +1,12 @@
-﻿using Dialog.Models;
-using Dialog.Services.Contracts;
+﻿using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
+using Dialog.Data.Models;
 
 namespace Dialog.Web.Areas.Blog.Controllers
 {
@@ -28,14 +29,14 @@ namespace Dialog.Web.Areas.Blog.Controllers
             return this.View(model);
         }
 
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this.blogService.Details<PostViewModel>(id);
+            var model = await this.blogService.Details<PostViewModel>(id);
 
             return this.View(model);
         }
@@ -48,7 +49,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateViewModel model)
+        public async Task<IActionResult> Create(CreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +58,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
             var user = this.User;
             var authorId = this.userManager.GetUserId(user);
 
-            var result = this.blogService.Create(authorId, model.Title, model.Content);
+            var result = await this.blogService.Create(authorId, model.Title, model.Content);
 
             if (!result.Success)
             {
@@ -67,14 +68,14 @@ namespace Dialog.Web.Areas.Blog.Controllers
             return this.RedirectToAction(nameof(All));
         }
 
-        public IActionResult AddComment(CreateCommentViewModel model)
+        public async Task<IActionResult> AddComment(CreateCommentViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return this.RedirectToAction(nameof(Details), routeValues: new { Id = model.PostId });
             }
 
-            var result = this.blogService.AddComment(model.PostId, model.Author, model.Message);
+            var result = await this.blogService.AddComment(model.PostId, model.Author, model.Message);
 
             if (!result.Success)
             {

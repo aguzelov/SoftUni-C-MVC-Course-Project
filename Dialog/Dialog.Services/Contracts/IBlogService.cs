@@ -3,6 +3,7 @@ using Dialog.ViewModels.Blog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Dialog.Services.Contracts
 {
@@ -10,11 +11,11 @@ namespace Dialog.Services.Contracts
     {
         AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model);
 
-        T Details<T>(string id);
+        Task<T> Details<T>(string id);
 
-        IServiceResult Create(string authorId, string title, string content);
+        Task<IServiceResult> Create(string authorId, string title, string content);
 
-        IServiceResult AddComment(string postId, string authorName, string message);
+        Task<IServiceResult> AddComment(string postId, string authorName, string message);
 
         IQueryable<T> RecentBlogs<T>();
 

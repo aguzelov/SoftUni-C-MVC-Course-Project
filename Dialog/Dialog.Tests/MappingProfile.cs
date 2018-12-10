@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Dialog.Models.Blog;
+using Dialog.Data.Models.Blog;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
 

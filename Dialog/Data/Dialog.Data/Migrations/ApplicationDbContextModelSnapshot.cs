@@ -283,7 +283,7 @@ namespace Dialog.Data.Migrations
             modelBuilder.Entity("Dialog.Models.News.News", b =>
                 {
                     b.HasOne("Dialog.Models.ApplicationUser", "Author")
-                        .WithMany()
+                        .WithMany("News")
                         .HasForeignKey("AuthorId");
                 });
 

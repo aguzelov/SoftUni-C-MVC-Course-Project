@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Dialog.Data;
-using Dialog.Models.News;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.News;
@@ -8,17 +7,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Dialog.Data.Common.Repositories;
+using Dialog.Data.Models;
+using Dialog.Data.Models.News;
+using Microsoft.AspNetCore.Identity;
 
 namespace Dialog.Services
 {
     public class NewsService : INewsService
     {
-        private readonly ApplicationDbContext context;
+        private readonly IRepository<News> _newsRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper mapper;
 
-        public NewsService(ApplicationDbContext context, IMapper mapper)
+        public NewsService(IRepository<News> newsRepository,UserManager<ApplicationUser> userManager, IMapper mapper)
         {
-            this.context = context;
+            this._newsRepository = newsRepository;
+            this._userManager = userManager;
             this.mapper = mapper;
         }
 
@@ -28,13 +34,13 @@ namespace Dialog.Services
 
             if (!string.IsNullOrEmpty(model.Author))
             {
-                news = this.context.News
+                news = this._newsRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Where(p => p.Author.UserName == model.Author);
             }
             else
             {
-                news = this.context.News
+                news = this._newsRepository.All()
                 .OrderByDescending(p => p.CreatedOn);
             }
 
@@ -52,18 +58,18 @@ namespace Dialog.Services
             return model;
         }
 
-        public IServiceResult Create(string authorId, string title, string content)
+        public async Task<IServiceResult> Create(string authorId, string title, string content)
         {
             var result = new ServiceResult
             {
                 Success = false
             };
 
-            var author = this.context.Users.FirstOrDefault(u => u.Id == authorId);
+            var author = await this._userManager.FindByIdAsync(authorId);
 
             if (author == null ||
                 title == null ||
-                context == null)
+                content == null)
             {
                 return result;
             }
@@ -79,8 +85,8 @@ namespace Dialog.Services
 
             try
             {
-                this.context.News.Add(news);
-                this.context.SaveChanges();
+                this._newsRepository.Add(news);
+                await this._newsRepository.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -93,10 +99,9 @@ namespace Dialog.Services
             return result;
         }
 
-        public T Details<T>(string id)
+        public async Task<T> Details<T>(string id)
         {
-            var news = this.context.News
-                   .FirstOrDefault(p => p.Id == id);
+            var news = await this._newsRepository.GetByIdAsync(id);
 
             var models = this.mapper.Map<T>(news);
 
@@ -105,7 +110,7 @@ namespace Dialog.Services
 
         public ICollection<T> RecentNews<T>()
         {
-            var blogs = this.context.News
+            var blogs = this._newsRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
                 .ToList();
@@ -119,7 +124,7 @@ namespace Dialog.Services
 
         public ICollection<T> Search<T>(string searchTerm)
         {
-            var news = this.context.News
+            var news = this._newsRepository.All()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(n => n.CreatedOn)
                 .ToList();

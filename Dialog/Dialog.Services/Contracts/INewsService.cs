@@ -3,6 +3,7 @@ using Dialog.ViewModels.News;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dialog.Services.Contracts
 {
@@ -10,9 +11,9 @@ namespace Dialog.Services.Contracts
     {
         AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model);
 
-        T Details<T>(string id);
+        Task<T> Details<T>(string id);
 
-        IServiceResult Create(string authorId, string title, string content);
+        Task<IServiceResult> Create(string authorId, string title, string content);
 
         ICollection<T> RecentNews<T>();
 

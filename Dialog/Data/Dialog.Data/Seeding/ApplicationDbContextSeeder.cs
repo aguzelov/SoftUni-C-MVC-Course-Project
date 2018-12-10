@@ -1,13 +1,13 @@
 ﻿using Dialog.Common;
-using Dialog.Models;
-using Dialog.Models.Blog;
-using Dialog.Models.News;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Dialog.Data.Models;
+using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.News;
 
 namespace Dialog.Data.Seeding
 {
@@ -63,7 +63,7 @@ namespace Dialog.Data.Seeding
                 var random = new Random();
                 var users = userManager.Users.ToList();
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     var user = users[random.Next(0, users.Count())];
 
@@ -112,7 +112,7 @@ namespace Dialog.Data.Seeding
                 var random = new Random();
                 var users = userManager.Users.ToList();
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     var user = users[random.Next(0, users.Count())];
 

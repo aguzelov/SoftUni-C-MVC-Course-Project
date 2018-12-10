@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Dialog.Models.Blog;
-using Dialog.Models.News;
+using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.News;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
 using Dialog.ViewModels.News;

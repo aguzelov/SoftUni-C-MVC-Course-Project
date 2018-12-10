@@ -17,6 +17,6 @@ namespace Dialog.ViewModels.Blog
 
         public ICollection<CommentViewModel> Comments { get; set; }
 
-        public CreateCommentViewModel CreateComment { get; set; }
+        public CreateCommentViewModel CreateCommentViewModel { get; set; }
     }
 }

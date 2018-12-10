@@ -1,7 +1,5 @@
 using AutoMapper;
 using Dialog.Data;
-using Dialog.Models;
-using Dialog.Models.Blog;
 using Dialog.Services;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
@@ -12,6 +10,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dialog.Data.Models;
+using Dialog.Data.Models.Blog;
 
 namespace Tests
 {
@@ -323,7 +323,7 @@ namespace Tests
 
             IMapper mapper = mappingConfig.CreateMapper();
 
-            this.Service = new BlogService(mockContext.Object, mapper);
+            //this.Service = new BlogService(mockContext.Object, mapper);
         }
 
         [Test]
@@ -387,7 +387,7 @@ namespace Tests
             var expectedPost = this.PostsData.First();
 
             //Act
-            var post = this.Service.Details<PostViewModel>(expectedPost.Id);
+            var post = this.Service.Details<PostViewModel>(expectedPost.Id).GetAwaiter().GetResult();
 
             //Assert
             Assert.IsInstanceOf<PostViewModel>(post);
@@ -404,7 +404,7 @@ namespace Tests
             var postContent = "Fourth Post Content";
 
             //Act
-            var result = this.Service.Create(authorId, postTitle, postContent);
+            var result = this.Service.Create(authorId, postTitle, postContent).GetAwaiter().GetResult();
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
@@ -420,7 +420,7 @@ namespace Tests
             var commentContent = "Fourth Post Content";
 
             //Act
-            var result = this.Service.AddComment(postId, authorName, commentContent);
+            var result = this.Service.AddComment(postId, authorName, commentContent).GetAwaiter().GetResult();
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);

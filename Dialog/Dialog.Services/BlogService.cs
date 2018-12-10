@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Dialog.Data;
-using Dialog.Models;
-using Dialog.Models.Blog;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
@@ -10,18 +8,26 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Dialog.Data.Common.Repositories;
+using Dialog.Data.Models;
+using Dialog.Data.Models.Blog;
 
 namespace Dialog.Services
 {
     public class BlogService : IBlogService
     {
-        private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
+        private readonly IRepository<Post> _postRepository;
+        private readonly IRepository<Comment> _commentRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BlogService(ApplicationDbContext context, IMapper mapper)
+        public BlogService( IMapper mapper, IRepository<Post> postRepository,IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager)
         {
-            this.context = context;
             this.mapper = mapper;
+            this._postRepository = postRepository;
+            this._commentRepository = commentRepository;
+            this._userManager = userManager;
         }
 
         public AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model)
@@ -30,13 +36,13 @@ namespace Dialog.Services
 
             if (!string.IsNullOrEmpty(model.Author))
             {
-                posts = this.context.Posts
+                posts = this._postRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Where(p => p.Author.UserName == model.Author);
             }
             else
             {
-                posts = this.context.Posts
+                posts = this._postRepository.All()
                 .OrderByDescending(p => p.CreatedOn);
             }
 
@@ -56,7 +62,7 @@ namespace Dialog.Services
 
         public IQueryable<T> RecentBlogs<T>()
         {
-            var blogs = this.context.Posts
+            var blogs = this._postRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
                 .ToList();
@@ -68,28 +74,27 @@ namespace Dialog.Services
             return model.AsQueryable<T>();
         }
 
-        public T Details<T>(string id)
+        public async Task<T> Details<T>(string id)
         {
-            var post = this.context.Posts
-                .FirstOrDefault(p => p.Id == id);
+            var post = await this._postRepository.GetByIdAsync(id);
 
             var models = this.mapper.Map<T>(post);
 
             return models;
         }
 
-        public IServiceResult Create(string authorId, string title, string content)
+        public async Task<IServiceResult> Create(string authorId, string title, string content)
         {
             var result = new ServiceResult
             {
                 Success = false
             };
 
-            var author = this.context.Users.FirstOrDefault(u => u.Id == authorId);
+            var author = await this._userManager.FindByIdAsync(authorId);
 
             if (author == null ||
                 title == null ||
-                context == null)
+                content == null)
             {
                 return result;
             }
@@ -105,8 +110,8 @@ namespace Dialog.Services
 
             try
             {
-                this.context.Posts.Add(post);
-                this.context.SaveChanges();
+                this._postRepository.Add(post);
+               await this._postRepository.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -119,11 +124,11 @@ namespace Dialog.Services
             return result;
         }
 
-        public IServiceResult AddComment(string postId, string authorName, string message)
+        public async Task<IServiceResult> AddComment(string postId, string authorName, string message)
         {
             var result = new ServiceResult { Success = false };
 
-            var post = this.context.Posts.FirstOrDefault(p => p.Id == postId);
+            var post = await this._postRepository.GetByIdAsync(postId);
             if (post == null)
             {
                 return result;
@@ -140,8 +145,8 @@ namespace Dialog.Services
 
             try
             {
-                this.context.Comments.Add(comment);
-                this.context.SaveChanges();
+                this._commentRepository.Add(comment);
+               await this._commentRepository.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -156,7 +161,7 @@ namespace Dialog.Services
 
         public IQueryable<T> Search<T>(string searchTerm)
         {
-            var post = this.context.Posts
+            var post = this._postRepository.All()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(p => p.CreatedOn)
                 .ToList();

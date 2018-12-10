@@ -1,5 +1,5 @@
-﻿@model PostViewModel
-
+﻿@using Microsoft.CodeAnalysis.Operations
+@model PostViewModel
 @{
     var partialModel = new JumbotronPartialViewModel
     {
@@ -67,23 +67,23 @@
 
                     <div class="comment-form-wrap pt-5">
                         <h3 class="mb-5">Leave a comment</h3>
-                        <form action="/Blog/Blog/AddComment" method="post" class="p-5 bg-light">
+                        <form asp-area="Blog" asp-controller="Blog" asp-action="AddComment" method="post" class="p-5 bg-light">
                             <input type="text" name="PostId" value="@Model.Id" hidden />
 
                             <div class="form-group">
-                                <label asp-for="@Model.CreateComment.Author"></label>
-                                <input class="form-control" asp-for="@Model.CreateComment.Author">
-                                <span asp-validation-for="@Model.CreateComment.Author"></span>
+                                <label asp-for="@Model.CreateCommentViewModel.Author"></label>
+                                <input name="@nameof(Model.CreateCommentViewModel.Author)" class="form-control" asp-for="@Model.CreateCommentViewModel.Author">
+                                <span asp-validation-for="@Model.CreateCommentViewModel.Author"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="@Model.CreateComment.Email"></label>
-                                <input class="form-control" asp-for="@Model.CreateComment.Email">
-                                <span asp-validation-for="@Model.CreateComment.Email"></span>
+                                <label asp-for="@Model.CreateCommentViewModel.Email"></label>
+                                <input name="@nameof(Model.CreateCommentViewModel.Email)" class="form-control" asp-for="@Model.CreateCommentViewModel.Email">
+                                <span asp-validation-for="@Model.CreateCommentViewModel.Email"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="@Model.CreateComment.Message"></label>
-                                <textarea asp-for="@Model.CreateComment.Message" id="Message" cols="30" rows="10" class="form-control"></textarea>
-                                <span asp-validation-for="@Model.CreateComment.Message"></span>
+                                <label asp-for="@Model.CreateCommentViewModel.Message"></label>
+                                <textarea name="@nameof(Model.CreateCommentViewModel.Message)" asp-for="@Model.CreateCommentViewModel.Message"  cols="30" rows="10" class="form-control"></textarea>
+                                <span asp-validation-for="@Model.CreateCommentViewModel.Message"></span>
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">

@@ -1,7 +1,7 @@
-﻿namespace Dialog.Models.Contracts
-{
-    using System;
+﻿using System;
 
+namespace Dialog.Data.Common.Models
+{
     public interface IAuditInfo
     {
         DateTime CreatedOn { get; set; }

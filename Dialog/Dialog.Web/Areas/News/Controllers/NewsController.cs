@@ -1,4 +1,5 @@
-﻿using Dialog.Models;
+﻿using System.Threading.Tasks;
+using Dialog.Data.Models;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.News;
@@ -27,14 +28,14 @@ namespace Dialog.Web.Areas.News.Controllers
             return this.View(model);
         }
 
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this.newsService.Details<NewsViewModel>(id);
+            var model = await this.newsService.Details<NewsViewModel>(id);
 
             return this.View(model);
         }
@@ -47,7 +48,7 @@ namespace Dialog.Web.Areas.News.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateViewModel model)
+        public async Task<IActionResult> Create(CreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +57,7 @@ namespace Dialog.Web.Areas.News.Controllers
             var user = this.User;
             var authorId = this.userManager.GetUserId(user);
 
-            var result = this.newsService.Create(authorId, model.Title, model.Content);
+            var result = await this.newsService.Create(authorId, model.Title, model.Content);
 
             if (!result.Success)
             {

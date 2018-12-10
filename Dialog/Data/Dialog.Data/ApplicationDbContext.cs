@@ -1,6 +1,6 @@
-﻿using Dialog.Models;
-using Dialog.Models.Blog;
-using Dialog.Models.News;
+﻿using Dialog.Data.Models;
+using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.News;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +19,6 @@ namespace Dialog.Data
         {
         }
 
-        public new virtual DbSet<ApplicationUser> Users { get; set; }
 
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }

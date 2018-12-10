@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Dialog.Data;
-using Dialog.Models;
+using Dialog.Data.Common.Repositories;
+using Dialog.Data.Models;
+using Dialog.Data.Repositories;
 using Dialog.Services;
 using Dialog.Services.Contracts;
 using Dialog.Web.Infrastructure.Extensions;
@@ -58,7 +60,7 @@ namespace Dialog.Web
             {
                 options.Filters.Add(typeof(RecentBlogsActionFilter));
             }
-                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             var mappingConfig = new MapperConfiguration(mc =>
                 mc.AddProfile(new MappingProfile())
@@ -69,6 +71,10 @@ namespace Dialog.Web
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
             services.AddScoped<RecentBlogsActionFilter>();
+
+            // Data repositories
+            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<INewsService, NewsService>();

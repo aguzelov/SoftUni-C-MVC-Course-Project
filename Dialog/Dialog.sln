@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.Web", "Dialog.Web\Dialog.Web.csproj", "{12BB46FF-4305-4450-9C43-40FA5C76E02E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.Data", "Dialog.Data\Dialog.Data.csproj", "{8D77A231-88C0-4622-A907-910BB81F7E8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.Data", "Data\Dialog.Data\Dialog.Data.csproj", "{8D77A231-88C0-4622-A907-910BB81F7E8F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.Models", "Dialog.Models\Dialog.Models.csproj", "{79169FC9-32D8-4F97-9722-183D13AD128F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.Data.Models", "Data\Dialog.Data.Models\Dialog.Data.Models.csproj", "{79169FC9-32D8-4F97-9722-183D13AD128F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.Services", "Dialog.Services\Dialog.Services.csproj", "{7B3D8038-5F75-4285-A3CA-AD787840537B}"
 EndProject
@@ -16,6 +16,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.Common", "Dialog.Common\Dialog.Common.csproj", "{88B3D4AC-7E3A-4761-9E81-2892224BA163}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialog.ViewModels", "Dialog.ViewModels\Dialog.ViewModels.csproj", "{6DD4716B-93BE-4D65-9C1E-0FB861DD67BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{7BBD3A00-A21B-4AAE-A578-B3CD72EC2A88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dialog.Data.Common", "Data\Dialog.Data.Common\Dialog.Data.Common.csproj", "{0EE8BEDC-1CE5-4C5E-A843-3687689287C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,9 +55,18 @@ Global
 		{6DD4716B-93BE-4D65-9C1E-0FB861DD67BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DD4716B-93BE-4D65-9C1E-0FB861DD67BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DD4716B-93BE-4D65-9C1E-0FB861DD67BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EE8BEDC-1CE5-4C5E-A843-3687689287C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EE8BEDC-1CE5-4C5E-A843-3687689287C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EE8BEDC-1CE5-4C5E-A843-3687689287C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EE8BEDC-1CE5-4C5E-A843-3687689287C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8D77A231-88C0-4622-A907-910BB81F7E8F} = {7BBD3A00-A21B-4AAE-A578-B3CD72EC2A88}
+		{79169FC9-32D8-4F97-9722-183D13AD128F} = {7BBD3A00-A21B-4AAE-A578-B3CD72EC2A88}
+		{0EE8BEDC-1CE5-4C5E-A843-3687689287C8} = {7BBD3A00-A21B-4AAE-A578-B3CD72EC2A88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F84346-7939-42A2-8415-4E0BEDE4B844}
