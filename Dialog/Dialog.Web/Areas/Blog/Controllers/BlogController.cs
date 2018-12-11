@@ -36,7 +36,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model =  this.blogService.Details(id);
+            var model = this.blogService.Details(id);
 
             return this.View(model);
         }
@@ -67,6 +67,8 @@ namespace Dialog.Web.Areas.Blog.Controllers
 
             return this.RedirectToAction(nameof(All));
         }
+
+        //TODO : Add Edit Post Action
 
         public async Task<IActionResult> AddComment(CreateCommentViewModel model)
         {
@@ -101,6 +103,13 @@ namespace Dialog.Web.Areas.Blog.Controllers
             }
 
             return this.View("All", model);
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            await this.blogService.Delete(id);
+
+            return RedirectToAction("Index", "Administrator", new { area = "Administration" });
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Dialog.Services
         private readonly IRepository<Comment> _commentRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public BlogService(IRepository<Post> postRepository,IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager)
+        public BlogService(IRepository<Post> postRepository, IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager)
         {
             this._postRepository = postRepository;
             this._commentRepository = commentRepository;
@@ -60,6 +60,16 @@ namespace Dialog.Services
             return model;
         }
 
+        public ICollection<T> All<T>()
+        {
+            var posts = this._postRepository.All()
+                 .OrderByDescending(p => p.CreatedOn)
+                 .To<T>()
+                 .ToList();
+
+            return posts;
+        }
+
         public IQueryable<T> RecentBlogs<T>()
         {
             var blogs = this._postRepository.All()
@@ -76,16 +86,15 @@ namespace Dialog.Services
 
         public PostViewModel Details(string id)
         {
-            var post =  this._postRepository.GetByIdAsync(id).GetAwaiter().GetResult();
-
+            var post = this._postRepository.GetByIdAsync(id).GetAwaiter().GetResult();
 
             //TODO : Reformat this
             var model = new PostViewModel
             {
-               Id = post.Id,
+                Id = post.Id,
                 Content = post.Content,
                 Title = post.Title,
-                Comments = post.Comments.Select(c=> new CommentViewModel
+                Comments = post.Comments.Select(c => new CommentViewModel
                 {
                     Id = c.Id,
                     Content = c.Content,
@@ -99,7 +108,6 @@ namespace Dialog.Services
                     Name = post.Author.UserName
                 }
             };
-
 
             return model;
         }
@@ -132,7 +140,7 @@ namespace Dialog.Services
             try
             {
                 this._postRepository.Add(post);
-               await this._postRepository.SaveChangesAsync();
+                await this._postRepository.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -167,7 +175,7 @@ namespace Dialog.Services
             try
             {
                 this._commentRepository.Add(comment);
-               await this._commentRepository.SaveChangesAsync();
+                await this._commentRepository.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -188,6 +196,16 @@ namespace Dialog.Services
                 .To<T>();
 
             return post;
+        }
+
+        public async Task Delete(string id)
+        {
+            var post = await this._postRepository.GetByIdAsync(id);
+
+            post.IsDeleted = true;
+            post.DeletedOn = DateTime.UtcNow;
+
+            await this._postRepository.SaveChangesAsync();
         }
     }
 }
