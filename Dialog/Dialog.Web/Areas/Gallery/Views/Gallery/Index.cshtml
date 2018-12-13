@@ -1,0 +1,44 @@
+﻿@using CloudinaryDotNet
+@using Dialog.Data.Models.Gallery
+@inject Cloudinary Cloudinary
+
+@model ICollection<Image>
+
+@{
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = "Gallery",
+        Current = "Gallery",
+        HasSearchField = false,
+        ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704897/aqrhfwh6fcpdnc7tiwuq.jpg"
+    };
+}
+
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
+
+<section class="ftco-section ftco-gallery">
+    <div class="container">
+        <div class="d-md-flex">
+
+            @{ var index = 1;}
+            @foreach (var image in Model)
+            {
+
+                <a href="@image.SecureUri" class="gallery image-popup d-flex justify-content-center align-items-center img ftco-animate" style="background-image: url(@image.SecureUri);">
+                    <div class="icon d-flex justify-content-center align-items-center">
+                        <span class="icon-search"></span>
+                    </div>
+                </a>
+
+                if (index == 4)
+                {
+                @:</div>
+                @:<div class="d-md-flex">
+                    index = 0;
+                }
+
+                index++;
+            }
+        </div>
+    </div>
+</section>

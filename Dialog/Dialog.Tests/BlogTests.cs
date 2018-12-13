@@ -392,7 +392,7 @@ namespace Tests
             //Assert
             Assert.IsInstanceOf<PostViewModel>(post);
             Assert.AreEqual(expectedPost.Id, post.Id);
-            Assert.AreEqual(expectedPost.Author.UserName, post.Author.Name);
+            Assert.AreEqual(expectedPost.Author.UserName, post.Author.UserName);
         }
 
         [Test]

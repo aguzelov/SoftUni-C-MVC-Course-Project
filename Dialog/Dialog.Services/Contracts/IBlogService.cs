@@ -24,5 +24,7 @@ namespace Dialog.Services.Contracts
         IQueryable<T> Search<T>(string searchTerm);
 
         Task Delete(string id);
+
+        int Count();
     }
 }

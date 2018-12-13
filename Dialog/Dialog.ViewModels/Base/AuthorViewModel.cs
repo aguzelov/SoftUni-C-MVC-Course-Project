@@ -4,17 +4,10 @@ using Dialog.Data.Models;
 
 namespace Dialog.ViewModels.Base
 {
-    public class AuthorViewModel : IMapFrom<ApplicationUser> , IHaveCustomMappings
+    public class AuthorViewModel : IMapFrom<ApplicationUser>
     {
         public string Id { get; set; }
 
-        public string Name { get; set; }
-
-        public void CreateMappings(IMapperConfigurationExpression configuration)
-        {
-            configuration.CreateMap<ApplicationUser, AuthorViewModel>()
-                .ForMember(a => a.Name, opt => opt.MapFrom(u => u.UserName));
-
-        }
+        public string UserName { get; set; }
     }
 }

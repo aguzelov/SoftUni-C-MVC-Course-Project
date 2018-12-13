@@ -14,5 +14,7 @@ namespace Dialog.ViewModels.Base
         public string Current { get; set; }
 
         public bool HasSearchField { get; set; }
+
+        public string ImageUri { get; set; }
     }
 }

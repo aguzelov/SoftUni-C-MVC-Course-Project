@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AutoMapper;
+using CloudinaryDotNet;
 using Dialog.Common.Mapping;
 using Dialog.Data;
 using Dialog.Data.Common.Repositories;
@@ -66,6 +67,15 @@ namespace Dialog.Web
             }
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            var account = new Account(
+                this._configuration.GetSection("Cloudinary").GetSection("CloudName").Value,
+                this._configuration.GetSection("Cloudinary").GetSection("APIKey").Value,
+                this._configuration.GetSection("Cloudinary").GetSection("APISecret").Value);
+
+            var cloudinary = new Cloudinary(account);
+
+            services.AddSingleton(new Cloudinary(account));
+
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
             services.AddScoped<RecentBlogsActionFilter>();
 
@@ -76,6 +86,7 @@ namespace Dialog.Web
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGalleryService, GalleryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

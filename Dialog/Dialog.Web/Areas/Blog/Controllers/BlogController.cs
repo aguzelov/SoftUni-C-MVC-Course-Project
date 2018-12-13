@@ -109,7 +109,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             await this.blogService.Delete(id);
 
-            return RedirectToAction("Index", "Administrator", new { area = "Administration" });
+            return RedirectToAction("Blog", "Administrator", new { area = "Administration" });
         }
     }
 }

@@ -1,10 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Dialog.Services.Contracts
 {
     public interface IUserService
     {
-        ICollection<T> AuthorPosts<T>();
+        ICollection<T> All<T>();
+
+        ICollection<T> AuthorWithPostsCount<T>();
+
+        ICollection<T> AuthorWithNewsCount<T>();
+
+        int Count();
+
+        Task<string> GetUserRoles(string email);
     }
 }

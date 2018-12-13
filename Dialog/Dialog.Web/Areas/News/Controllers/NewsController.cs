@@ -85,5 +85,12 @@ namespace Dialog.Web.Areas.News.Controllers
 
             return this.View("All", model);
         }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            await this.newsService.Delete(id);
+
+            return RedirectToAction("News", "Administrator", new { area = "Administration" });
+        }
     }
 }

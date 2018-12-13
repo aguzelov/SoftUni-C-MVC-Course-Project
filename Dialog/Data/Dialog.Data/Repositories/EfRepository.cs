@@ -1,4 +1,6 @@
-﻿namespace Dialog.Data.Repositories
+﻿using Dialog.Data.Common.Models;
+
+namespace Dialog.Data.Repositories
 {
     using System;
     using System.Linq;
@@ -24,6 +26,16 @@
         public virtual IQueryable<TEntity> All() => this.DbSet;
 
         public virtual IQueryable<TEntity> AllAsNoTracking() => this.DbSet.AsNoTracking();
+
+        public IQueryable<TEntity> AllWithoutDeleted()
+        {
+            if (typeof(IDeletableEntity).IsAssignableFrom(typeof(TEntity)))
+            {
+                return this.DbSet.Where(t => !(t as IDeletableEntity).IsDeleted);
+            }
+
+            return this.DbSet;
+        }
 
         public virtual Task<TEntity> GetByIdAsync(params object[] id) => this.DbSet.FindAsync(id);
 

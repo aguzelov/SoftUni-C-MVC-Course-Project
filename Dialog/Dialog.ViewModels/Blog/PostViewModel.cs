@@ -4,7 +4,7 @@ using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
 
-namespace Dialog.ViewModels.Blog 
+namespace Dialog.ViewModels.Blog
 {
     public class PostViewModel : IMapFrom<Post>, IHaveCustomMappings
     {
@@ -26,7 +26,7 @@ namespace Dialog.ViewModels.Blog
         {
             configuration.CreateMap<Post, PostViewModel>()
                 .ForPath(e => e.Author.Id, opt => opt.MapFrom(src => src.Author.Id))
-                .ForPath(e => e.Author.Name, opt => opt.MapFrom(src => src.Author.UserName))
+                .ForPath(e => e.Author.UserName, opt => opt.MapFrom(src => src.Author.UserName))
                 .ReverseMap();
         }
     }

@@ -1,7 +1,10 @@
-﻿using Dialog.Common;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Dialog.Common;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Administration;
 using Dialog.ViewModels.Blog;
+using Dialog.ViewModels.News;
 using Dialog.ViewModels.User;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
@@ -15,26 +18,69 @@ namespace Dialog.Web.Areas.Administration.Controllers
     {
         private readonly IBlogService _blogService;
         private readonly IUserService _userService;
+        private readonly INewsService _newsService;
+        private readonly IGalleryService _galleryService;
 
-        public AdministratorController(IBlogService blogService, IUserService userService)
+        public AdministratorController(IBlogService blogService, IUserService userService, INewsService newsService, IGalleryService galleryService)
         {
             this._blogService = blogService;
             this._userService = userService;
+            this._newsService = newsService;
+            this._galleryService = galleryService;
         }
 
         public IActionResult Index()
         {
-            return this.View();
+            var model = new AdministratorIndexViewModel
+            {
+                PostsCount = this._blogService.Count(),
+                NewsCount = this._newsService.Count(),
+                UsersCount = this._userService.Count(),
+                ImagesCount = this._galleryService.Count(),
+            };
+
+            return this.View(model);
         }
 
         public IActionResult Blog()
         {
-            var model = new AdministrationBlogViewModel
+            var model = new AdministrationEntityViewModel<PostSummaryViewModel, AuthorsWithPostsCountViewModel>
             {
-                Posts = this._blogService.All<PostSummaryViewModel>(),
-                Authors = this._userService.AuthorPosts<AuthorsWithPostsCountViewModel>()
+                Entities = this._blogService.All<PostSummaryViewModel>(),
+                Authors = this._userService.AuthorWithPostsCount<AuthorsWithPostsCountViewModel>()
             };
             return this.View(model);
+        }
+
+        public IActionResult News()
+        {
+            var model = new AdministrationEntityViewModel<NewsSummaryViewModel, AuthorsWithNewsCountViewModel>
+            {
+                Entities = this._newsService.All<NewsSummaryViewModel>(),
+                Authors = this._userService.AuthorWithNewsCount<AuthorsWithNewsCountViewModel>()
+            };
+            return this.View(model);
+        }
+
+        public IActionResult Users()
+        {
+            var users = this._userService.All<UserSummaryViewModel>().ToList();
+
+            users.ForEach(u => u.Role = this._userService.GetUserRoles(u.Email).GetAwaiter().GetResult());
+
+            var model = new AdministrationUsersViewModel
+            {
+                Users = users
+            };
+
+            return this.View(model);
+        }
+
+        public IActionResult Gallery()
+        {
+            var images = this._galleryService.All().ToList();
+
+            return this.View();
         }
     }
 }

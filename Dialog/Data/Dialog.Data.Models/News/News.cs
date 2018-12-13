@@ -1,5 +1,6 @@
 ﻿using System;
 using Dialog.Data.Common.Models;
+using Dialog.Data.Models.Gallery;
 
 namespace Dialog.Data.Models.News
 {
@@ -17,5 +18,7 @@ namespace Dialog.Data.Models.News
         public string AuthorId { get; set; }
         public virtual ApplicationUser Author { get; set; }
 
+        public string ImageId { get; set; }
+        public virtual Image Image { get; set; }
     }
 }

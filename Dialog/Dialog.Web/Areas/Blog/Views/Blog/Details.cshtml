@@ -6,7 +6,8 @@
         Title = Model.Title,
         Parent = "Blog",
         Current = "Blog Details",
-        HasSearchField = false
+        HasSearchField = false,
+        ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704889/sa3vhx2bn0rvbrws5wi5.jpg"
     };
 }
 
@@ -23,7 +24,7 @@
                         <img src="/images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4">
                     </div>
                     <div class="desc align-self-md-center">
-                        <h3>@Model.Author.Name</h3>
+                        <h3>@Model.Author.UserName</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
                     </div>
                 </div>
@@ -82,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="@Model.CreateCommentViewModel.Message"></label>
-                                <textarea name="@nameof(Model.CreateCommentViewModel.Message)" asp-for="@Model.CreateCommentViewModel.Message"  cols="30" rows="10" class="form-control"></textarea>
+                                <textarea name="@nameof(Model.CreateCommentViewModel.Message)" asp-for="@Model.CreateCommentViewModel.Message" cols="30" rows="10" class="form-control"></textarea>
                                 <span asp-validation-for="@Model.CreateCommentViewModel.Message"></span>
                             </div>
                             <div class="form-group">

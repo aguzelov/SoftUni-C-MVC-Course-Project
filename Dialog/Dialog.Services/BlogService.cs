@@ -31,17 +31,17 @@ namespace Dialog.Services
 
         public AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model)
         {
-            IQueryable<Post> posts = null;
+            IQueryable<Post> posts = this._postRepository.AllWithoutDeleted();
 
             if (!string.IsNullOrEmpty(model.Author))
             {
-                posts = this._postRepository.All()
+                posts = posts
                 .OrderByDescending(p => p.CreatedOn)
                 .Where(p => p.Author.UserName == model.Author);
             }
             else
             {
-                posts = this._postRepository.All()
+                posts = posts
                 .OrderByDescending(p => p.CreatedOn);
             }
 
@@ -62,7 +62,7 @@ namespace Dialog.Services
 
         public ICollection<T> All<T>()
         {
-            var posts = this._postRepository.All()
+            var posts = this._postRepository.AllWithoutDeleted()
                  .OrderByDescending(p => p.CreatedOn)
                  .To<T>()
                  .ToList();
@@ -72,14 +72,10 @@ namespace Dialog.Services
 
         public IQueryable<T> RecentBlogs<T>()
         {
-            var blogs = this._postRepository.All()
+            var blogs = this._postRepository.AllWithoutDeleted()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
                 .To<T>();
-
-            //var model = blogs
-            //    .Select(p => this.mapper.Map<T>(p))
-            //    .ToList();
 
             return blogs;
         }
@@ -105,7 +101,7 @@ namespace Dialog.Services
                 Author = new AuthorViewModel
                 {
                     Id = post.Author.Id,
-                    Name = post.Author.UserName
+                    UserName = post.Author.UserName
                 }
             };
 
@@ -190,7 +186,7 @@ namespace Dialog.Services
 
         public IQueryable<T> Search<T>(string searchTerm)
         {
-            var post = this._postRepository.All()
+            var post = this._postRepository.AllWithoutDeleted()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(p => p.CreatedOn)
                 .To<T>();
@@ -206,6 +202,13 @@ namespace Dialog.Services
             post.DeletedOn = DateTime.UtcNow;
 
             await this._postRepository.SaveChangesAsync();
+        }
+
+        public int Count()
+        {
+            var count = this._postRepository.AllWithoutDeleted().Count();
+
+            return count;
         }
     }
 }

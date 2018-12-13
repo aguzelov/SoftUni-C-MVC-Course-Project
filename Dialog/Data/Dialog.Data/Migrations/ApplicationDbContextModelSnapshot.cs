@@ -19,7 +19,7 @@ namespace Dialog.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Dialog.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Dialog.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -29,14 +29,24 @@ namespace Dialog.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("ImageId");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -59,6 +69,8 @@ namespace Dialog.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ImageId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -70,7 +82,7 @@ namespace Dialog.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Dialog.Models.Blog.Comment", b =>
+            modelBuilder.Entity("Dialog.Data.Models.Blog.Comment", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -100,7 +112,7 @@ namespace Dialog.Data.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Dialog.Models.Blog.Post", b =>
+            modelBuilder.Entity("Dialog.Data.Models.Blog.Post", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -113,6 +125,8 @@ namespace Dialog.Data.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<string>("ImageId");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
@@ -122,11 +136,39 @@ namespace Dialog.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Dialog.Models.News.News", b =>
+            modelBuilder.Entity("Dialog.Data.Models.Gallery.Image", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ContentType");
+
+                    b.Property<double>("Height");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("PublicId");
+
+                    b.Property<string>("SecureUri");
+
+                    b.Property<int>("TransformationType");
+
+                    b.Property<string>("Uri");
+
+                    b.Property<double>("Width");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Dialog.Data.Models.News.News", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -139,6 +181,8 @@ namespace Dialog.Data.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<string>("ImageId");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
@@ -148,6 +192,8 @@ namespace Dialog.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("ImageId");
 
                     b.ToTable("News");
                 });
@@ -262,29 +308,44 @@ namespace Dialog.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Dialog.Models.Blog.Comment", b =>
+            modelBuilder.Entity("Dialog.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("Dialog.Models.Blog.Comment")
+                    b.HasOne("Dialog.Data.Models.Gallery.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+                });
+
+            modelBuilder.Entity("Dialog.Data.Models.Blog.Comment", b =>
+                {
+                    b.HasOne("Dialog.Data.Models.Blog.Comment")
                         .WithMany("Replies")
                         .HasForeignKey("CommentId");
 
-                    b.HasOne("Dialog.Models.Blog.Post", "Post")
+                    b.HasOne("Dialog.Data.Models.Blog.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId");
                 });
 
-            modelBuilder.Entity("Dialog.Models.Blog.Post", b =>
+            modelBuilder.Entity("Dialog.Data.Models.Blog.Post", b =>
                 {
-                    b.HasOne("Dialog.Models.ApplicationUser", "Author")
+                    b.HasOne("Dialog.Data.Models.ApplicationUser", "Author")
                         .WithMany("Posts")
                         .HasForeignKey("AuthorId");
+
+                    b.HasOne("Dialog.Data.Models.Gallery.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
                 });
 
-            modelBuilder.Entity("Dialog.Models.News.News", b =>
+            modelBuilder.Entity("Dialog.Data.Models.News.News", b =>
                 {
-                    b.HasOne("Dialog.Models.ApplicationUser", "Author")
+                    b.HasOne("Dialog.Data.Models.ApplicationUser", "Author")
                         .WithMany("News")
                         .HasForeignKey("AuthorId");
+
+                    b.HasOne("Dialog.Data.Models.Gallery.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -297,7 +358,7 @@ namespace Dialog.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Dialog.Models.ApplicationUser")
+                    b.HasOne("Dialog.Data.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -305,7 +366,7 @@ namespace Dialog.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Dialog.Models.ApplicationUser")
+                    b.HasOne("Dialog.Data.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -318,7 +379,7 @@ namespace Dialog.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Dialog.Models.ApplicationUser")
+                    b.HasOne("Dialog.Data.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -326,7 +387,7 @@ namespace Dialog.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Dialog.Models.ApplicationUser")
+                    b.HasOne("Dialog.Data.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

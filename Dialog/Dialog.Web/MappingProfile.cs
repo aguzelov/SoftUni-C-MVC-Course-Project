@@ -23,12 +23,12 @@ namespace Dialog.Web
 
             CreateMap<Post, PostViewModel>()
                 .ForPath(e => e.Author.Id, opt => opt.MapFrom(src => src.Author.Id))
-                .ForPath(e => e.Author.Name, opt => opt.MapFrom(src => src.Author.UserName))
+                .ForPath(e => e.Author.UserName, opt => opt.MapFrom(src => src.Author.UserName))
                 .ReverseMap();
 
             CreateMap<News, NewsViewModel>()
                 .ForPath(e => e.Author.Id, opt => opt.MapFrom(src => src.Author.Id))
-                .ForPath(e => e.Author.Name, opt => opt.MapFrom(src => src.Author.UserName))
+                .ForPath(e => e.Author.UserName, opt => opt.MapFrom(src => src.Author.UserName))
                 .ReverseMap();
         }
     }

@@ -21,7 +21,7 @@ namespace Dialog.Services
         private readonly IRepository<News> _newsRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public NewsService(IRepository<News> newsRepository,UserManager<ApplicationUser> userManager)
+        public NewsService(IRepository<News> newsRepository, UserManager<ApplicationUser> userManager)
         {
             this._newsRepository = newsRepository;
             this._userManager = userManager;
@@ -29,17 +29,17 @@ namespace Dialog.Services
 
         public AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model)
         {
-            IQueryable<News> news = null;
+            IQueryable<News> news = this._newsRepository.AllWithoutDeleted();
 
             if (!string.IsNullOrEmpty(model.Author))
             {
-                news = this._newsRepository.All()
+                news = news
                     .OrderByDescending(p => p.CreatedOn)
                     .Where(p => p.Author.UserName == model.Author);
             }
             else
             {
-                news = this._newsRepository.All()
+                news = news
                     .OrderByDescending(p => p.CreatedOn);
             }
 
@@ -56,6 +56,16 @@ namespace Dialog.Services
             model.Entities = currentNews;
 
             return model;
+        }
+
+        public ICollection<T> All<T>()
+        {
+            var posts = this._newsRepository.AllWithoutDeleted()
+                .OrderByDescending(p => p.CreatedOn)
+                .To<T>()
+                .ToList();
+
+            return posts;
         }
 
         public async Task<IServiceResult> Create(string authorId, string title, string content)
@@ -111,7 +121,7 @@ namespace Dialog.Services
                 Author = new AuthorViewModel
                 {
                     Id = news.Author.Id,
-                    Name = news.Author.UserName
+                    UserName = news.Author.UserName
                 }
             };
 
@@ -120,7 +130,7 @@ namespace Dialog.Services
 
         public ICollection<T> RecentNews<T>()
         {
-            var blogs = this._newsRepository.All()
+            var blogs = this._newsRepository.AllWithoutDeleted()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
                 .To<T>()
@@ -131,12 +141,29 @@ namespace Dialog.Services
 
         public IQueryable<T> Search<T>(string searchTerm)
         {
-            var news = this._newsRepository.All()
+            var news = this._newsRepository.AllWithoutDeleted()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(n => n.CreatedOn)
                 .To<T>();
 
             return news;
+        }
+
+        public async Task Delete(string id)
+        {
+            var news = await this._newsRepository.GetByIdAsync(id);
+
+            news.IsDeleted = true;
+            news.DeletedOn = DateTime.UtcNow;
+
+            await this._newsRepository.SaveChangesAsync();
+        }
+
+        public int Count()
+        {
+            var count = this._newsRepository.AllWithoutDeleted().Count();
+
+            return count;
         }
     }
 }
