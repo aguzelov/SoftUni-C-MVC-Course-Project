@@ -78,9 +78,9 @@ namespace Dialog.Web.Areas.Administration.Controllers
 
         public IActionResult Gallery()
         {
-            var images = this._galleryService.All().ToList();
+            var model = this._galleryService.All();
 
-            return this.View();
+            return this.View(model);
         }
     }
 }
