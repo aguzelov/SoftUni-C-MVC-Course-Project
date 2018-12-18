@@ -15,7 +15,7 @@ namespace Dialog.Services.Contracts
 
         PostViewModel Details(string id);
 
-        Task<IServiceResult> Create(string authorId, string title, string content);
+        Task<IServiceResult> Create(string authorId, CreateViewModel model);
 
         Task<IServiceResult> AddComment(string postId, string authorName, string message);
 

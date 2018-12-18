@@ -404,7 +404,7 @@ namespace Tests
             var postContent = "Fourth Post Content";
 
             //Act
-            var result = this.Service.Create(authorId, postTitle, postContent).GetAwaiter().GetResult();
+            var result = this.Service.Create(authorId, new CreateViewModel()).GetAwaiter().GetResult();
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);

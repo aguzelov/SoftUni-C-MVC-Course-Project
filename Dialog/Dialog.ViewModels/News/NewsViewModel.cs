@@ -1,6 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.ViewModels.Base;
+using Dialog.ViewModels.Gallery;
+using Microsoft.AspNetCore.Http;
 
 namespace Dialog.ViewModels.News
 {
@@ -13,6 +17,11 @@ namespace Dialog.ViewModels.News
         public string Content { get; set; }
 
         public AuthorViewModel Author { get; set; }
+
+        [DataType(DataType.ImageUrl)]
+        public ICollection<IFormFile> UploadImages { get; set; }
+
+        public ImageViewModel Image { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {

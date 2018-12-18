@@ -2,6 +2,7 @@
 using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
+using Dialog.ViewModels.Gallery;
 
 namespace Dialog.ViewModels.Blog
 {
@@ -16,6 +17,8 @@ namespace Dialog.ViewModels.Blog
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
+
+        public ImageViewModel Image { get; set; }
 
         public int CommmentsCount { get; set; }
 

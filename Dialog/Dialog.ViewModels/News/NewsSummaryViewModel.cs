@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dialog.Common.Mapping;
+using Dialog.ViewModels.Gallery;
 
 namespace Dialog.ViewModels.News
 {
@@ -43,6 +44,8 @@ namespace Dialog.ViewModels.News
             this.Content.Length > 50 ?
             this.Content.Substring(0, 50) :
             this.Content;
+
+        public ImageViewModel Image { get; set; }
 
         public string ModifiedDateText => this.ModifiedOn.Equals(default(DateTime))
             ? "Not Modified"

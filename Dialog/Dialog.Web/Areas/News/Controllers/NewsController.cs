@@ -58,7 +58,7 @@ namespace Dialog.Web.Areas.News.Controllers
             var user = this.User;
             var authorId = this._userManager.GetUserId(user);
 
-            var result = await this._newsService.Create(authorId, model.Title, model.Content);
+            var result = await this._newsService.Create(authorId, model);
 
             if (!result.Success)
             {

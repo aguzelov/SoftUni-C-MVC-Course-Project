@@ -32,8 +32,10 @@ namespace Dialog.Services
             return images;
         }
 
-        public void Upload(List<IFormFile> files)
+        public ICollection<Image> Upload(ICollection<IFormFile> files)
         {
+            var images = new List<Image>();
+
             if (files.Any())
             {
                 foreach (var file in files)
@@ -54,7 +56,6 @@ namespace Dialog.Services
 
                         using (var fs = new MemoryStream())
                         {
-                            file.OpenReadStream();
                             var uploadParams = new ImageUploadParams()
                             {
                                 File = new FileDescription(newFileName, file.OpenReadStream())
@@ -75,7 +76,7 @@ namespace Dialog.Services
                                 Height = 150,
                                 TransformationType = Data.Models.Gallery.Transformation.Fit
                             };
-
+                            images.Add(image);
                             this._imageRepository.Add(image);
                         }
                     }
@@ -83,6 +84,8 @@ namespace Dialog.Services
 
                 this._imageRepository.SaveChangesAsync().GetAwaiter().GetResult();
             }
+
+            return images;
         }
 
         public int Count()

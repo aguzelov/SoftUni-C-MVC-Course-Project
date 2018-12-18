@@ -11,7 +11,11 @@ using System.Threading.Tasks;
 using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
+using Dialog.Data.Models.Gallery;
 using Dialog.Data.Models.News;
+using Dialog.ViewModels.Gallery;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 
 namespace Dialog.Services
@@ -20,11 +24,13 @@ namespace Dialog.Services
     {
         private readonly IRepository<News> _newsRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IGalleryService _galleryService;
 
-        public NewsService(IRepository<News> newsRepository, UserManager<ApplicationUser> userManager)
+        public NewsService(IRepository<News> newsRepository, UserManager<ApplicationUser> userManager, IGalleryService galleryService)
         {
             this._newsRepository = newsRepository;
             this._userManager = userManager;
+            this._galleryService = galleryService;
         }
 
         public AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model)
@@ -68,7 +74,7 @@ namespace Dialog.Services
             return posts;
         }
 
-        public async Task<IServiceResult> Create(string authorId, string title, string content)
+        public async Task<IServiceResult> Create(string authorId, CreateViewModel model)
         {
             var result = new ServiceResult
             {
@@ -78,20 +84,27 @@ namespace Dialog.Services
             var author = await this._userManager.FindByIdAsync(authorId);
 
             if (author == null ||
-                title == null ||
-                content == null)
+                model.Title == null ||
+                model.Content == null)
             {
                 return result;
             }
 
+            var images = this._galleryService.Upload(model.UploadImages);
+
             var news = new News
             {
-                Title = title,
-                Content = content,
+                Title = model.Title,
+                Content = model.Content,
                 CreatedOn = DateTime.UtcNow,
                 IsDeleted = false,
                 Author = author,
             };
+
+            if (images != null)
+            {
+                news.Image = images.First();
+            }
 
             try
             {
@@ -124,6 +137,18 @@ namespace Dialog.Services
                     UserName = news.Author.UserName
                 }
             };
+
+            if (news.Image != null)
+            {
+                model.Image = new ImageViewModel
+                {
+                    Id = news.Image.Id,
+                    SecureUri = news.Image.SecureUri,
+                    Name = news.Image.Name,
+                    Height = news.Image.Height,
+                    Width = news.Image.Width
+                };
+            }
 
             return model;
         }
@@ -175,8 +200,14 @@ namespace Dialog.Services
 
             var news = await this._newsRepository.GetByIdAsync(model.Id);
 
+            var images = this._galleryService.Upload(model.UploadImages);
+
             news.Title = model.Title;
             news.Content = model.Content;
+            if (images != null)
+            {
+                news.Image = images.First();
+            }
 
             news.ModifiedOn = DateTime.UtcNow;
 

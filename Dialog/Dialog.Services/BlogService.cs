@@ -13,6 +13,7 @@ using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
+using Dialog.ViewModels.Gallery;
 using Microsoft.AspNetCore.Http;
 
 namespace Dialog.Services
@@ -22,12 +23,14 @@ namespace Dialog.Services
         private readonly IRepository<Post> _postRepository;
         private readonly IRepository<Comment> _commentRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IGalleryService _galleryService;
 
-        public BlogService(IRepository<Post> postRepository, IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager)
+        public BlogService(IRepository<Post> postRepository, IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager, IGalleryService galleryService)
         {
             this._postRepository = postRepository;
             this._commentRepository = commentRepository;
             this._userManager = userManager;
+            this._galleryService = galleryService;
         }
 
         public AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model)
@@ -106,10 +109,22 @@ namespace Dialog.Services
                 }
             };
 
+            if (post.Image != null)
+            {
+                model.Image = new ImageViewModel
+                {
+                    Id = post.Image.Id,
+                    SecureUri = post.Image.SecureUri,
+                    Name = post.Image.Name,
+                    Height = post.Image.Height,
+                    Width = post.Image.Width
+                };
+            }
+
             return model;
         }
 
-        public async Task<IServiceResult> Create(string authorId, string title, string content)
+        public async Task<IServiceResult> Create(string authorId, CreateViewModel model)
         {
             var result = new ServiceResult
             {
@@ -119,20 +134,27 @@ namespace Dialog.Services
             var author = await this._userManager.FindByIdAsync(authorId);
 
             if (author == null ||
-                title == null ||
-                content == null)
+                model.Title == null ||
+                model.Content == null)
             {
                 return result;
             }
 
+            var images = this._galleryService.Upload(model.UploadImages);
+
             var post = new Post
             {
-                Title = title,
-                Content = content,
+                Title = model.Title,
+                Content = model.Content,
                 CreatedOn = DateTime.UtcNow,
                 IsDeleted = false,
                 Author = author,
             };
+
+            if (images != null)
+            {
+                post.Image = images.First();
+            }
 
             try
             {
@@ -221,10 +243,16 @@ namespace Dialog.Services
 
             var post = await this._postRepository.GetByIdAsync(model.Id);
 
+            var images = this._galleryService.Upload(model.UploadImages);
+
             post.Title = model.Title;
             post.Content = model.Content;
-
             post.ModifiedOn = DateTime.UtcNow;
+
+            if (images != null)
+            {
+                post.Image = images.First();
+            }
 
             try
             {

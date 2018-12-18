@@ -1,8 +1,11 @@
 ﻿using Dialog.ViewModels.Base;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
+using Dialog.ViewModels.Gallery;
+using Microsoft.AspNetCore.Http;
 
 namespace Dialog.ViewModels.Blog
 {
@@ -21,6 +24,11 @@ namespace Dialog.ViewModels.Blog
         public ICollection<CommentViewModel> Comments { get; set; }
 
         public CreateCommentViewModel CreateCommentViewModel { get; set; }
+
+        [DataType(DataType.ImageUrl)]
+        public ICollection<IFormFile> UploadImages { get; set; }
+
+        public ImageViewModel Image { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {

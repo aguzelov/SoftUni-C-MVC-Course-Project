@@ -15,7 +15,7 @@
 
 <section class="ftco-section">
     <div class="container">
-        <form asp-area="Blog" asp-route="Blog/Create" method="post">
+        <form enctype="multipart/form-data" asp-area="Blog" asp-route="Blog/Create" method="post">
             <label asp-for="Title"></label>
             <input asp-for="Title" />
             <br />
@@ -24,7 +24,9 @@
             <br />
             <label asp-for="Content"></label>
             <textarea rows="10" asp-for="Content"></textarea>
-
+            <br />
+            <input asp-for="@Model.UploadImages" multiple />
+            <br />
             <input class="btn btn-primary py-3 px-5" type="submit" />
         </form>
     </div>

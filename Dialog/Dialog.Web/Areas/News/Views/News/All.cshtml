@@ -21,7 +21,7 @@
             {
                 <div class="col-md-4 d-flex ftco-animate">
                     <div class="blog-entry align-self-stretch">
-                        <a asp-area="News" asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="block-20" style="background-image: url('/images/event-1.jpg');">
+                        <a asp-area="News" asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="block-20" style="background-image: url('@(news.Image?.SecureUri??"/images/event-1.jpg")');">
                         </a>
                         <div class="text p-4 d-block">
                             <div class="meta mb-3">

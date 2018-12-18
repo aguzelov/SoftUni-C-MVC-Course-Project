@@ -16,7 +16,7 @@ namespace Dialog.Services.Contracts
 
         NewsViewModel Details(string id);
 
-        Task<IServiceResult> Create(string authorId, string title, string content);
+        Task<IServiceResult> Create(string authorId, CreateViewModel model);
 
         ICollection<T> RecentNews<T>();
 
