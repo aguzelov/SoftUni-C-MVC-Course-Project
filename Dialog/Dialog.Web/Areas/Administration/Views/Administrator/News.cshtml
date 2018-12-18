@@ -26,7 +26,7 @@
                                 <th>Title</th>
                                 <th>Author</th>
                                 <th>Created On</th>
-                                <th>Comments</th>
+                                <th>Modified On</th>
                                 <th class="col-sm-3">Action</th>
                             </tr>
                         </thead>
@@ -36,12 +36,14 @@
                                 <tr class="d-flex">
                                     <td>@news.Title</td>
                                     <td>@news.Author</td>
-                                    <td>@news.CreatedOn</td>
-                                    <td class="center">X</td>
+                                    <td>@news.CreatedOn.ToString("dd.MM.yyyy")</td>
+                                    <td class="center">@news.ModifiedDateText</td>
                                     <td class="col-sm-3">
                                         <div>
 
                                             <a asp-area="News" asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-success">View</a>
+
+                                            <a asp-area="News" asp-controller="News" asp-action="Edit" asp-route-id="@news.Id" class="btn btn-success">Edit</a>
                                             <a asp-area="News" asp-controller="News" asp-action="Delete" asp-route-id="@news.Id" class="btn btn-danger">Delete</a>
                                         </div>
                                     </td>

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
+using Microsoft.AspNetCore.Http;
 
 namespace Dialog.ViewModels.Blog
 {

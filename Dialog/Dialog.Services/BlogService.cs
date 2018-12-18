@@ -13,6 +13,7 @@ using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
+using Microsoft.AspNetCore.Http;
 
 namespace Dialog.Services
 {
@@ -209,6 +210,35 @@ namespace Dialog.Services
             var count = this._postRepository.AllWithoutDeleted().Count();
 
             return count;
+        }
+
+        public async Task<IServiceResult> Edit(PostViewModel model)
+        {
+            var result = new ServiceResult
+            {
+                Success = false
+            };
+
+            var post = await this._postRepository.GetByIdAsync(model.Id);
+
+            post.Title = model.Title;
+            post.Content = model.Content;
+
+            post.ModifiedOn = DateTime.UtcNow;
+
+            try
+            {
+                await this._postRepository.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+                return result;
+            }
+
+            result.Success = true;
+
+            return result;
         }
     }
 }

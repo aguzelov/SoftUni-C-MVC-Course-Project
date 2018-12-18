@@ -65,4 +65,43 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Post By Users
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Posts Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int index = 1;}
+                                @foreach (var user in Model.Users)
+                                {
+                                    <tr>
+                                        <td>@(index++)</td>
+                                        <td>@user.Username</td>
+                                        <td>@user.PostsCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-6 -->
+        <!-- /.col-lg-6 -->
+    </div>
 </div>

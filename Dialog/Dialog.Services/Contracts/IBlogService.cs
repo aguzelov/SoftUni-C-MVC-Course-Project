@@ -1,6 +1,6 @@
 ﻿using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
-using System;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,5 +26,7 @@ namespace Dialog.Services.Contracts
         Task Delete(string id);
 
         int Count();
+
+        Task<IServiceResult> Edit(PostViewModel model);
     }
 }

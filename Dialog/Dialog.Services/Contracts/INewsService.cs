@@ -25,5 +25,7 @@ namespace Dialog.Services.Contracts
         Task Delete(string id);
 
         int Count();
+
+        Task<IServiceResult> Edit(NewsViewModel model);
     }
 }

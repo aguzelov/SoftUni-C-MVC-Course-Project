@@ -15,6 +15,8 @@ namespace Dialog.ViewModels.Blog
 
         public DateTime CreatedOn { get; set; }
 
+        public DateTime ModifiedOn { get; set; }
+
         public int CommmentsCount { get; set; }
 
         public string AuthorName { get; set; }
@@ -42,6 +44,10 @@ namespace Dialog.ViewModels.Blog
             this.Content.Length > 50 ?
             this.Content.Substring(0, 50) :
             this.Content;
+
+        public string ModifiedDateText => this.ModifiedOn.Equals(default(DateTime))
+            ? "Not Modified"
+            : this.ModifiedOn.ToString("dd.MM.yyyy");
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {

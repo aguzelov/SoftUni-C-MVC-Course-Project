@@ -13,18 +13,18 @@ namespace Dialog.Web.Areas.Blog.Controllers
     [Area("Blog")]
     public class BlogController : BaseController
     {
-        private readonly IBlogService blogService;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IBlogService _blogService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public BlogController(IBlogService blogService, UserManager<ApplicationUser> userManager)
         {
-            this.blogService = blogService;
-            this.userManager = userManager;
+            this._blogService = blogService;
+            this._userManager = userManager;
         }
 
         public IActionResult All(AllViewModel<PostSummaryViewModel> model)
         {
-            model = this.blogService.All(model);
+            model = this._blogService.All(model);
 
             return this.View(model);
         }
@@ -36,7 +36,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this.blogService.Details(id);
+            var model = this._blogService.Details(id);
 
             return this.View(model);
         }
@@ -51,14 +51,14 @@ namespace Dialog.Web.Areas.Blog.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }
             var user = this.User;
-            var authorId = this.userManager.GetUserId(user);
+            var authorId = this._userManager.GetUserId(user);
 
-            var result = await this.blogService.Create(authorId, model.Title, model.Content);
+            var result = await this._blogService.Create(authorId, model.Title, model.Content);
 
             if (!result.Success)
             {
@@ -77,7 +77,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 return this.RedirectToAction(nameof(Details), routeValues: new { Id = model.PostId });
             }
 
-            var result = await this.blogService.AddComment(model.PostId, model.Author, model.Message);
+            var result = await this._blogService.AddComment(model.PostId, model.Author, model.Message);
 
             if (!result.Success)
             {
@@ -94,7 +94,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this.blogService.Search<PostSummaryViewModel>(searchTerm);
+            var model = this._blogService.Search<PostSummaryViewModel>(searchTerm);
 
             if (model == null ||
                 model.Count() == 0)
@@ -107,9 +107,34 @@ namespace Dialog.Web.Areas.Blog.Controllers
 
         public async Task<IActionResult> Delete(string id)
         {
-            await this.blogService.Delete(id);
+            await this._blogService.Delete(id);
 
             return RedirectToAction("Blog", "Administrator", new { area = "Administration" });
+        }
+
+        public IActionResult Edit(string id)
+        {
+            var post = this._blogService.Details(id);
+
+            return this.View(post);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PostViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var result = await this._blogService.Edit(model);
+
+            if (!result.Success)
+            {
+                return this.View(model);
+            }
+
+            return this.RedirectToAction(nameof(Details), new { Id = model.Id });
         }
     }
 }

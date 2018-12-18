@@ -24,6 +24,7 @@ namespace Dialog.Data
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<Setting> Settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

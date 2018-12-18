@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Dialog.Data.Common.Models;
 
 namespace Dialog.Data.Models.Gallery
 {
-    public class Image
+    public class Image : BaseDeletableModel<string>
     {
         public Image()
         {
-            this.Id = Guid.NewGuid().ToString();
+            base.Id = Guid.NewGuid().ToString();
         }
-
-        public string Id { get; set; }
 
         public string Name { get; set; }
 

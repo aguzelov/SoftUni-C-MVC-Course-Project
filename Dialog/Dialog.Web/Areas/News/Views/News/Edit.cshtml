@@ -1,12 +1,12 @@
-﻿@model CreateViewModel
+﻿@model NewsViewModel
 
 @{
     var partialModel = new JumbotronPartialViewModel
     {
-        Title = "Create Blog Post",
-        Current = "Create",
-        Parent = "Blog",
-        ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704889/sa3vhx2bn0rvbrws5wi5.jpg"
+        Title = "Edit News",
+        Current = "Edit",
+        Parent = "News",
+        ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704896/rdc9ezgkeratzej3otlx.jpg"
     };
 
 }
@@ -15,13 +15,16 @@
 
 <section class="ftco-section">
     <div class="container">
-
         <form asp-area="Blog" asp-route="Blog/Create" method="post">
             <label asp-for="Title"></label>
             <input asp-for="Title" />
             <br />
+            <label asp-for="Author"></label>
+            <input asp-for="Author.UserName" disabled="disabled" />
+            <br />
             <label asp-for="Content"></label>
             <textarea rows="10" asp-for="Content"></textarea>
+
             <input class="btn btn-primary py-3 px-5" type="submit" />
         </form>
     </div>

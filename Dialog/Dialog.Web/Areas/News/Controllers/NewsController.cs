@@ -13,18 +13,18 @@ namespace Dialog.Web.Areas.News.Controllers
     [Area("News")]
     public class NewsController : BaseController
     {
-        private readonly INewsService newsService;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly INewsService _newsService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public NewsController(INewsService newsService, UserManager<ApplicationUser> userManager)
         {
-            this.newsService = newsService;
-            this.userManager = userManager;
+            this._newsService = newsService;
+            this._userManager = userManager;
         }
 
         public IActionResult All(AllViewModel<NewsSummaryViewModel> model)
         {
-            model = this.newsService.All(model);
+            model = this._newsService.All(model);
 
             return this.View(model);
         }
@@ -36,7 +36,7 @@ namespace Dialog.Web.Areas.News.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this.newsService.Details(id);
+            var model = this._newsService.Details(id);
 
             return this.View(model);
         }
@@ -56,9 +56,9 @@ namespace Dialog.Web.Areas.News.Controllers
                 return this.View(model);
             }
             var user = this.User;
-            var authorId = this.userManager.GetUserId(user);
+            var authorId = this._userManager.GetUserId(user);
 
-            var result = await this.newsService.Create(authorId, model.Title, model.Content);
+            var result = await this._newsService.Create(authorId, model.Title, model.Content);
 
             if (!result.Success)
             {
@@ -75,7 +75,7 @@ namespace Dialog.Web.Areas.News.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this.newsService.Search<NewsSummaryViewModel>(searchTerm).ToList();
+            var model = this._newsService.Search<NewsSummaryViewModel>(searchTerm).ToList();
 
             if (model == null ||
                 model.Count == 0)
@@ -88,9 +88,34 @@ namespace Dialog.Web.Areas.News.Controllers
 
         public async Task<IActionResult> Delete(string id)
         {
-            await this.newsService.Delete(id);
+            await this._newsService.Delete(id);
 
             return RedirectToAction("News", "Administrator", new { area = "Administration" });
+        }
+
+        public IActionResult Edit(string id)
+        {
+            var post = this._newsService.Details(id);
+
+            return this.View(post);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(NewsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var result = await this._newsService.Edit(model);
+
+            if (!result.Success)
+            {
+                return this.View(model);
+            }
+
+            return this.RedirectToAction(nameof(Details), new { Id = model.Id });
         }
     }
 }

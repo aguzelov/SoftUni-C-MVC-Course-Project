@@ -26,6 +26,7 @@
                                 <th>Title</th>
                                 <th>Author</th>
                                 <th>Created On</th>
+                                <th>Last Modified On</th>
                                 <th>Comments</th>
                                 <th class="col-sm-3">Action</th>
                             </tr>
@@ -36,12 +37,14 @@
                                 <tr class="d-flex">
                                     <td>@post.Title</td>
                                     <td>@post.AuthorName</td>
-                                    <td>@post.CreatedOn</td>
+                                    <td>@post.CreatedOn.ToString("dd.MM.yyyy")</td>
+                                    <td>@post.ModifiedDateText</td>
                                     <td class="center">@post.CommmentsCount</td>
                                     <td class="col-sm-3">
                                         <div>
 
                                             <a asp-area="Blog" asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id" class="btn btn-success">View</a>
+                                            <a asp-area="Blog" asp-controller="Blog" asp-action="Edit" asp-route-id="@post.Id" class="btn btn-danger">Edit</a>
                                             <a asp-area="Blog" asp-controller="Blog" asp-action="Delete" asp-route-id="@post.Id" class="btn btn-danger">Delete</a>
                                         </div>
                                     </td>

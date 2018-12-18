@@ -165,5 +165,34 @@ namespace Dialog.Services
 
             return count;
         }
+
+        public async Task<IServiceResult> Edit(NewsViewModel model)
+        {
+            var result = new ServiceResult
+            {
+                Success = false
+            };
+
+            var news = await this._newsRepository.GetByIdAsync(model.Id);
+
+            news.Title = model.Title;
+            news.Content = model.Content;
+
+            news.ModifiedOn = DateTime.UtcNow;
+
+            try
+            {
+                await this._newsRepository.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                result.Error = e.Message;
+                return result;
+            }
+
+            result.Success = true;
+
+            return result;
+        }
     }
 }

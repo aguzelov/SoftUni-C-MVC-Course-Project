@@ -18,6 +18,8 @@ namespace Dialog.ViewModels.News
 
         public DateTime CreatedOn { get; set; }
 
+        public DateTime ModifiedOn { get; set; }
+
         public string ShortAuthorName
         {
             get
@@ -41,5 +43,9 @@ namespace Dialog.ViewModels.News
             this.Content.Length > 50 ?
             this.Content.Substring(0, 50) :
             this.Content;
+
+        public string ModifiedDateText => this.ModifiedOn.Equals(default(DateTime))
+            ? "Not Modified"
+            : this.ModifiedOn.ToString("dd.MM.yyyy");
     }
 }
