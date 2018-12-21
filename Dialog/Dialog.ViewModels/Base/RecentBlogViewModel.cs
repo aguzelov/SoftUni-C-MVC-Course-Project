@@ -2,6 +2,7 @@
 using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
+using Dialog.ViewModels.Gallery;
 
 namespace Dialog.ViewModels.Base
 {
@@ -16,6 +17,8 @@ namespace Dialog.ViewModels.Base
         public int CommmentsCount { get; set; }
 
         public string AuthorName { get; set; }
+
+        public ImageViewModel Image { get; set; }
 
         public string ShortAuthorName
         {
