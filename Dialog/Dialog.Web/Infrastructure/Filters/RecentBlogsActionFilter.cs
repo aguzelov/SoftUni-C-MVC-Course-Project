@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Dialog.Web.Infrastructure.Filters
 {
-    public class RecentBlogsActionFilter : Attribute, IActionFilter
+    public class RecentBlogsActionFilter : Attribute, IActionFilter, IPageFilter
     {
         private readonly IBlogService blogService;
 
@@ -22,13 +24,31 @@ namespace Dialog.Web.Infrastructure.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var controller = context.Controller as Controller;
-
-            if (controller != null)
+            if (context.Controller is Controller controller)
             {
                 var recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>();
 
                 controller.ViewData["RecentBlogs"] = recentBlogs.ToList();
+            }
+        }
+
+        public void OnPageHandlerSelected(PageHandlerSelectedContext context)
+        {
+        }
+
+        public void OnPageHandlerExecuting(PageHandlerExecutingContext context)
+        {
+        }
+
+        public void OnPageHandlerExecuted(PageHandlerExecutedContext context)
+        {
+            var result = context.Result;
+            if (result is PageResult pageResult)
+            {
+                var viewData = pageResult.ViewData;
+                var recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>();
+
+                viewData["RecentBlogs"] = recentBlogs.ToList();
             }
         }
     }
