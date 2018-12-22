@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using AutoMapper;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using Dialog.Common.Mapping;
 using Dialog.Data;
 using Dialog.Data.Common.Repositories;
@@ -20,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace Dialog.Web
 {

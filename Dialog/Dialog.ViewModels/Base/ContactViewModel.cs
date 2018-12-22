@@ -19,5 +19,8 @@ namespace Dialog.ViewModels.Base
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        public string HereAppId { get; set; }
+        public string HereAppCode { get; set; }
     }
 }

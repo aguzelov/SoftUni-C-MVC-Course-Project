@@ -1,32 +1,44 @@
 ﻿using Dialog.ViewModels.Base;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
 
 namespace Dialog.Web.Controllers
 {
     public class HomeController : BaseController
     {
+        private readonly IConfiguration _configuration;
+
+        public HomeController(IConfiguration configuration)
+        {
+            this._configuration = configuration;
+        }
+
         public IActionResult Index()
         {
-            ViewData["Title"] = "Dialog";
+            this.ViewData["Title"] = "Dialog";
             return View();
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            this.ViewData["Message"] = "Your application description page.";
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            this.ViewData["Message"] = "Your contact page.";
+            this.ViewData["AppID"] = this._configuration.GetSection("HEREMap").GetSection("AppID").Value;
+            this.ViewData["AppCode"] = this._configuration.GetSection("HEREMap").GetSection("AppCode").Value;
             var model = new ContactViewModel
             {
                 Address = "Sredec, 8300, Lilqna Dimitrova 1 str.",
                 Phone = "0888072710",
-                Email = "aguzelov@outlook.com"
+                Email = "aguzelov@outlook.com",
+                HereAppId = this._configuration.GetSection("HEREMap").GetSection("AppID").Value,
+                HereAppCode = this._configuration.GetSection("HEREMap").GetSection("AppCode").Value
             };
 
             return View(model);
@@ -34,21 +46,21 @@ namespace Dialog.Web.Controllers
 
         public IActionResult Causes()
         {
-            ViewData["Message"] = "Your contact page.";
+            this.ViewData["Message"] = "Your contact page.";
 
             return View();
         }
 
         public IActionResult Event()
         {
-            ViewData["Message"] = "Your contact page.";
+            this.ViewData["Message"] = "Your contact page.";
 
             return View();
         }
 
         public IActionResult Gallery()
         {
-            ViewData["Message"] = "Your contact page.";
+            this.ViewData["Message"] = "Your contact page.";
 
             return View();
         }
@@ -61,7 +73,7 @@ namespace Dialog.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
     }
 }
