@@ -1,22 +1,32 @@
-﻿@{
-    Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+﻿@using Dialog.ViewModels.Base
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Manage your account</h2>
+@{
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = "Change your account settings",
+        Current = "Account manage",
+        HasSearchField = false,
+        ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704892/vsqim7crkmv9egy3anmg.jpg"
+    };
+}
 
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <partial name="_ManageNav" />
+            </div>
+            <div class="col-md-9">
+                @RenderBody()
+            </div>
         </div>
     </div>
-</div>
-
+</section>
 @section Scripts {
     @RenderSection("Scripts", required: false)
 }
