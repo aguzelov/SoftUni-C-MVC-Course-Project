@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using Dialog.Web.Hubs;
 
 namespace Dialog.Web
 {
@@ -65,6 +66,8 @@ namespace Dialog.Web
                 options.Filters.Add(typeof(RecentBlogsActionFilter));
             }
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSignalR();
 
             var account = new Account(
                 this._configuration.GetSection("Cloudinary").GetSection("CloudName").Value,
@@ -126,6 +129,11 @@ namespace Dialog.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
             });
         }
     }

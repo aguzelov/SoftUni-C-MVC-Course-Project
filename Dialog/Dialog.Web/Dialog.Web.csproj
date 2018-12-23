@@ -10,6 +10,7 @@
     <PackageReference Include="CloudinaryDotNet" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" PrivateAssets="All" />
   </ItemGroup>
@@ -52,6 +53,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\News\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_ChatPartial.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Shared\_Layout.cshtml">
