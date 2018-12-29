@@ -101,7 +101,7 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
                     var callbackUrl = this.Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { userId = user.Id, code = code },
+                        values: new { userId = user.Id, code },
                         protocol: this.Request.Scheme);
 
                     await this._emailSender.SendEmailAsync(this.Input.Email, "Confirm your email",

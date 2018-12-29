@@ -66,7 +66,7 @@ namespace Dialog.Web
             {
                 options.Filters.Add(typeof(RecentBlogsActionFilter));
             }
-            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSignalR();
 
