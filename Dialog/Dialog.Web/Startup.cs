@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using Dialog.Web.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Dialog.Web
 {
@@ -81,6 +82,8 @@ namespace Dialog.Web
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
             services.AddScoped<RecentBlogsActionFilter>();
 
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -89,6 +92,7 @@ namespace Dialog.Web
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGalleryService, GalleryService>();
+            services.AddScoped<IChatService, ChatService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

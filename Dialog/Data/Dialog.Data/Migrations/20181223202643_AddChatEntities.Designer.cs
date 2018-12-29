@@ -4,14 +4,16 @@ using Dialog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dialog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181223202643_AddChatEntities")]
+    partial class AddChatEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,8 +157,6 @@ namespace Dialog.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Name");
-
                     b.HasKey("Id");
 
                     b.ToTable("Chats");
@@ -184,32 +184,6 @@ namespace Dialog.Data.Migrations
                     b.HasIndex("ChatId");
 
                     b.ToTable("ChatLines");
-                });
-
-            modelBuilder.Entity("Dialog.Data.Models.Chat.UserChat", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<string>("ChatId");
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("UserChats");
                 });
 
             modelBuilder.Entity("Dialog.Data.Models.Gallery.Image", b =>
@@ -445,17 +419,6 @@ namespace Dialog.Data.Migrations
 
                     b.HasOne("Dialog.Data.Models.Chat.Chat", "Chat")
                         .WithMany("ChatLines")
-                        .HasForeignKey("ChatId");
-                });
-
-            modelBuilder.Entity("Dialog.Data.Models.Chat.UserChat", b =>
-                {
-                    b.HasOne("Dialog.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("UserChats")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("Dialog.Data.Models.Chat.Chat", "Chat")
-                        .WithMany("UserChats")
                         .HasForeignKey("ChatId");
                 });
 

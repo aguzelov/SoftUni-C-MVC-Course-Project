@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Dialog.Data.Common.Models;
 using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.Chat;
 using Dialog.Data.Models.Gallery;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -30,5 +31,6 @@ namespace Dialog.Data.Models
 
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<News.News> News { get; set; }
+        public virtual ICollection<UserChat> UserChats { get; set; } = new HashSet<UserChat>();
     }
 }

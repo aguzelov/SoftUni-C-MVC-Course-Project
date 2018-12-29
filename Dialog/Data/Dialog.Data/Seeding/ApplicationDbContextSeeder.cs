@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.Chat;
 using Dialog.Data.Models.News;
 
 namespace Dialog.Data.Seeding
@@ -52,6 +53,40 @@ namespace Dialog.Data.Seeding
             SeedPosts(dbContext, userManager);
 
             SeedNews(dbContext, userManager);
+
+            SeedChatRoom(dbContext);
+        }
+
+        private static void SeedChatRoom(ApplicationDbContext dbContext)
+        {
+            if (!dbContext.Chats.Any())
+            {
+                var usersId = dbContext.Users.Select(u => u.Id).ToList();
+
+                var userChats = new List<UserChat>();
+
+                foreach (var userId in usersId)
+                {
+                    var userChat = new UserChat
+                    {
+                        ApplicationUserId = userId,
+                        CreatedOn = DateTime.UtcNow,
+                    };
+
+                    userChats.Add(userChat);
+                }
+
+                var globarChatRoom = new Chat
+                {
+                    Name = "Global",
+                    CreatedOn = DateTime.UtcNow,
+                    UserChats = userChats
+                };
+
+                dbContext.Chats.Add(globarChatRoom);
+
+                dbContext.SaveChanges();
+            }
         }
 
         private static void SeedNews(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
