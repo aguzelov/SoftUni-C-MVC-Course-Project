@@ -9,13 +9,13 @@ namespace Dialog.ViewModels.Base
     {
         public int PageSize { get; } = 3;
 
-        public int Page { get; set; } = 1;
+        public int CurrentPage { get; set; } = 1;
 
         public int TotalPages { get; set; }
 
-        public bool HasPreviousPage => this.Page > 1;
+        public bool HasPreviousPage => this.CurrentPage > 1;
 
-        public bool HasNextPage => this.Page < this.TotalPages;
+        public bool HasNextPage => this.CurrentPage < this.TotalPages;
 
         public string Author { get; set; }
 
