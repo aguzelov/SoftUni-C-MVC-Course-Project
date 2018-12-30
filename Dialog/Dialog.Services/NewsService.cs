@@ -1,32 +1,26 @@
-﻿using AutoMapper;
-using Dialog.Data;
+﻿using Dialog.Common.Mapping;
+using Dialog.Data.Common.Repositories;
+using Dialog.Data.Models;
+using Dialog.Data.Models.News;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
+using Dialog.ViewModels.Gallery;
 using Dialog.ViewModels.News;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Dialog.Common.Mapping;
-using Dialog.Data.Common.Repositories;
-using Dialog.Data.Models;
-using Dialog.Data.Models.Gallery;
-using Dialog.Data.Models.News;
-using Dialog.ViewModels.Gallery;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Identity;
 
 namespace Dialog.Services
 {
     public class NewsService : INewsService
     {
-        private readonly IRepository<News> _newsRepository;
+        private readonly IDeletableEntityRepository<News> _newsRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IGalleryService _galleryService;
 
-        public NewsService(IRepository<News> newsRepository, UserManager<ApplicationUser> userManager, IGalleryService galleryService)
+        public NewsService(IDeletableEntityRepository<News> newsRepository, UserManager<ApplicationUser> userManager, IGalleryService galleryService)
         {
             this._newsRepository = newsRepository;
             this._userManager = userManager;
@@ -35,7 +29,7 @@ namespace Dialog.Services
 
         public AllViewModel<NewsSummaryViewModel> All(AllViewModel<NewsSummaryViewModel> model)
         {
-            IQueryable<News> news = this._newsRepository.AllWithoutDeleted();
+            var news = this._newsRepository.All();
 
             if (!string.IsNullOrEmpty(model.Author))
             {
@@ -50,7 +44,7 @@ namespace Dialog.Services
             }
 
             var currentNews = news
-                 .Skip((model.Page - 1) * model.PageSize)
+                 .Skip((model.CurrentPage - 1) * model.PageSize)
                  .Take(model.PageSize)
                  .To<NewsSummaryViewModel>()
                  .ToList();
@@ -66,7 +60,7 @@ namespace Dialog.Services
 
         public ICollection<T> All<T>()
         {
-            var posts = this._newsRepository.AllWithoutDeleted()
+            var posts = this._newsRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .To<T>()
                 .ToList();
@@ -155,7 +149,7 @@ namespace Dialog.Services
 
         public ICollection<T> RecentNews<T>()
         {
-            var blogs = this._newsRepository.AllWithoutDeleted()
+            var blogs = this._newsRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
                 .To<T>()
@@ -166,7 +160,7 @@ namespace Dialog.Services
 
         public IQueryable<T> Search<T>(string searchTerm)
         {
-            var news = this._newsRepository.AllWithoutDeleted()
+            var news = this._newsRepository.All()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(n => n.CreatedOn)
                 .To<T>();
@@ -186,7 +180,7 @@ namespace Dialog.Services
 
         public int Count()
         {
-            var count = this._newsRepository.AllWithoutDeleted().Count();
+            var count = this._newsRepository.All().Count();
 
             return count;
         }

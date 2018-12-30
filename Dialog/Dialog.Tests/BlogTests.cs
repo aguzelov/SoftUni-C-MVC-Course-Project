@@ -1,26 +1,37 @@
-using AutoMapper;
-using Dialog.Data;
+using Dialog.Common.Mapping;
+using Dialog.Data.Common.Repositories;
+using Dialog.Data.Models;
+using Dialog.Data.Models.Blog;
 using Dialog.Services;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dialog.Data.Models;
-using Dialog.Data.Models.Blog;
+using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using CloudinaryDotNet.Actions;
+using Dialog.Data.Models.Gallery;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
-namespace Tests
+namespace Dialog.Tests
 {
+    [TestFixture]
     public class BlogServiceTests
     {
         public IBlogService Service { get; set; }
         public IQueryable<Post> PostsData { get; set; }
         public IQueryable<ApplicationUser> UserData { get; set; }
         public IQueryable<Comment> CommentData { get; set; }
+
+        public BlogServiceTests()
+        {
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+        }
 
         [SetUp]
         public void Setup()
@@ -142,11 +153,6 @@ namespace Tests
                     },
                 },
             }.AsQueryable();
-            var mockPostSet = new Mock<DbSet<Post>>();
-            mockPostSet.As<IQueryable<Post>>().Setup(m => m.Provider).Returns(this.PostsData.Provider);
-            mockPostSet.As<IQueryable<Post>>().Setup(m => m.Expression).Returns(this.PostsData.Expression);
-            mockPostSet.As<IQueryable<Post>>().Setup(m => m.ElementType).Returns(this.PostsData.ElementType);
-            mockPostSet.As<IQueryable<Post>>().Setup(m => m.GetEnumerator()).Returns(this.PostsData.GetEnumerator());
 
             this.UserData = new List<ApplicationUser>
             {
@@ -299,80 +305,74 @@ namespace Tests
                     UserName= "fourth@user.com",
                 },
             }.AsQueryable();
-            var mockApplicationUserSet = new Mock<DbSet<ApplicationUser>>();
-            mockApplicationUserSet.As<IQueryable<ApplicationUser>>().Setup(m => m.Provider).Returns(this.UserData.Provider);
-            mockApplicationUserSet.As<IQueryable<ApplicationUser>>().Setup(m => m.Expression).Returns(this.UserData.Expression);
-            mockApplicationUserSet.As<IQueryable<ApplicationUser>>().Setup(m => m.ElementType).Returns(this.UserData.ElementType);
-            mockApplicationUserSet.As<IQueryable<ApplicationUser>>().Setup(m => m.GetEnumerator()).Returns(this.UserData.GetEnumerator());
 
             this.CommentData = new List<Comment>().AsQueryable();
-            var mockCommentSet = new Mock<DbSet<Comment>>();
-            mockCommentSet.As<IQueryable<Comment>>().Setup(m => m.Provider).Returns(this.CommentData.Provider);
-            mockCommentSet.As<IQueryable<Comment>>().Setup(m => m.Expression).Returns(this.CommentData.Expression);
-            mockCommentSet.As<IQueryable<Comment>>().Setup(m => m.ElementType).Returns(this.CommentData.ElementType);
-            mockCommentSet.As<IQueryable<Comment>>().Setup(m => m.GetEnumerator()).Returns(this.CommentData.GetEnumerator());
-
-            var mockContext = new Mock<ApplicationDbContext>();
-            mockContext.Setup(m => m.Posts).Returns(mockPostSet.Object);
-            mockContext.Setup(m => m.Users).Returns(mockApplicationUserSet.Object);
-            mockContext.Setup(m => m.Comments).Returns(mockCommentSet.Object);
-
-            var mappingConfig = new MapperConfiguration(mc =>
-                mc.AddProfile(new MappingProfile())
-            );
-
-            IMapper mapper = mappingConfig.CreateMapper();
-
-            //this.Service = new BlogService(mockContext.Object, mapper);
         }
 
         [Test]
-        public void AutoMapperConfigIsValid()
+        public void BlogServiceGetAllPostsWithModel()
         {
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<MappingProfile>();
-                // add all profiles you'll use in your project here
-            });
-            Mapper.AssertConfigurationIsValid();
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+            //Act
+            var model = new AllViewModel<PostSummaryViewModel>();
+            var posts = this.Service.All(model);
+
+            //Assert
+            Assert.AreEqual(this.PostsData.Count(), posts.Entities.Count);
+            Assert.IsTrue(posts.Entities.First().CreatedOn > posts.Entities.Skip(1).First().CreatedOn);
+            Assert.AreEqual(posts.TotalPages, (int)Math.Ceiling(this.PostsData.Count() / (double)model.PageSize));
+            Assert.That(posts.Entities, Is.All.InstanceOf<PostSummaryViewModel>());
         }
 
-        //[Test]
-        //public void BlogServiceGetAllPosts()
-        //{
-        //    //Arrange
+        [Test]
+        public void BlogServiceGetAllPostsWithAuthor()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+            //Act
 
-        //    //Act
-        //    var posts = this.Service.All<PostSummaryViewModel>().ToList();
+            var model = new AllViewModel<PostSummaryViewModel> { Author = this.PostsData.First().Author.UserName };
+            var posts = this.Service.All(model);
 
-        //    //Assert
-        //    Assert.AreEqual(this.PostsData.Count(), posts.Count);
-        //    Assert.IsTrue(posts[0].CreatedOn > posts[1].CreatedOn);
-        //    Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
-        //}
+            //Assert
+            Assert.That(posts.Entities.All(p => p.AuthorName == model.Author));
+            Assert.AreEqual(1, posts.Entities.Count);
+            Assert.AreEqual(posts.TotalPages, (int)Math.Ceiling(this.PostsData.Count() / (double)model.PageSize));
+            Assert.That(posts.Entities, Is.All.InstanceOf<PostSummaryViewModel>());
+        }
 
-        //[Test]
-        //public void BlogServiceGetAllByAuthorPosts()
-        //{
-        //    //Arrange
-        //    var expectingPost = this.PostsData.First();
-        //    var expectingCount = 1;
-        //    //Act
-        //    var posts = this.Service.All<PostSummaryViewModel>(expectingPost.Author.UserName).ToList();
+        [Test]
+        public void BlogServiceGetAllPosts()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+            //Act
+            var posts = this.Service.All<PostSummaryViewModel>().ToList();
 
-        //    //Assert
-        //    Assert.AreEqual(expectingCount, posts.Count);
-        //    Assert.AreEqual(expectingPost.Id, posts[0].Id);
-        //    Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
-        //}
+            //Assert
+            Assert.AreEqual(this.PostsData.Count(), posts.Count);
+            Assert.IsTrue(posts[0].CreatedOn > posts[1].CreatedOn);
+            Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(posts);
+        }
 
         [Test]
         public void BlogServiceGetRecentPosts()
         {
             //Arrange
-            var expectingCount = 3;
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
             //Act
             var posts = this.Service.RecentBlogs<RecentBlogViewModel>().ToList();
+            var expectingCount = 3;
 
             //Assert
             Assert.AreEqual(expectingCount, posts.Count);
@@ -385,6 +385,15 @@ namespace Tests
         {
             //Arrange
             var expectedPost = this.PostsData.First();
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository
+                .Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
+            this.Service = new BlogService(postRepository.Object, null, null, null);
 
             //Act
             var post = this.Service.Details(expectedPost.Id);
@@ -396,35 +405,419 @@ namespace Tests
         }
 
         [Test]
+        public void BlogServiceDetailsPostWithIncorrectPostId()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository
+                .Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
+            //Act
+            var incorrectId = this.PostsData.First().Id + "WRONG";
+            var post = this.Service.Details(incorrectId);
+
+            //Assert
+            Assert.IsNull(post);
+        }
+
+        [Test]
+        public void BlogServiceCountAllPosts()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
+            //Act
+            var expected = this.PostsData.Count();
+            var count = this.Service.Count();
+
+            //Assert
+            Assert.AreEqual(expected, count);
+        }
+
+        [Test]
+        public void BlogServiceDeletePost()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository
+                .Setup(r => r.Delete(It.IsAny<Post>())).Callback((Post p) =>
+                {
+                    p.IsDeleted = true;
+                });
+            postRepository
+                .Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
+
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
+            var post = this.PostsData.First();
+
+            //Act
+            this.Service.Delete(post.Id);
+
+            //Assert
+            Assert.AreEqual(true, post.IsDeleted);
+        }
+
+        [Test]
+        public void BlogServiceDeletePostWithIncorrectPostId()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository
+                .Setup(r => r.Delete(It.IsAny<Post>())).Callback((Post p) =>
+                {
+                    p.IsDeleted = true;
+                });
+            postRepository.Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
+
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
+            var post = this.PostsData.First();
+
+            //Act
+            this.Service.Delete(post.Id + "WRONG");
+
+            //Assert
+            Assert.AreEqual(false, post.IsDeleted);
+        }
+
+        [Test]
+        public void BlogServiceSearchCurrentPost()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+            //Act
+            var expected = this.PostsData.First();
+
+            var post = this.Service.Search(expected.Title);
+
+            //Assert
+
+            Assert.AreEqual(expected.Title, post.Entities.First().Title);
+            Assert.IsInstanceOf<ICollection<PostSummaryViewModel>>(post.Entities);
+        }
+
+        [Test]
+        public void BlogServiceSearchMultiplePosts()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
+            var searchingWord = "Title";
+
+            //Act
+            var post = this.Service.Search(searchingWord);
+
+            //Assert
+            Assert.AreEqual(this.PostsData.Count(), post.Entities.Count);
+            Assert.IsTrue(post.Entities.First().CreatedOn > post.Entities.Skip(1).First().CreatedOn);
+            Assert.That(post.Entities.All(p => p.Title.Contains(searchingWord)));
+            Assert.That(post.Entities, Is.All.InstanceOf<PostSummaryViewModel>());
+        }
+
+        [Test]
+        public void BlogServiceSearchWithIncorrectTerm()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.All()).Returns(this.PostsData);
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
+            var searchingWord = "TitleWRONG";
+
+            //Act
+            var post = this.Service.Search(searchingWord);
+
+            //Assert
+            Assert.AreEqual(0, post.Entities.Count);
+        }
+
+        [Test]
+        public void BlogServiceCreatePostWithEmptyModel()
+        {
+            //Arrange
+
+            this.Service = new BlogService(null, null, null, null);
+
+            //Act
+            var author = this.UserData.First();
+            var result = this.Service.Create(author.Id, new CreateViewModel()).GetAwaiter().GetResult();
+            var expectedErrorMsg = "Model is empty!";
+
+            //Assert
+            Assert.IsInstanceOf<IServiceResult>(result);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(expectedErrorMsg, result.Error);
+        }
+
+        [Test]
+        public void BlogServiceCreatePostWithIncorrectAuthorId()
+        {
+            //Arrange
+
+            var userRepository = new Mock<IDeletableEntityRepository<ApplicationUser>>();
+            userRepository
+                .Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.UserData.FirstOrDefault(u => u.Id == stringed));
+                });
+
+            this.Service = new BlogService(null, null, userRepository.Object, null);
+
+            //Act
+            var author = this.UserData.First();
+            var model = new CreateViewModel() { Title = "Test Title", Content = "Test Content" };
+
+            var result = this.Service.Create(author.Id + "WRONG", model).GetAwaiter().GetResult();
+            var expectedErrorMsg = "Author is not found!";
+
+            //Assert
+            Assert.IsInstanceOf<IServiceResult>(result);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(expectedErrorMsg, result.Error);
+        }
+
+        [Test]
         public void BlogServiceCreatePost()
         {
             //Arrange
-            var authorId = "fourthUserId";
-            var postTitle = "Fourth Title";
-            var postContent = "Fourth Post Content";
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(p => p.Add(It.IsAny<Post>())).Callback((Post p) =>
+            {
+                var posts = this.PostsData.ToList();
+                posts.Add(p);
+                this.PostsData = posts.AsQueryable();
+            });
+            postRepository.Setup(p => p.SaveChangesAsync()).Returns(Task.FromResult(1));
+
+            var userRepository = new Mock<IDeletableEntityRepository<ApplicationUser>>();
+            userRepository
+                .Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.UserData.FirstOrDefault(u => u.Id == stringed));
+                });
+
+            var galleryService = new Mock<IGalleryService>();
+            galleryService
+                .Setup(g => g.Upload(It.IsAny<ICollection<IFormFile>>()))
+                .Returns(new List<Image>
+            {
+                    new Image(),
+                    new Image()
+            });
+
+            this.Service = new BlogService(postRepository.Object, null, userRepository.Object, galleryService.Object);
 
             //Act
-            var result = this.Service.Create(authorId, new CreateViewModel()).GetAwaiter().GetResult();
+            var author = this.UserData.First();
+            var model = new CreateViewModel() { Title = "Test Title", Content = "Test Content" };
+            var result = this.Service.Create(author.Id, model).GetAwaiter().GetResult();
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
             Assert.IsTrue(result.Success);
+            Assert.AreEqual(this.PostsData.Last().Title, model.Title);
+            Assert.AreEqual(this.PostsData.Last().Content, model.Content);
         }
 
         [Test]
         public void BlogServiceAddComment()
         {
             //Arrange
-            var authorName = this.UserData.First().UserName;
-            var postId = this.PostsData.First().Id;
-            var commentContent = "Fourth Post Content";
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
 
+            var commentRepository = new Mock<IDeletableEntityRepository<Comment>>();
+            commentRepository.Setup(p => p.Add(It.IsAny<Comment>())).Callback((Comment c) =>
+            {
+                var comments = this.CommentData.ToList();
+                comments.Add(c);
+                this.CommentData = comments.AsQueryable();
+            });
+            commentRepository.Setup(p => p.SaveChangesAsync()).Returns(Task.FromResult(1));
+            this.Service = new BlogService(postRepository.Object, commentRepository.Object, null, null);
             //Act
-            var result = this.Service.AddComment(postId, authorName, commentContent).GetAwaiter().GetResult();
+
+            var expectedCount = this.CommentData.Count() + 1;
+            var postToAddComment = this.PostsData.First();
+            string authorName = "Test Author";
+            string commentContent = "Test Comment";
+            var result = this.Service.AddComment(postToAddComment.Id, authorName, commentContent).GetAwaiter().GetResult();
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
             Assert.IsTrue(result.Success);
+            Assert.AreEqual(expectedCount, this.CommentData.Count());
+            Assert.AreEqual(this.CommentData.Last().Author, authorName);
+            Assert.AreEqual(this.CommentData.Last().Content, commentContent);
+        }
+
+        [Test]
+        public void BlogServiceAddCommentWithIncorrectPostId()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
+
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+            //Act
+
+            var expectedMsg = "Post not found!";
+            var postToAddComment = this.PostsData.First();
+            string authorName = "Test Author";
+            string commentContent = "Test Comment";
+
+            var result = this.Service.AddComment(postToAddComment.Id + "WRONG", authorName, commentContent).GetAwaiter().GetResult();
+
+            //Assert
+            Assert.IsInstanceOf<IServiceResult>(result);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(expectedMsg, result.Error);
+        }
+
+        [Test]
+        public void BlogServiceAddCommentWithIncorrectParameters()
+        {
+            //Arrange
+
+            this.Service = new BlogService(null, null, null, null);
+            //Act
+
+            var expectedMsg = "Invalid data!";
+            var result = this.Service.AddComment(null, null, null).GetAwaiter().GetResult();
+
+            //Assert
+            Assert.IsInstanceOf<IServiceResult>(result);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(expectedMsg, result.Error);
+        }
+
+        [Test]
+        public void BlogServiceEditPost()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
+            postRepository.Setup(p => p.SaveChangesAsync()).Returns(Task.FromResult(1));
+
+            var galleryService = new Mock<IGalleryService>();
+            galleryService
+                .Setup(g => g.Upload(It.IsAny<ICollection<IFormFile>>()))
+                .Returns(new List<Image>
+                {
+                    new Image(),
+                    new Image()
+                });
+
+            this.Service = new BlogService(postRepository.Object, null, null, galleryService.Object);
+
+            //Act
+            var author = this.UserData.First();
+            var model = new PostViewModel()
+            {
+                Id = this.PostsData.First().Id,
+                Title = "Test Title",
+                Content = "Test Content"
+            };
+            var result = this.Service.Edit(model).GetAwaiter().GetResult();
+
+            //Assert
+            Assert.IsInstanceOf<IServiceResult>(result);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(this.PostsData.First().Title, model.Title);
+            Assert.AreEqual(this.PostsData.First().Content, model.Content);
+            Assert.IsTrue(this.PostsData.First().ModifiedOn != null);
+            Assert.IsTrue(this.PostsData.First().Image != null);
+        }
+
+        [Test]
+        public void BlogServiceEditPostWithIncorrectParameters()
+        {
+            //Arrange
+
+            this.Service = new BlogService(null, null, null, null);
+
+            //Act
+            var expectedMsg = "Invalid post data!";
+            var model = new PostViewModel()
+            {
+            };
+            var result = this.Service.Edit(model).GetAwaiter().GetResult();
+
+            //Assert
+            Assert.IsInstanceOf<IServiceResult>(result);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(expectedMsg, result.Error);
+        }
+
+        [Test]
+        public void BlogServiceEditPostWithIncorrectPostId()
+        {
+            //Arrange
+            var postRepository = new Mock<IDeletableEntityRepository<Post>>();
+            postRepository.Setup(r => r.GetByIdAsync(It.IsAny<object[]>()))
+                .Returns((object[] id) =>
+                {
+                    var stringed = id.First().ToString();
+                    return Task.FromResult(this.PostsData.FirstOrDefault(p => p.Id == stringed));
+                });
+            this.Service = new BlogService(postRepository.Object, null, null, null);
+
+            //Act
+            var expectedMsg = "Invalid post id!";
+            var model = new PostViewModel()
+            {
+                Id = this.PostsData.First().Id + "WRONG",
+                Title = "Test Title",
+                Content = "Test Content"
+            };
+            var result = this.Service.Edit(model).GetAwaiter().GetResult();
+
+            //Assert
+            Assert.IsInstanceOf<IServiceResult>(result);
+            Assert.IsFalse(result.Success);
+            Assert.AreEqual(expectedMsg, result.Error);
         }
     }
 }

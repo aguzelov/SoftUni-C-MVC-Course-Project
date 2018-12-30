@@ -12,10 +12,10 @@ namespace Dialog.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<ApplicationUser> _useRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> _useRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserService(IRepository<ApplicationUser> useRepository, UserManager<ApplicationUser> userManager)
+        public UserService(IDeletableEntityRepository<ApplicationUser> useRepository, UserManager<ApplicationUser> userManager)
         {
             this._useRepository = useRepository;
             this._userManager = userManager;
@@ -23,7 +23,7 @@ namespace Dialog.Services
 
         public ICollection<T> All<T>()
         {
-            var users = this._useRepository.AllWithoutDeleted()
+            var users = this._useRepository.All()
                 .OrderByDescending(u => u.CreatedOn)
                 .To<T>()
                 .ToList();
@@ -53,16 +53,16 @@ namespace Dialog.Services
 
         public int Count()
         {
-            var count = this._useRepository.AllWithoutDeleted().Count();
+            var count = this._useRepository.All().Count();
 
             return count;
         }
 
         public async Task<string> GetUserRoles(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await this._userManager.FindByEmailAsync(email);
 
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await this._userManager.GetRolesAsync(user);
 
             return string.Join("; ", roles);
         }

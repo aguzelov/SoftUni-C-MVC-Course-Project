@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common;
 using Dialog.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Dialog.Web.Areas.Blog.Controllers
 {
@@ -31,16 +33,19 @@ namespace Dialog.Web.Areas.Blog.Controllers
 
         public IActionResult Details(string id)
         {
-            if (id == null)
+            if (id != null)
             {
-                return this.RedirectToAction(nameof(All));
+                var model = this._blogService.Details(id);
+                if (model != null)
+                {
+                    return this.View(model);
+                }
             }
 
-            var model = this._blogService.Details(id);
-
-            return this.View(model);
+            return this.RedirectToAction(nameof(All));
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             var model = new CreateViewModel();
@@ -49,6 +54,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateViewModel model)
         {
             if (!this.ModelState.IsValid)
@@ -62,6 +68,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
 
             if (!result.Success)
             {
+                this.ModelState.AddModelError("result", result.Error);
                 return this.View(model);
             }
 
@@ -72,7 +79,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
 
         public async Task<IActionResult> AddComment(CreateCommentViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 return this.RedirectToAction(nameof(Details), routeValues: new { Id = model.PostId });
             }
@@ -94,10 +101,10 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this._blogService.Search<PostSummaryViewModel>(searchTerm);
+            var model = this._blogService.Search(searchTerm);
 
             if (model == null ||
-                model.Count() == 0)
+                !model.Entities.Any())
             {
                 return this.RedirectToAction(nameof(All));
             }
@@ -105,13 +112,18 @@ namespace Dialog.Web.Areas.Blog.Controllers
             return this.View("All", model);
         }
 
+        [Authorize(Roles = GlobalConstants.AdminRole)]
         public async Task<IActionResult> Delete(string id)
         {
-            await this._blogService.Delete(id);
+            if (id != null)
+            {
+                await this._blogService.Delete(id);
+            }
 
             return RedirectToAction("Blog", "Administrator", new { area = "Administration" });
         }
 
+        [Authorize]
         public IActionResult Edit(string id)
         {
             var post = this._blogService.Details(id);
@@ -120,9 +132,10 @@ namespace Dialog.Web.Areas.Blog.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Edit(PostViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }

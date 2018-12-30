@@ -14,10 +14,10 @@ namespace Dialog.Services
     public class ChatService : IChatService
     {
         private readonly IRepository<ChatLine> _chatLineRepository;
-        private readonly IRepository<Chat> _chatRepository;
-        private readonly IRepository<ApplicationUser> _userRepository;
+        private readonly IDeletableEntityRepository<Chat> _chatRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> _userRepository;
 
-        public ChatService(IRepository<ChatLine> chatLineRepository, IRepository<Chat> chatRepository, IRepository<ApplicationUser> userRepository)
+        public ChatService(IRepository<ChatLine> chatLineRepository, IDeletableEntityRepository<Chat> chatRepository, IDeletableEntityRepository<ApplicationUser> userRepository)
         {
             this._chatLineRepository = chatLineRepository;
             this._chatRepository = chatRepository;
@@ -31,7 +31,7 @@ namespace Dialog.Services
                 Success = false
             };
 
-            var user = this._userRepository.AllWithoutDeleted().FirstOrDefault(u => u.UserName == username);
+            var user = this._userRepository.All().FirstOrDefault(u => u.UserName == username);
 
             if (user == null)
             {
@@ -39,7 +39,7 @@ namespace Dialog.Services
                 return result;
             }
 
-            var chat = this._chatRepository.AllWithoutDeleted().FirstOrDefault(c => c.Name == chatName);
+            var chat = this._chatRepository.All().FirstOrDefault(c => c.Name == chatName);
 
             if (chat == null)
             {
@@ -64,7 +64,7 @@ namespace Dialog.Services
 
         public IQueryable<T> RecentMessage<T>(string chatName)
         {
-            var message = this._chatLineRepository.AllWithoutDeleted()
+            var message = this._chatLineRepository.All()
                 .Where(m => m.Chat.Name == chatName && m.CreatedOn >= DateTime.UtcNow.AddDays(-1))
                 .OrderBy(m => m.CreatedOn)
                 .To<T>();
@@ -74,7 +74,7 @@ namespace Dialog.Services
 
         public IQueryable<T> UserChats<T>(string username)
         {
-            var user = this._userRepository.AllWithoutDeleted()
+            var user = this._userRepository.All()
                 .FirstOrDefault(u => u.UserName == username);
 
             if (user == null)
@@ -89,7 +89,7 @@ namespace Dialog.Services
 
         public string GetChatId(string chatName)
         {
-            var chat = this._chatRepository.AllWithoutDeleted().FirstOrDefault(c => c.Name == chatName);
+            var chat = this._chatRepository.All().FirstOrDefault(c => c.Name == chatName);
 
             if (chat == null)
             {

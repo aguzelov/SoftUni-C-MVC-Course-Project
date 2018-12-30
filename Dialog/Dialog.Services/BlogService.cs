@@ -1,41 +1,40 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Dialog.Data;
+﻿using Dialog.Common.Mapping;
+using Dialog.Data.Common.Repositories;
+using Dialog.Data.Models;
+using Dialog.Data.Models.Blog;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
-using Microsoft.AspNetCore.Identity;
+using Dialog.ViewModels.Gallery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dialog.Common.Mapping;
-using Dialog.Data.Common.Repositories;
-using Dialog.Data.Models;
-using Dialog.Data.Models.Blog;
-using Dialog.ViewModels.Gallery;
-using Microsoft.AspNetCore.Http;
 
 namespace Dialog.Services
 {
     public class BlogService : IBlogService
     {
-        private readonly IRepository<Post> _postRepository;
-        private readonly IRepository<Comment> _commentRepository;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IDeletableEntityRepository<Post> _postRepository;
+        private readonly IDeletableEntityRepository<Comment> _commentRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> _userRepository;
         private readonly IGalleryService _galleryService;
 
-        public BlogService(IRepository<Post> postRepository, IRepository<Comment> commentRepository, UserManager<ApplicationUser> userManager, IGalleryService galleryService)
+        public BlogService(
+            IDeletableEntityRepository<Post> postRepository,
+            IDeletableEntityRepository<Comment> commentRepository,
+            IDeletableEntityRepository<ApplicationUser> userRepository,
+            IGalleryService galleryService)
         {
             this._postRepository = postRepository;
             this._commentRepository = commentRepository;
-            this._userManager = userManager;
+            this._userRepository = userRepository;
             this._galleryService = galleryService;
         }
 
         public AllViewModel<PostSummaryViewModel> All(AllViewModel<PostSummaryViewModel> model)
         {
-            IQueryable<Post> posts = this._postRepository.AllWithoutDeleted();
+            var posts = this._postRepository.All();
 
             if (!string.IsNullOrEmpty(model.Author))
             {
@@ -50,7 +49,7 @@ namespace Dialog.Services
             }
 
             var currentPosts = posts
-                 .Skip((model.Page - 1) * model.PageSize)
+                 .Skip((model.CurrentPage - 1) * model.PageSize)
                  .Take(model.PageSize)
                  .To<PostSummaryViewModel>()
                  .ToList();
@@ -66,7 +65,7 @@ namespace Dialog.Services
 
         public ICollection<T> All<T>()
         {
-            var posts = this._postRepository.AllWithoutDeleted()
+            var posts = this._postRepository.All()
                  .OrderByDescending(p => p.CreatedOn)
                  .To<T>()
                  .ToList();
@@ -76,7 +75,7 @@ namespace Dialog.Services
 
         public IQueryable<T> RecentBlogs<T>()
         {
-            var blogs = this._postRepository.AllWithoutDeleted()
+            var blogs = this._postRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
                 .Take(3)
                 .To<T>();
@@ -88,7 +87,11 @@ namespace Dialog.Services
         {
             var post = this._postRepository.GetByIdAsync(id).GetAwaiter().GetResult();
 
-            //TODO : Reformat this
+            if (post == null)
+            {
+                return null;
+            }
+
             var model = new PostViewModel
             {
                 Id = post.Id,
@@ -131,12 +134,18 @@ namespace Dialog.Services
                 Success = false
             };
 
-            var author = await this._userManager.FindByIdAsync(authorId);
-
-            if (author == null ||
-                model.Title == null ||
+            if (model.Title == null ||
                 model.Content == null)
             {
+                result.Error = "Model is empty!";
+                return result;
+            }
+
+            var author = await this._userRepository.GetByIdAsync(authorId);
+
+            if (author == null)
+            {
+                result.Error = "Author is not found!";
                 return result;
             }
 
@@ -159,7 +168,11 @@ namespace Dialog.Services
             try
             {
                 this._postRepository.Add(post);
-                await this._postRepository.SaveChangesAsync();
+                var affectedRows = await this._postRepository.SaveChangesAsync();
+                if (affectedRows != 1)
+                {
+                    throw new InvalidOperationException("Post not saved in database!");
+                }
             }
             catch (Exception e)
             {
@@ -176,9 +189,18 @@ namespace Dialog.Services
         {
             var result = new ServiceResult { Success = false };
 
+            if (postId == null ||
+                authorName == null ||
+                message == null)
+            {
+                result.Error = "Invalid data!";
+                return result;
+            }
+
             var post = await this._postRepository.GetByIdAsync(postId);
             if (post == null)
             {
+                result.Error = "Post not found!";
                 return result;
             }
 
@@ -194,7 +216,11 @@ namespace Dialog.Services
             try
             {
                 this._commentRepository.Add(comment);
-                await this._commentRepository.SaveChangesAsync();
+                var affectedRows = await this._commentRepository.SaveChangesAsync();
+                if (affectedRows != 1)
+                {
+                    throw new InvalidOperationException("Comment not saved in database!");
+                }
             }
             catch (Exception e)
             {
@@ -207,29 +233,46 @@ namespace Dialog.Services
             return result;
         }
 
-        public IQueryable<T> Search<T>(string searchTerm)
+        public AllViewModel<PostSummaryViewModel> Search(string searchTerm)
         {
-            var post = this._postRepository.AllWithoutDeleted()
+            var posts = this._postRepository.All()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(p => p.CreatedOn)
-                .To<T>();
+                .To<PostSummaryViewModel>();
 
-            return post;
+            var model = new AllViewModel<PostSummaryViewModel>();
+
+            var currentPosts = posts
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize)
+                .ToList();
+
+            var totalPosts = posts.Count();
+
+            model.TotalPages = (int)Math.Ceiling(totalPosts / (double)model.PageSize);
+
+            model.Entities = currentPosts;
+
+            return model;
         }
 
         public async Task Delete(string id)
         {
             var post = await this._postRepository.GetByIdAsync(id);
 
-            post.IsDeleted = true;
-            post.DeletedOn = DateTime.UtcNow;
+            if (post == null)
+            {
+                return;
+            }
+
+            this._postRepository.Delete(post);
 
             await this._postRepository.SaveChangesAsync();
         }
 
         public int Count()
         {
-            var count = this._postRepository.AllWithoutDeleted().Count();
+            var count = this._postRepository.All().Count();
 
             return count;
         }
@@ -241,13 +284,27 @@ namespace Dialog.Services
                 Success = false
             };
 
+            if (model.Id == null ||
+                model.Content == null ||
+                model.Title == null)
+            {
+                result.Error = "Invalid post data!";
+                return result;
+            }
+
             var post = await this._postRepository.GetByIdAsync(model.Id);
 
-            var images = this._galleryService.Upload(model.UploadImages);
+            if (post == null)
+            {
+                result.Error = "Invalid post id!";
+                return result;
+            }
 
             post.Title = model.Title;
             post.Content = model.Content;
             post.ModifiedOn = DateTime.UtcNow;
+
+            var images = this._galleryService.Upload(model.UploadImages);
 
             if (images != null)
             {

@@ -17,9 +17,9 @@ namespace Dialog.Services
     public class GalleryService : IGalleryService
     {
         private readonly Cloudinary _cloudinary;
-        private readonly IRepository<Image> _imageRepository;
+        private readonly IDeletableEntityRepository<Image> _imageRepository;
 
-        public GalleryService(Cloudinary cloudinary, IRepository<Image> imageRepository)
+        public GalleryService(Cloudinary cloudinary, IDeletableEntityRepository<Image> imageRepository)
         {
             this._cloudinary = cloudinary;
             this._imageRepository = imageRepository;

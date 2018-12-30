@@ -21,7 +21,7 @@ namespace Dialog.Services.Contracts
 
         IQueryable<T> RecentBlogs<T>();
 
-        IQueryable<T> Search<T>(string searchTerm);
+        AllViewModel<PostSummaryViewModel> Search(string searchTerm);
 
         Task Delete(string id);
 
