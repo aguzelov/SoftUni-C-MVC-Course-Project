@@ -5,7 +5,7 @@ namespace Dialog.Services.Contracts
 {
     public interface IChatService
     {
-        Task<IServiceResult> AddMessage(string chatId, string username, string message);
+        Task<IServiceResult> AddMessage(string chatName, string username, string message);
 
         IQueryable<T> RecentMessage<T>(string chatName);
 

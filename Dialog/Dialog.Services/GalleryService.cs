@@ -9,17 +9,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace Dialog.Services
 {
     public class GalleryService : IGalleryService
     {
-        private readonly Cloudinary _cloudinary;
+        private readonly ICloudinaryService _cloudinaryService;
         private readonly IDeletableEntityRepository<Image> _imageRepository;
 
-        public GalleryService(Cloudinary cloudinary, IDeletableEntityRepository<Image> imageRepository)
+        public GalleryService(ICloudinaryService cloudinaryService, IDeletableEntityRepository<Image> imageRepository)
         {
-            this._cloudinary = cloudinary;
+            this._cloudinaryService = cloudinaryService;
             this._imageRepository = imageRepository;
         }
 
@@ -43,40 +44,26 @@ namespace Dialog.Services
                         //Getting FileName
                         var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim().ToString();
 
-                        //Assigning Unique Filename (Guid)
-                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
-
                         //Getting file Extension
                         var fileExtension = Path.GetExtension(fileName);
 
-                        // concating  FileName + FileExtension
-                        var newFileName = myUniqueFileName + fileExtension;
+                        var uploadResult = this._cloudinaryService.Upload(file, fileExtension);
 
-                        using (var fs = new MemoryStream())
+                        var uri = uploadResult.SecureUri;
+
+                        var image = new Image
                         {
-                            var uploadParams = new ImageUploadParams()
-                            {
-                                File = new FileDescription(newFileName, file.OpenReadStream())
-                            };
-
-                            var uploadResult = this._cloudinary.Upload(uploadParams);
-
-                            var uri = uploadResult.SecureUri;
-
-                            var image = new Image
-                            {
-                                PublicId = uploadResult.PublicId,
-                                Uri = uploadResult.Uri.ToString(),
-                                SecureUri = uploadResult.SecureUri.ToString(),
-                                ContentType = fileExtension,
-                                Name = fileName,
-                                Width = 100,
-                                Height = 150,
-                                TransformationType = Data.Models.Gallery.Transformation.Fit
-                            };
-                            images.Add(image);
-                            this._imageRepository.Add(image);
-                        }
+                            PublicId = uploadResult.PublicId,
+                            Uri = uploadResult.Uri.ToString(),
+                            SecureUri = uploadResult.SecureUri.ToString(),
+                            ContentType = fileExtension,
+                            Name = fileName,
+                            Width = 100,
+                            Height = 150,
+                            TransformationType = Data.Models.Gallery.Transformation.Fit
+                        };
+                        images.Add(image);
+                        this._imageRepository.Add(image);
                     }
                 }
 
