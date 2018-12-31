@@ -2,10 +2,12 @@ using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.Gallery;
 using Dialog.Services;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -13,25 +15,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using CloudinaryDotNet.Actions;
-using Dialog.Data.Models.Gallery;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace Dialog.Tests
 {
     [TestFixture]
-    public class BlogServiceTests
+    public class BlogServiceTests : BaseTests
     {
         public IBlogService Service { get; set; }
         public IQueryable<Post> PostsData { get; set; }
         public IQueryable<ApplicationUser> UserData { get; set; }
         public IQueryable<Comment> CommentData { get; set; }
-
-        public BlogServiceTests()
-        {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
-        }
 
         [SetUp]
         public void Setup()

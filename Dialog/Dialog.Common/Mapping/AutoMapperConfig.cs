@@ -9,18 +9,30 @@
 
     public static class AutoMapperConfig
     {
+        private static List<Assembly> RegisteredAssemblies { get; set; } = new List<Assembly>();
+
         public static void RegisterMappings(params Assembly[] assemblies)
         {
-            var types = assemblies.SelectMany(a => a.GetExportedTypes()).ToList();
-
-            Mapper.Initialize(configuration =>
+            foreach (var assembly in assemblies)
             {
-                RegisterStandardFromMappings(configuration, types);
+                if (RegisteredAssemblies.Contains(assembly))
+                {
+                    continue;
+                }
 
-                RegisterStandardToMappings(configuration, types);
+                var types = assembly.GetExportedTypes().ToList();
 
-                RegisterCustomMaps(configuration, types);
-            });
+                Mapper.Initialize(configuration =>
+                {
+                    RegisterStandardFromMappings(configuration, types);
+
+                    RegisterStandardToMappings(configuration, types);
+
+                    RegisterCustomMaps(configuration, types);
+                });
+
+                RegisteredAssemblies.Add(assembly);
+            }
         }
 
         private static void RegisterStandardFromMappings(IProfileExpression configuration, IEnumerable<Type> types)
