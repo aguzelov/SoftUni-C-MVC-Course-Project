@@ -93,6 +93,7 @@ namespace Dialog.Web
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGalleryService, GalleryService>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
 
             services.AddLogging(loggingBuilder =>
             {

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -14,8 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dialog.Services\Dialog.Services.csproj" />
-    <ProjectReference Include="..\Dialog.Web\Dialog.Web.csproj" />
+    <ProjectReference Include="..\..\Dialog.Common\Dialog.Common.csproj" />
+    <ProjectReference Include="..\..\Dialog.Services\Dialog.Services.csproj" />
+    <ProjectReference Include="..\..\Dialog.ViewModels\Dialog.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

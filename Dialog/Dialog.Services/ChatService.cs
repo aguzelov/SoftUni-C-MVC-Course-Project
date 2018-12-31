@@ -47,6 +47,12 @@ namespace Dialog.Services
                 return result;
             }
 
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                result.Error = "Message cannot be empty!";
+                return result;
+            }
+
             var chatLine = new ChatLine
             {
                 ApplicationUserId = user.Id,
@@ -65,8 +71,9 @@ namespace Dialog.Services
         public IQueryable<T> RecentMessage<T>(string chatName)
         {
             var message = this._chatLineRepository.All()
-                .Where(m => m.Chat.Name == chatName && m.CreatedOn >= DateTime.UtcNow.AddDays(-1))
+                .Where(m => m.Chat.Name == chatName)
                 .OrderBy(m => m.CreatedOn)
+                .Take(4)
                 .To<T>();
 
             return message;
@@ -74,15 +81,17 @@ namespace Dialog.Services
 
         public IQueryable<T> UserChats<T>(string username)
         {
-            var user = this._userRepository.All()
-                .FirstOrDefault(u => u.UserName == username);
+            var chats = this._userRepository.All()
+                .FirstOrDefault(u => u.UserName == username)?
+                .UserChats
+                .Select(uc => uc.Chat)
+                .AsQueryable()
+                .To<T>();
 
-            if (user == null)
+            if (chats == null)
             {
-                throw new NullReferenceException(username);
+                throw new ArgumentException("Invalid username");
             }
-
-            var chats = user.UserChats.Select(uc => uc.Chat).AsQueryable().To<T>();
 
             return chats;
         }
