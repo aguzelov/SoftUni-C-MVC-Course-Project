@@ -8,6 +8,7 @@ using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
 using Dialog.Data.Models.Chat;
 using Dialog.Data.Models.Gallery;
+using Dialog.Data.Models.News;
 using Dialog.Services.Contracts;
 using NUnit.Framework;
 
@@ -15,7 +16,8 @@ namespace Dialog.Services.Tests
 {
     public class BaseTests<T>
     {
-        protected readonly string IncorrectSuffix = "Incorrect";
+        private const int DataCount = 10;
+        protected readonly string IncorrectTestText = "Incorrect";
 
         protected T Service { get; set; }
         protected IQueryable<ApplicationUser> UserData { get; set; }
@@ -24,6 +26,7 @@ namespace Dialog.Services.Tests
         protected IQueryable<Chat> ChatData { get; set; }
         protected IQueryable<ChatLine> ChatLineData { get; set; }
         protected IQueryable<Image> ImageData { get; set; }
+        protected IQueryable<News> NewsData { get; set; }
 
         public BaseTests()
         {
@@ -314,21 +317,49 @@ namespace Dialog.Services.Tests
             GenerateUserChats();
 
             GenerateImageData();
+
+            GenerateNewsDate();
+        }
+
+        private void GenerateNewsDate()
+        {
+            var newsData = new List<News>();
+
+            for (int i = 0; i < DataCount; i++)
+            {
+                var user = GetRandomUser();
+
+                var news = new News()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedOn = GetRandomDate(),
+                    Author = user,
+                    AuthorId = user.Id,
+                    Content = "Content" + i,
+                    Title = "Title" + i
+                };
+
+                newsData.Add(news);
+            }
+
+            this.NewsData = newsData.AsQueryable();
+            foreach (var user in this.UserData)
+            {
+                user.News = this.NewsData.Where(n => n.AuthorId == user.Id).ToList();
+            }
         }
 
         private void GenerateImageData()
         {
             var images = new List<Image>();
 
-            var random = new Random();
-
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < DataCount; i++)
             {
                 var image = new Image
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = "ImageName" + i,
-                    CreatedOn = DateTime.UtcNow.AddDays(random.Next(1, 10) * -1),
+                    CreatedOn = GetRandomDate(),
                 };
 
                 images.Add(image);
@@ -343,12 +374,12 @@ namespace Dialog.Services.Tests
 
             var random = new Random();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < DataCount; i++)
             {
                 var chat = new Chat
                 {
                     Id = Guid.NewGuid().ToString(),
-                    CreatedOn = DateTime.UtcNow.AddDays(random.Next(1, 100) * -1),
+                    CreatedOn = GetRandomDate(),
                     Name = nameof(Chat) + i,
                 };
 
@@ -365,8 +396,6 @@ namespace Dialog.Services.Tests
         {
             var lines = new List<ChatLine>();
 
-            var random = new Random();
-
             for (int i = 0; i < count; i++)
             {
                 var line = new ChatLine()
@@ -374,9 +403,9 @@ namespace Dialog.Services.Tests
                     Id = Guid.NewGuid().ToString(),
                     ChatId = chat.Id,
                     Chat = chat,
-                    CreatedOn = DateTime.UtcNow.AddDays(random.Next(1, 100) * -1),
+                    CreatedOn = GetRandomDate(),
                     Text = "ChatText" + i,
-                    ApplicationUser = (this.UserData.ToList())[random.Next(0, this.UserData.Count())]
+                    ApplicationUser = GetRandomUser()
                 };
 
                 lines.Add(line);
@@ -387,8 +416,6 @@ namespace Dialog.Services.Tests
 
         private void GenerateUserChats()
         {
-            var random = new Random();
-
             foreach (var user in this.UserData)
             {
                 var chats = this.ChatData.Where(c => c.ChatLines.Any(cl => cl.ApplicationUserId == user.Id));
@@ -404,7 +431,7 @@ namespace Dialog.Services.Tests
                         ApplicationUserId = user.Id,
                         Chat = chat,
                         ChatId = chat.Id,
-                        CreatedOn = DateTime.UtcNow.AddDays(random.Next(1, 100) * -1)
+                        CreatedOn = GetRandomDate()
                     };
 
                     userChats.Add(userChat);
@@ -412,6 +439,20 @@ namespace Dialog.Services.Tests
 
                 user.UserChats = userChats;
             }
+        }
+
+        private DateTime GetRandomDate()
+        {
+            var random = new Random();
+
+            return DateTime.UtcNow.AddDays(random.Next(1, 100) * -1);
+        }
+
+        private ApplicationUser GetRandomUser()
+        {
+            var random = new Random();
+
+            return (this.UserData.ToList())[random.Next(0, this.UserData.Count())];
         }
     }
 }

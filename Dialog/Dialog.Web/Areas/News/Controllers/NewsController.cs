@@ -31,14 +31,14 @@ namespace Dialog.Web.Areas.News.Controllers
 
         public IActionResult Details(string id)
         {
-            if (id == null)
-            {
-                return this.RedirectToAction(nameof(All));
-            }
-
             var model = this._newsService.Details(id);
 
-            return this.View(model);
+            if (model != null)
+            {
+                return this.View(model);
+            }
+
+            return this.RedirectToAction(nameof(All));
         }
 
         public IActionResult Create()
@@ -75,10 +75,10 @@ namespace Dialog.Web.Areas.News.Controllers
                 return this.RedirectToAction(nameof(All));
             }
 
-            var model = this._newsService.Search<NewsSummaryViewModel>(searchTerm).ToList();
+            var model = this._newsService.Search(searchTerm);
 
             if (model == null ||
-                model.Count == 0)
+                model.Entities.Count == 0)
             {
                 return this.RedirectToAction(nameof(All));
             }

@@ -50,7 +50,7 @@ namespace Dialog.Services.Tests
 
             //Assert
             var ex = Assert.Throws<ArgumentException>(() =>
-                this.Service.GetChatId(this.IncorrectSuffix));
+                this.Service.GetChatId(this.IncorrectTestText));
             Assert.That(ex.Message, Is.EqualTo("Invalid chat name!"));
         }
 
@@ -88,7 +88,7 @@ namespace Dialog.Services.Tests
 
             //Act
 
-            var messages = this.Service.RecentMessage<RecentMessagesViewModel>(this.IncorrectSuffix).ToList();
+            var messages = this.Service.RecentMessage<RecentMessagesViewModel>(this.IncorrectTestText).ToList();
 
             //Assert
             Assert.AreEqual(0, messages.Count);
@@ -130,7 +130,7 @@ namespace Dialog.Services.Tests
 
             //Assert
             var ex = Assert.Throws<ArgumentException>(() =>
-                this.Service.UserChats<UserChatsViewModel>(this.IncorrectSuffix));
+                this.Service.UserChats<UserChatsViewModel>(this.IncorrectTestText));
             Assert.That(ex.Message, Is.EqualTo("Invalid username"));
         }
 
@@ -190,7 +190,7 @@ namespace Dialog.Services.Tests
             var chatToAdd = this.ChatData.First();
             var messageToAdd = "Test Message";
 
-            var result = this.Service.AddMessage(chatToAdd.Name, this.IncorrectSuffix, messageToAdd).GetAwaiter()
+            var result = this.Service.AddMessage(chatToAdd.Name, this.IncorrectTestText, messageToAdd).GetAwaiter()
                 .GetResult();
             var expectedErrorMsg = "User not found!";
 
@@ -220,7 +220,7 @@ namespace Dialog.Services.Tests
             var userToAdd = this.UserData.First();
             var messageToAdd = "Test Message";
 
-            var result = this.Service.AddMessage(this.IncorrectSuffix, userToAdd.UserName, messageToAdd).GetAwaiter()
+            var result = this.Service.AddMessage(this.IncorrectTestText, userToAdd.UserName, messageToAdd).GetAwaiter()
                 .GetResult();
             var expectedErrorMsg = "Chat not found!";
 

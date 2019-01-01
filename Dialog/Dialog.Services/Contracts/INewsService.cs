@@ -18,9 +18,9 @@ namespace Dialog.Services.Contracts
 
         Task<IServiceResult> Create(string authorId, CreateViewModel model);
 
-        ICollection<T> RecentNews<T>();
+        //ICollection<T> RecentNews<T>();
 
-        IQueryable<T> Search<T>(string searchTerm);
+        AllViewModel<NewsSummaryViewModel> Search(string searchTerm);
 
         Task Delete(string id);
 

@@ -17,13 +17,13 @@ namespace Dialog.Services
     public class NewsService : INewsService
     {
         private readonly IDeletableEntityRepository<News> _newsRepository;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IDeletableEntityRepository<ApplicationUser> _userRepository;
         private readonly IGalleryService _galleryService;
 
-        public NewsService(IDeletableEntityRepository<News> newsRepository, UserManager<ApplicationUser> userManager, IGalleryService galleryService)
+        public NewsService(IDeletableEntityRepository<News> newsRepository, IDeletableEntityRepository<ApplicationUser> userRepository, IGalleryService galleryService)
         {
             this._newsRepository = newsRepository;
-            this._userManager = userManager;
+            this._userRepository = userRepository;
             this._galleryService = galleryService;
         }
 
@@ -75,12 +75,19 @@ namespace Dialog.Services
                 Success = false
             };
 
-            var author = await this._userManager.FindByIdAsync(authorId);
-
-            if (author == null ||
-                model.Title == null ||
-                model.Content == null)
+            if (string.IsNullOrEmpty(authorId) ||
+                string.IsNullOrEmpty(model.Title) ||
+                string.IsNullOrEmpty(model.Content))
             {
+                result.Error = "Invalid is parameters!";
+                return result;
+            }
+
+            var author = await this._userRepository.GetByIdAsync(authorId);
+
+            if (author == null)
+            {
+                result.Error = "Author not found!";
                 return result;
             }
 
@@ -120,6 +127,11 @@ namespace Dialog.Services
         {
             var news = this._newsRepository.GetByIdAsync(id).GetAwaiter().GetResult();
 
+            if (news == null)
+            {
+                return null;
+            }
+
             var model = new NewsViewModel
             {
                 Id = news.Id,
@@ -147,33 +159,49 @@ namespace Dialog.Services
             return model;
         }
 
-        public ICollection<T> RecentNews<T>()
-        {
-            var blogs = this._newsRepository.All()
-                .OrderByDescending(p => p.CreatedOn)
-                .Take(3)
-                .To<T>()
-                .ToList();
+        //public ICollection<T> RecentNews<T>()
+        //{
+        //    var blogs = this._newsRepository.All()
+        //        .OrderByDescending(p => p.CreatedOn)
+        //        .Take(3)
+        //        .To<T>()
+        //        .ToList();
 
-            return blogs;
-        }
+        //    return blogs;
+        //}
 
-        public IQueryable<T> Search<T>(string searchTerm)
+        public AllViewModel<NewsSummaryViewModel> Search(string searchTerm)
         {
             var news = this._newsRepository.All()
                 .Where(n => n.Title.Contains(searchTerm))
                 .OrderByDescending(n => n.CreatedOn)
-                .To<T>();
+                .To<NewsSummaryViewModel>();
 
-            return news;
+            var model = new AllViewModel<NewsSummaryViewModel>();
+
+            var currentPosts = news
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize)
+                .ToList();
+
+            var totalPosts = news.Count();
+
+            model.TotalPages = (int)Math.Ceiling(totalPosts / (double)model.PageSize);
+
+            model.Entities = currentPosts;
+
+            return model;
         }
 
         public async Task Delete(string id)
         {
             var news = await this._newsRepository.GetByIdAsync(id);
+            if (news == null)
+            {
+                return;
+            }
 
-            news.IsDeleted = true;
-            news.DeletedOn = DateTime.UtcNow;
+            this._newsRepository.Delete(news);
 
             await this._newsRepository.SaveChangesAsync();
         }
@@ -192,7 +220,21 @@ namespace Dialog.Services
                 Success = false
             };
 
+            if (string.IsNullOrEmpty(model.Id) ||
+                string.IsNullOrEmpty(model.Title) ||
+                string.IsNullOrEmpty(model.Content))
+            {
+                result.Error = "Invalid news data!";
+                return result;
+            }
+
             var news = await this._newsRepository.GetByIdAsync(model.Id);
+
+            if (news == null)
+            {
+                result.Error = "Invalid news id!";
+                return result;
+            }
 
             var images = this._galleryService.Upload(model.UploadImages);
 

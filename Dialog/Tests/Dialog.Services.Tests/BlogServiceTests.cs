@@ -30,7 +30,7 @@ namespace Dialog.Services.Tests
             var posts = this.Service.All(model);
 
             //Assert
-            Assert.AreEqual(this.PostsData.Count(), posts.Entities.Count);
+            Assert.AreEqual(posts.PageSize, posts.Entities.Count);
             Assert.IsTrue(posts.Entities.First().CreatedOn > posts.Entities.Skip(1).First().CreatedOn);
             Assert.AreEqual(posts.TotalPages, (int)Math.Ceiling(this.PostsData.Count() / (double)model.PageSize));
             Assert.That(posts.Entities, Is.All.InstanceOf<PostSummaryViewModel>());
@@ -45,13 +45,17 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(postRepository.Object, null, null, null);
             //Act
 
-            var model = new AllViewModel<PostSummaryViewModel> { Author = this.PostsData.First().Author.UserName };
+            var authorName = this.PostsData.First().Author.UserName;
+            var expectedPostsCount = this.PostsData.Count(n => n.Author.UserName == authorName);
+            var model = new AllViewModel<PostSummaryViewModel> { Author = authorName };
             var posts = this.Service.All(model);
 
             //Assert
             Assert.That(posts.Entities.All(p => p.AuthorName == model.Author));
             Assert.AreEqual(1, posts.Entities.Count);
-            Assert.AreEqual(posts.TotalPages, (int)Math.Ceiling(this.PostsData.Count() / (double)model.PageSize));
+            Assert.AreEqual(
+                posts.TotalPages,
+                (int)Math.Ceiling(expectedPostsCount / (double)model.PageSize));
             Assert.That(posts.Entities, Is.All.InstanceOf<PostSummaryViewModel>());
         }
 
@@ -128,8 +132,8 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(postRepository.Object, null, null, null);
 
             //Act
-            var incorrectId = this.PostsData.First().Id + "WRONG";
-            var post = this.Service.Details(incorrectId);
+
+            var post = this.Service.Details(this.IncorrectTestText);
 
             //Assert
             Assert.IsNull(post);
@@ -202,7 +206,7 @@ namespace Dialog.Services.Tests
             var post = this.PostsData.First();
 
             //Act
-            this.Service.Delete(post.Id + "WRONG");
+            this.Service.Delete(this.IncorrectTestText);
 
             //Assert
             Assert.AreEqual(false, post.IsDeleted);
@@ -240,7 +244,7 @@ namespace Dialog.Services.Tests
             var post = this.Service.Search(searchingWord);
 
             //Assert
-            Assert.AreEqual(this.PostsData.Count(), post.Entities.Count);
+            Assert.That(post.Entities.Count <= post.PageSize);
             Assert.IsTrue(post.Entities.First().CreatedOn > post.Entities.Skip(1).First().CreatedOn);
             Assert.That(post.Entities.All(p => p.Title.Contains(searchingWord)));
             Assert.That(post.Entities, Is.All.InstanceOf<PostSummaryViewModel>());
@@ -254,10 +258,8 @@ namespace Dialog.Services.Tests
             postRepository.Setup(r => r.All()).Returns(this.PostsData);
             this.Service = new BlogService(postRepository.Object, null, null, null);
 
-            var searchingWord = "TitleWRONG";
-
             //Act
-            var post = this.Service.Search(searchingWord);
+            var post = this.Service.Search(this.IncorrectTestText);
 
             //Assert
             Assert.AreEqual(0, post.Entities.Count);
@@ -298,10 +300,10 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(null, null, userRepository.Object, null);
 
             //Act
-            var author = this.UserData.First();
+
             var model = new CreateViewModel() { Title = "Test Title", Content = "Test Content" };
 
-            var result = this.Service.Create(author.Id + "WRONG", model).GetAwaiter().GetResult();
+            var result = this.Service.Create(this.IncorrectTestText, model).GetAwaiter().GetResult();
             var expectedErrorMsg = "Author is not found!";
 
             //Assert
@@ -408,11 +410,10 @@ namespace Dialog.Services.Tests
             //Act
 
             var expectedMsg = "Post not found!";
-            var postToAddComment = this.PostsData.First();
             string authorName = "Test Author";
             string commentContent = "Test Comment";
 
-            var result = this.Service.AddComment(postToAddComment.Id + "WRONG", authorName, commentContent).GetAwaiter().GetResult();
+            var result = this.Service.AddComment(this.IncorrectTestText, authorName, commentContent).GetAwaiter().GetResult();
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
@@ -517,7 +518,7 @@ namespace Dialog.Services.Tests
             var expectedMsg = "Invalid post id!";
             var model = new PostViewModel()
             {
-                Id = this.PostsData.First().Id + "WRONG",
+                Id = this.IncorrectTestText,
                 Title = "Test Title",
                 Content = "Test Content"
             };
