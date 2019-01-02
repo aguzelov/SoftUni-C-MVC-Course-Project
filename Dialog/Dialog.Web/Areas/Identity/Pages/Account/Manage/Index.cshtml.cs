@@ -39,6 +39,9 @@ namespace Dialog.Web.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Required]
+            public string Username { get; set; }
+
+            [Required]
             [EmailAddress]
             public string Email { get; set; }
 
@@ -63,6 +66,7 @@ namespace Dialog.Web.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Username = userName,
                 Email = email,
                 PhoneNumber = phoneNumber
             };
@@ -83,6 +87,16 @@ namespace Dialog.Web.Areas.Identity.Pages.Account.Manage
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            if (Input.Username != user.UserName)
+            {
+                var setUsernameResult = await this._userManager.SetUserNameAsync(user, Input.Username);
+                if (!setUsernameResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occurred setting username for user with ID '{userId}'.");
+                }
             }
 
             var email = await _userManager.GetEmailAsync(user);
