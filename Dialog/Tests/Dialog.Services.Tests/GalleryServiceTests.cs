@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dialog.ViewModels.Gallery;
+using NUnit.Framework.Interfaces;
 
 namespace Dialog.Services.Tests
 {
@@ -48,6 +50,47 @@ namespace Dialog.Services.Tests
             //Assert
             Assert.AreEqual(expectedCount, result.Count);
             Assert.That(result, Is.All.InstanceOf<Image>());
+        }
+
+        [Test]
+        public void GalleryServiceRecentImages()
+        {
+            //Arrange
+            var imageRepository = new Mock<IDeletableEntityRepository<Image>>();
+            imageRepository.Setup(i => i.All())
+                .Returns(this.ImageData);
+
+            this.Service = new GalleryService(null, imageRepository.Object);
+
+            //Act
+            var expectedCount = this.ImageData.Count();
+            var result = this.Service.RecentImages<ImageViewModel>().ToList();
+
+            //Assert
+            Assert.That(result.Count() <= 8);
+            Assert.That(result, Is.All.InstanceOf<ImageViewModel>());
+        }
+
+        [Test]
+        public void GalleryServiceGetDefaultImage()
+        {
+            //Arrange
+            var postImage = this.ImageData.First();
+            postImage.DefaultType = ImageDefaultType.BlogPost;
+
+            var imageRepository = new Mock<IDeletableEntityRepository<Image>>();
+            imageRepository.Setup(i => i.All())
+                .Returns(this.ImageData);
+
+            this.Service = new GalleryService(null, imageRepository.Object);
+
+            //Act
+            var result = this.Service.GetDefaultImage(ImageDefaultType.BlogPost);
+
+            //Assert
+            Assert.That(result.DefaultType == ImageDefaultType.BlogPost);
+            Assert.AreEqual(postImage.Id, result.Id);
+            Assert.That(result, Is.InstanceOf<Image>());
         }
 
         [Test]

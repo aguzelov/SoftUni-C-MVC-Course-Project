@@ -77,23 +77,23 @@ namespace Dialog.Services.Tests
             Assert.IsInstanceOf<ICollection<NewsSummaryViewModel>>(news);
         }
 
-        //[Test]
-        //public void NewsServiceGetRecentNews()
-        //{
-        //    //Arrange
-        //    var newsRepository = new Mock<IDeletableEntityRepository<News>>();
-        //    newsRepository.Setup(r => r.All()).Returns(this.NewsData);
-        //    this.Service = new NewsService(newsRepository.Object, null, null);
+        [Test]
+        public void NewsServiceGetRecentNews()
+        {
+            //Arrange
+            var newsRepository = new Mock<IDeletableEntityRepository<News>>();
+            newsRepository.Setup(r => r.All()).Returns(this.NewsData);
+            this.Service = new NewsService(newsRepository.Object, null, null);
 
-        //    //Act
-        //    var news = this.Service.RecentNews<>().ToList();
-        //    var expectingCount = 3;
+            //Act
+            var news = this.Service.RecentNews<NewsSummaryViewModel>().ToList();
+            var expectingCount = 4;
 
-        //    //Assert
-        //    Assert.AreEqual(expectingCount, news.Count);
-        //    Assert.AreEqual(this.NewsData.First().Id, news[0].Id);
-        //    Assert.IsInstanceOf<ICollection<RecentBlogViewModel>>(news);
-        //}
+            //Assert
+            Assert.AreEqual(expectingCount, news.Count);
+            Assert.AreEqual(this.NewsData.OrderByDescending(n => n.CreatedOn).First().Id, news[0].Id);
+            Assert.IsInstanceOf<ICollection<NewsSummaryViewModel>>(news);
+        }
 
         [Test]
         public void NewsServiceDetailsNews()

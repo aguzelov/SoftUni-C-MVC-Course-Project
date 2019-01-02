@@ -170,7 +170,7 @@ namespace Dialog.Services
         public IQueryable<T> RecentNews<T>()
         {
             var news = this._newsRepository.All()
-                .OrderByDescending(p => p.CreatedOn)
+                .OrderByDescending(n => n.CreatedOn)
                 .Take(4)
                 .To<T>();
 
