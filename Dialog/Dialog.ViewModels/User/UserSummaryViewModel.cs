@@ -20,6 +20,8 @@ namespace Dialog.ViewModels.User
 
         public DateTime CreatedOn { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public int PostsCount { get; set; }
 
         public int NewsCount { get; set; }
@@ -28,7 +30,8 @@ namespace Dialog.ViewModels.User
         {
             configuration.CreateMap<ApplicationUser, UserSummaryViewModel>()
                 .ForMember(u => u.PostsCount, opt => opt.MapFrom(src => src.Posts.Count(p => !p.IsDeleted)))
-                .ForMember(u => u.NewsCount, opt => opt.MapFrom(src => src.News.Count(n => !n.IsDeleted)));
+                .ForMember(u => u.NewsCount, opt => opt.MapFrom(src => src.News.Count(n => !n.IsDeleted)))
+                .ForMember(u => u.IsApproved, opt => opt.MapFrom(src => src.IsApproved));
         }
     }
 }

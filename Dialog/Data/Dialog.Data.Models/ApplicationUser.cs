@@ -28,6 +28,8 @@ namespace Dialog.Data.Models
 
         public virtual Image Image { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<News.News> News { get; set; }
         public virtual ICollection<UserChat> UserChats { get; set; } = new HashSet<UserChat>();

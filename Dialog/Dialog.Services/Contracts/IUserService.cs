@@ -14,5 +14,13 @@ namespace Dialog.Services.Contracts
         int Count();
 
         Task<string> GetUserRoles(string email);
+
+        Task Approve(string id);
+
+        Task Promote(string id);
+
+        Task Demote(string id);
+
+        Task DeleteUser(string id);
     }
 }

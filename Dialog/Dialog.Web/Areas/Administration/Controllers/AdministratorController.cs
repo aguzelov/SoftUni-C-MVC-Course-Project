@@ -8,6 +8,7 @@ using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Dialog.Web.Areas.Administration.Controllers
 {
@@ -73,6 +74,34 @@ namespace Dialog.Web.Areas.Administration.Controllers
             };
 
             return this.View(model);
+        }
+
+        public async Task<IActionResult> ApproveUser(string id)
+        {
+            await this._userService.Approve(id);
+
+            return this.RedirectToAction(nameof(Users));
+        }
+
+        public async Task<IActionResult> PromoteUser(string id)
+        {
+            await this._userService.Promote(id);
+
+            return this.RedirectToAction(nameof(Users));
+        }
+
+        public async Task<IActionResult> DemoteUser(string id)
+        {
+            await this._userService.Demote(id);
+
+            return this.RedirectToAction(nameof(Users));
+        }
+
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            await this._userService.DeleteUser(id);
+
+            return this.RedirectToAction(nameof(Users));
         }
 
         public IActionResult Gallery()

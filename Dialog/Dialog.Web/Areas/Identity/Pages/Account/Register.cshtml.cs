@@ -1,4 +1,5 @@
-﻿using Dialog.Data.Models;
+﻿using System;
+using Dialog.Data.Models;
 using Dialog.Data.Models.Chat;
 using Dialog.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -76,6 +77,7 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
                 {
                     UserName = this.Input.Email,
                     Email = this.Input.Email,
+                    CreatedOn = DateTime.UtcNow
                 };
 
                 user.UserChats.Add(new UserChat
