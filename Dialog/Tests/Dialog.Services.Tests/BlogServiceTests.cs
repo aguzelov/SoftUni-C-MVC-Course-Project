@@ -337,11 +337,7 @@ namespace Dialog.Services.Tests
             var galleryService = new Mock<IGalleryService>();
             galleryService
                 .Setup(g => g.Upload(It.IsAny<ICollection<IFormFile>>()))
-                .Returns(new List<Image>
-            {
-                    new Image(),
-                    new Image()
-            });
+                .Returns(new Image());
 
             this.Service = new BlogService(postRepository.Object, null, userRepository.Object, galleryService.Object);
 
@@ -454,11 +450,7 @@ namespace Dialog.Services.Tests
             var galleryService = new Mock<IGalleryService>();
             galleryService
                 .Setup(g => g.Upload(It.IsAny<ICollection<IFormFile>>()))
-                .Returns(new List<Image>
-                {
-                    new Image(),
-                    new Image()
-                });
+                .Returns(new Image());
 
             this.Service = new BlogService(postRepository.Object, null, null, galleryService.Object);
 

@@ -79,8 +79,8 @@ namespace Dialog.Services.Tests
             var result = this.Service.Upload(files);
 
             //Assert
-            Assert.AreEqual(files.Count, result.Count);
-            Assert.That(result, Is.All.InstanceOf<Image>());
+            Assert.NotNull(result);
+            Assert.That(result, Is.InstanceOf<Image>());
         }
 
         private ICollection<IFormFile> GenerateFiles()
