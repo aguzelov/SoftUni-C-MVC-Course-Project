@@ -57,6 +57,7 @@ namespace Dialog.Web
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
             })
             .AddDefaultTokenProviders()
             .AddDefaultUI()
@@ -64,6 +65,7 @@ namespace Dialog.Web
 
             services.AddMvc(options =>
             {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(typeof(RecentBlogsActionFilter));
             }
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
