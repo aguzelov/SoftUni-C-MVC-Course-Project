@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Dialog.Common.Mapping;
+﻿using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dialog.ViewModels.Blog
 {

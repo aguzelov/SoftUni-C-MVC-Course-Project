@@ -1,15 +1,14 @@
 ﻿using Dialog.Common;
+using Dialog.Data.Models;
+using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.Chat;
+using Dialog.Data.Models.News;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dialog.Data.Models;
-using Dialog.Data.Models.Blog;
-using Dialog.Data.Models.Chat;
-using Dialog.Data.Models.Gallery;
-using Dialog.Data.Models.News;
 
 namespace Dialog.Data.Seeding
 {

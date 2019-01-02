@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Dialog.ViewModels.Blog;
-using Dialog.ViewModels.User;
+﻿using System.Collections.Generic;
 
 namespace Dialog.ViewModels.Administration
 {

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Dialog.Web.Hubs
 {

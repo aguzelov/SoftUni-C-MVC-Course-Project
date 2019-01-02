@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Dialog.Data.Models.Gallery
+﻿namespace Dialog.Data.Models.Gallery
 {
     public enum ImageDefaultType
     {

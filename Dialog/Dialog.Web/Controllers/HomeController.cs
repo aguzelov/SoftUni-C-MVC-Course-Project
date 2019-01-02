@@ -1,7 +1,7 @@
 ﻿using Dialog.ViewModels.Base;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 
 namespace Dialog.Web.Controllers
 {

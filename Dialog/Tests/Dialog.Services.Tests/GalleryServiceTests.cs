@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Dialog.Data.Common.Repositories;
+﻿using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models.Gallery;
 using Dialog.Services.Contracts;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Dialog.Services.Tests
 {

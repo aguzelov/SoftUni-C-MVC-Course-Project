@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Dialog.Common.Mapping;
-using Dialog.ViewModels.Base;
-using System.Reflection;
+﻿using Dialog.Common.Mapping;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
 using Dialog.Data.Models.Chat;
 using Dialog.Data.Models.Gallery;
 using Dialog.Data.Models.News;
-using Dialog.Services.Contracts;
+using Dialog.ViewModels.Base;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Dialog.Services.Tests
 {

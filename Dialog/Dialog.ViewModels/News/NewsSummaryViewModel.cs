@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Dialog.Common.Mapping;
+﻿using Dialog.Common.Mapping;
 using Dialog.ViewModels.Gallery;
+using System;
 
 namespace Dialog.ViewModels.News
 {

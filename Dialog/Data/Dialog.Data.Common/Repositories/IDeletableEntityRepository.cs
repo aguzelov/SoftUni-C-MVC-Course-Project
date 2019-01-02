@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using Dialog.Data.Common.Models;
+using System.Linq;
 using System.Threading.Tasks;
-using Dialog.Data.Common.Models;
 
 namespace Dialog.Data.Common.Repositories
 {

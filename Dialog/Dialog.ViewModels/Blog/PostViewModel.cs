@@ -1,11 +1,11 @@
-﻿using Dialog.ViewModels.Base;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+﻿using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
+using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Gallery;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dialog.ViewModels.Blog
 {

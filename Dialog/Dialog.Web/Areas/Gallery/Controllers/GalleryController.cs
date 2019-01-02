@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Dialog.ViewModels.Gallery;
+﻿using Dialog.Services.Contracts;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Dialog.Services.Contracts;
+using System.Collections.Generic;
 
 namespace Dialog.Web.Areas.Gallery.Controllers
 {

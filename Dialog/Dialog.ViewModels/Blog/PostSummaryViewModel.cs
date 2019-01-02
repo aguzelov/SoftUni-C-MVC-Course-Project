@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
 using Dialog.ViewModels.Gallery;
+using System;
 
 namespace Dialog.ViewModels.Blog
 {

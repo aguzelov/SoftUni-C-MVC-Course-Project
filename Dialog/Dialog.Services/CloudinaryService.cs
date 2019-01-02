@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Dialog.Services.Contracts;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
 
 namespace Dialog.Services
 {

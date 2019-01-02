@@ -1,6 +1,6 @@
-﻿using System;
-using Dialog.Data.Common.Models;
+﻿using Dialog.Data.Common.Models;
 using Dialog.Data.Models.Gallery;
+using System;
 
 namespace Dialog.Data.Models.News
 {

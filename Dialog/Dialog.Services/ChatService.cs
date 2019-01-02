@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dialog.Common.Mapping;
+﻿using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Chat;
 using Dialog.Services.Contracts;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Dialog.Services
 {

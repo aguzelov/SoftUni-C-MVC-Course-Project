@@ -1,17 +1,16 @@
 ﻿using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
+using Dialog.Data.Models.Gallery;
 using Dialog.Data.Models.News;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Gallery;
 using Dialog.ViewModels.News;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dialog.Data.Models.Gallery;
 
 namespace Dialog.Services
 {

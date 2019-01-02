@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Dialog.Data.Models.Gallery;
+﻿using Dialog.Data.Models.Gallery;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace Dialog.Services.Contracts
 {

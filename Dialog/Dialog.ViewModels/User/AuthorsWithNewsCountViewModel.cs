@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models;
-using Dialog.Data.Models.Blog;
 using Dialog.ViewModels.Base;
+using System.Linq;
 
 namespace Dialog.ViewModels.User
 {

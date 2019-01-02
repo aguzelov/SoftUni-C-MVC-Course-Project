@@ -1,12 +1,10 @@
 ﻿using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
-using Dialog.Data.Models.Blog;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.User;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Dialog.ViewModels.Administration
+﻿namespace Dialog.ViewModels.Administration
 {
     public class AdministratorIndexViewModel
     {

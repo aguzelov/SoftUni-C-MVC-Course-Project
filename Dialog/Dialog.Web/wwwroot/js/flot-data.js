@@ -1,6 +1,5 @@
 //Flot Line Chart
-$(document).ready(function() {
-
+$(document).ready(function () {
     var offset = 0;
     plot();
 
@@ -39,19 +38,18 @@ $(document).ready(function() {
         };
 
         var plotObj = $.plot($("#flot-line-chart"), [{
-                data: sin,
-                label: "sin(x)"
-            }, {
-                data: cos,
-                label: "cos(x)"
-            }],
+            data: sin,
+            label: "sin(x)"
+        }, {
+            data: cos,
+            label: "cos(x)"
+        }],
             options);
     }
 });
 
 //Flot Pie Chart
-$(function() {
-
+$(function () {
     var data = [{
         label: "Series 0",
         data: 1
@@ -85,11 +83,10 @@ $(function() {
             defaultTheme: false
         }
     });
-
 });
 
 //Flot Multiple Axes Line Chart
-$(function() {
+$(function () {
     var oilprices = [
         [1167692400000, 61.05],
         [1167778800000, 58.32],
@@ -1062,47 +1059,45 @@ $(function() {
             label: "USD/EUR exchange rate",
             yaxis: 2
         }], {
-            xaxes: [{
-                mode: 'time'
-            }],
-            yaxes: [{
-                min: 0
-            }, {
-                // align if we are to the right
-                alignTicksWithAxis: position == "right" ? 1 : null,
-                position: position,
-                tickFormatter: euroFormatter
-            }],
-            legend: {
-                position: 'sw'
-            },
-            grid: {
-                hoverable: true //IMPORTANT! this is needed for tooltip to work
-            },
-            tooltip: true,
-            tooltipOpts: {
-                content: "%s for %x was %y",
-                xDateFormat: "%y-%0m-%0d",
+                xaxes: [{
+                    mode: 'time'
+                }],
+                yaxes: [{
+                    min: 0
+                }, {
+                    // align if we are to the right
+                    alignTicksWithAxis: position == "right" ? 1 : null,
+                    position: position,
+                    tickFormatter: euroFormatter
+                }],
+                legend: {
+                    position: 'sw'
+                },
+                grid: {
+                    hoverable: true //IMPORTANT! this is needed for tooltip to work
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%s for %x was %y",
+                    xDateFormat: "%y-%0m-%0d",
 
-                onHover: function(flotItem, $tooltipEl) {
-                    // console.log(flotItem, $tooltipEl);
+                    onHover: function (flotItem, $tooltipEl) {
+                        // console.log(flotItem, $tooltipEl);
+                    }
                 }
-            }
-
-        });
+            });
     }
 
     doPlot("right");
 
-    $("button").click(function() {
+    $("button").click(function () {
         doPlot($(this).text());
     });
 });
 
 //Flot Moving Line Chart
 
-$(function() {
-
+$(function () {
     var container = $("#flot-line-chart-moving");
 
     // Determine how many data points to keep based on the placeholder's initial size;
@@ -1115,7 +1110,6 @@ $(function() {
     var data = [];
 
     function getRandomData() {
-
         if (data.length) {
             data = data.slice(1);
         }
@@ -1160,7 +1154,7 @@ $(function() {
                 bottom: 20,
                 left: 20
             },
-            markings: function(axes) {
+            markings: function (axes) {
                 var markings = [];
                 var xaxis = axes.xaxis;
                 for (var x = Math.floor(xaxis.min); x < xaxis.max; x += xaxis.tickSize * 2) {
@@ -1176,7 +1170,7 @@ $(function() {
             }
         },
         xaxis: {
-            tickFormatter: function() {
+            tickFormatter: function () {
                 return "";
             }
         },
@@ -1196,13 +1190,11 @@ $(function() {
         plot.setData(series);
         plot.draw();
     }, 40);
-
 });
 
 //Flot Bar Chart
 
-$(function() {
-
+$(function () {
     var barOptions = {
         series: {
             bars: {
@@ -1238,5 +1230,4 @@ $(function() {
         ]
     };
     $.plot($("#flot-bar-chart"), [barData], barOptions);
-
 });

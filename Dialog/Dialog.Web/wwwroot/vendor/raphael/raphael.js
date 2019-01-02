@@ -23,7 +23,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
@@ -45,7 +44,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		return module.exports;
 /******/ 	}
 
-
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
 
@@ -62,19 +60,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ([
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(3), __webpack_require__(4)], __WEBPACK_AMD_DEFINE_RESULT__ = function(R) {
-
 	    return R;
-
 	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2)], __WEBPACK_AMD_DEFINE_RESULT__ = function(eve) {
-
 	    /*\
 	     * Raphael
 	     [ method ]
@@ -5113,7 +5106,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return ret;
 	    };
 
-
 	    /*\
 	     * Set.isPointInside
 	     [ method ]
@@ -5480,19 +5472,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return R;
 	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
-
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
-	// 
+	//
 	// Licensed under the Apache License, Version 2.0 (the "License");
 	// you may not use this file except in compliance with the License.
 	// You may obtain a copy of the License at
-	// 
+	//
 	// http://www.apache.org/licenses/LICENSE-2.0
-	// 
+	//
 	// Unless required by applicable law or agreed to in writing, software
 	// distributed under the License is distributed on an "AS IS" BASIS,
 	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -5636,7 +5626,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return out;
 	    };
-	    
+
 	    /*\
 	     * eve.on
 	     [ method ]
@@ -5651,7 +5641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - name (string) name of the event, dot (`.`) or slash (`/`) separated, with optional wildcards
 	     - f (function) event handler function
 	     **
-	     = (function) returned function accepts a single numeric parameter that represents z-index of the handler. It is an optional feature and only used when you need to ensure that some subset of handlers will be invoked in a given order, despite of the order of assignment. 
+	     = (function) returned function accepts a single numeric parameter that represents z-index of the handler. It is an optional feature and only used when you need to ensure that some subset of handlers will be invoked in a given order, despite of the order of assignment.
 	     > Example:
 	     | eve.on("mouse", eatIt)(2);
 	     | eve.on("mouse", scream);
@@ -5857,11 +5847,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    (typeof module != "undefined" && module.exports) ? (module.exports = eve) : ( true ? (!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() { return eve; }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))) : (glob.eve = eve));
 	})(this);
 
-
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_RESULT__ = function(R) {
 	    if (R && !R.svg) {
 	        return;
@@ -7281,11 +7269,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
-
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_RESULT__ = function(R) {
 	    if (R && !R.vml) {
 	        return;
@@ -7437,7 +7423,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            newpath = pathTypes[o.type] && (params.x != a.x || params.y != a.y || params.width != a.width || params.height != a.height || params.cx != a.cx || params.cy != a.cy || params.rx != a.rx || params.ry != a.ry || params.r != a.r),
 	            isOval = ovalTypes[o.type] && (a.cx != params.cx || a.cy != params.cy || a.r != params.r || a.rx != params.rx || a.ry != params.ry),
 	            res = o;
-
 
 	        for (var par in params) if (params[has](par)) {
 	            a[par] = params[par];
@@ -8285,7 +8270,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        })(method);
 	    }
 	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
 
 /***/ }
 /******/ ])

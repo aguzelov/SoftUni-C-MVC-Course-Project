@@ -1,14 +1,12 @@
-﻿using System;
-using System.ComponentModel.Design;
-using System.Linq;
-using Dialog.Data.Common.Repositories;
+﻿using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Chat;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Chat;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Linq;
 
 namespace Dialog.Services.Tests
 {

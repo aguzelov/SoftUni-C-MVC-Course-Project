@@ -2,6 +2,7 @@
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
+using Dialog.Data.Models.Gallery;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
@@ -10,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dialog.Data.Models.Gallery;
 
 namespace Dialog.Services
 {

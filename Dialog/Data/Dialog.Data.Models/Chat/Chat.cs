@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Dialog.Data.Common.Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Dialog.Data.Common.Models;
 
 namespace Dialog.Data.Models.Chat
 {

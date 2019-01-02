@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dialog.Data.Common.Repositories;
+﻿using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Gallery;
 using Dialog.Data.Models.News;
@@ -13,6 +8,10 @@ using Dialog.ViewModels.News;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Dialog.Services.Tests
 {

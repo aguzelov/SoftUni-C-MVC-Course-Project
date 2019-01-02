@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Dialog.Common
+﻿namespace Dialog.Common
 {
     public static class GlobalConstants
     {

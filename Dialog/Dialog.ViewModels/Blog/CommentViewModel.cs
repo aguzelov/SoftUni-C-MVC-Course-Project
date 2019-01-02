@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Dialog.Common.Mapping;
+﻿using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
+using System;
+using System.Collections.Generic;
 
 namespace Dialog.ViewModels.Blog
 {

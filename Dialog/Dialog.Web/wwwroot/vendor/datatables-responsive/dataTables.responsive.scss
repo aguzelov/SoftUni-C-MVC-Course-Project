@@ -1,4 +1,3 @@
-
 //
 // Mixins
 //
@@ -23,7 +22,6 @@
 	content: '-';
 	background-color: #d33333;
 }
-
 
 //
 // Table styles
@@ -80,7 +78,6 @@ table.dataTable {
 		}
 	}
 
-
 	// Styling for the `column` type
 	&.dtr-column > tbody {
 		> tr > td.control,
@@ -107,7 +104,6 @@ table.dataTable {
 			}
 		}
 	}
-
 
 	// Child row styling
 	> tbody > tr.child {
@@ -146,4 +142,3 @@ table.dataTable {
 		span.dtr-data {}
 	}
 }
-

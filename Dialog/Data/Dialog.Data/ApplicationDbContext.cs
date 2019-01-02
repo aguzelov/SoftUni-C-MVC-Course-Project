@@ -3,10 +3,8 @@ using Dialog.Data.Models.Blog;
 using Dialog.Data.Models.Chat;
 using Dialog.Data.Models.Gallery;
 using Dialog.Data.Models.News;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Dialog.Data
 {

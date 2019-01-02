@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Chat;
+using System;
 
 namespace Dialog.ViewModels.Chat
 {

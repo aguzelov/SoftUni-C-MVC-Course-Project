@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
-using Dialog.Services.Contracts;
+﻿using Dialog.Services.Contracts;
 using Dialog.ViewModels.Chat;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Dialog.Web.Hubs
 {

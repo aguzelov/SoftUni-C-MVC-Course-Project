@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Dialog.Common;
+﻿using Dialog.Common;
 using Dialog.Services.Contracts;
 using Dialog.ViewModels.Administration;
 using Dialog.ViewModels.Blog;
@@ -9,6 +7,7 @@ using Dialog.ViewModels.User;
 using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Dialog.Web.Areas.Administration.Controllers
 {

@@ -1,12 +1,11 @@
 ﻿namespace Dialog.Data.Repositories
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     using Dialog.Data.Common.Models;
     using Dialog.Data.Common.Repositories;
     using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity

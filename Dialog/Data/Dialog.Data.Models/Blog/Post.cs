@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Dialog.Data.Common.Models;
+﻿using Dialog.Data.Common.Models;
 using Dialog.Data.Models.Gallery;
+using System;
+using System.Collections.Generic;
 
 namespace Dialog.Data.Models.Blog
 {

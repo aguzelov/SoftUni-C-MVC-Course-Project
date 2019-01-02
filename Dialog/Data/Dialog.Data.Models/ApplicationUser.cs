@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Dialog.Data.Common.Models;
+﻿using Dialog.Data.Common.Models;
 using Dialog.Data.Models.Blog;
 using Dialog.Data.Models.Chat;
 using Dialog.Data.Models.Gallery;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace Dialog.Data.Models
 {

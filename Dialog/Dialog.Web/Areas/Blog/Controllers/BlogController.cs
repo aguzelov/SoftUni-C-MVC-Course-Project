@@ -1,14 +1,14 @@
-﻿using Dialog.Services.Contracts;
+﻿using Dialog.Common;
+using Dialog.Data.Models;
+using Dialog.Services.Contracts;
 using Dialog.ViewModels.Base;
 using Dialog.ViewModels.Blog;
 using Dialog.Web.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using Dialog.Common;
-using Dialog.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Dialog.Web.Areas.Blog.Controllers
 {

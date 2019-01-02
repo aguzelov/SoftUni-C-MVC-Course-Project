@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Dialog.Data.Models;
+using Dialog.Data.Models.Chat;
+using Dialog.Services.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +11,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Dialog.Data.Models;
-using Dialog.Data.Models.Chat;
-using Dialog.Services.Contracts;
 
 namespace Dialog.Web.Areas.Identity.Pages.Account
 {

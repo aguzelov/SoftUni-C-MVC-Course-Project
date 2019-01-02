@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dialog.Common.Mapping;
+﻿using Dialog.Common.Mapping;
 using Dialog.Data.Models;
 
 namespace Dialog.ViewModels.Base
