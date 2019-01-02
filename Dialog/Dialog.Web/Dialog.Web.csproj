@@ -65,6 +65,9 @@
     <Content Update="Views\Shared\_JumbotronPartial.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Shared\_DropdownNavBarLinks.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\_StellarPartial.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

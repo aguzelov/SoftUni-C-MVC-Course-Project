@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Data.Models.Gallery;
 
 namespace Dialog.Services
 {
@@ -91,8 +92,6 @@ namespace Dialog.Services
                 return result;
             }
 
-            var images = this._galleryService.Upload(model.UploadImages);
-
             var news = new News
             {
                 Title = model.Title,
@@ -102,9 +101,19 @@ namespace Dialog.Services
                 Author = author,
             };
 
-            if (images != null)
+            if (model.UploadImages != null)
             {
-                news.Image = images.First();
+                var image = this._galleryService.Upload(model.UploadImages);
+
+                if (image != null)
+                {
+                    news.Image = image;
+                }
+            }
+
+            if (news.Image == null)
+            {
+                news.Image = this._galleryService.GetDefaultImage(ImageDefaultType.News);
             }
 
             try
@@ -236,13 +245,13 @@ namespace Dialog.Services
                 return result;
             }
 
-            var images = this._galleryService.Upload(model.UploadImages);
+            var image = this._galleryService.Upload(model.UploadImages);
 
             news.Title = model.Title;
             news.Content = model.Content;
-            if (images != null)
+            if (image != null)
             {
-                news.Image = images.First();
+                news.Image = image;
             }
 
             news.ModifiedOn = DateTime.UtcNow;

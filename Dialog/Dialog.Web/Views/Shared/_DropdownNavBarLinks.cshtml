@@ -1,0 +1,21 @@
+@model string
+
+@if (User.Identity.IsAuthenticated)
+{
+    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
+        @Model
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="background-color: transparent; margin-top: -20px;">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" style="margin: -10px" asp-area="@Model" asp-controller="@Model" asp-action="All">All</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" style="margin: -10px" asp-area="@Model" asp-controller="@Model" asp-action="Create">Create</a></li>
+        </ul>
+    </div>
+
+}
+else
+{
+    <a asp-area="@Model" asp-controller="@Model" asp-action="All" class="nav-link">@Model</a>
+}

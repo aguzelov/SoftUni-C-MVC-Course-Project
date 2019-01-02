@@ -10,8 +10,10 @@ namespace Dialog.Services.Contracts
     {
         ICollection<Image> All();
 
-        ICollection<Image> Upload(ICollection<IFormFile> files);
+        Image Upload(ICollection<IFormFile> files);
 
         int Count();
+
+        Image GetDefaultImage(ImageDefaultType type);
     }
 }

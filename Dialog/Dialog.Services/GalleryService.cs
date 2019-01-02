@@ -31,7 +31,7 @@ namespace Dialog.Services
             return images;
         }
 
-        public ICollection<Image> Upload(ICollection<IFormFile> files)
+        public Image Upload(ICollection<IFormFile> files)
         {
             var images = new List<Image>();
 
@@ -47,30 +47,39 @@ namespace Dialog.Services
                         //Getting file Extension
                         var fileExtension = Path.GetExtension(fileName);
 
-                        var uploadResult = this._cloudinaryService.Upload(file, fileExtension);
-
-                        var uri = uploadResult.SecureUri;
-
-                        var image = new Image
+                        if (!this._imageRepository.All().Any(i => i.Name == fileName))
                         {
-                            PublicId = uploadResult.PublicId,
-                            Uri = uploadResult.Uri.ToString(),
-                            SecureUri = uploadResult.SecureUri.ToString(),
-                            ContentType = fileExtension,
-                            Name = fileName,
-                            Width = 100,
-                            Height = 150,
-                            TransformationType = Data.Models.Gallery.Transformation.Fit
-                        };
-                        images.Add(image);
-                        this._imageRepository.Add(image);
+                            var uploadResult = this._cloudinaryService.Upload(file, fileExtension);
+
+                            var uri = uploadResult.SecureUri;
+
+                            var image = new Image
+                            {
+                                PublicId = uploadResult.PublicId,
+                                Uri = uploadResult.Uri.ToString(),
+                                SecureUri = uploadResult.SecureUri.ToString(),
+                                ContentType = fileExtension,
+                                Name = fileName,
+                                Width = 100,
+                                Height = 150,
+                                TransformationType = Data.Models.Gallery.Transformation.Fit,
+                                CreatedOn = DateTime.UtcNow,
+                            };
+                            images.Add(image);
+                            this._imageRepository.Add(image);
+                        }
+                        else
+                        {
+                            var image = this._imageRepository.All().FirstOrDefault(i => i.Name == fileName);
+                            images.Add(image);
+                        }
                     }
                 }
 
                 this._imageRepository.SaveChangesAsync().GetAwaiter().GetResult();
             }
 
-            return images;
+            return images.FirstOrDefault();
         }
 
         public int Count()
@@ -78,6 +87,13 @@ namespace Dialog.Services
             var count = this._imageRepository.All().Count();
 
             return count;
+        }
+
+        public Image GetDefaultImage(ImageDefaultType type)
+        {
+            var image = this._imageRepository.All().FirstOrDefault(i => i.DefaultType == type);
+
+            return image;
         }
     }
 }

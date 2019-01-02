@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using Dialog.Common.Mapping;
 using Dialog.Data.Models.Blog;
@@ -46,7 +47,7 @@ namespace Dialog.ViewModels.Blog
         public string ShortContent =>
             this.Content.Length > 50 ?
             this.Content.Substring(0, 50) :
-            this.Content;
+            this.Content.PadRight(50 - this.Content.Length);
 
         public string ModifiedDateText => this.ModifiedOn.Equals(default(DateTime))
             ? "Not Modified"

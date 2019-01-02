@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Data.Models.Gallery;
 
 namespace Dialog.Services
 {
@@ -149,8 +150,6 @@ namespace Dialog.Services
                 return result;
             }
 
-            var images = this._galleryService.Upload(model.UploadImages);
-
             var post = new Post
             {
                 Title = model.Title,
@@ -160,9 +159,19 @@ namespace Dialog.Services
                 Author = author,
             };
 
-            if (images != null)
+            if (model.UploadImages != null)
             {
-                post.Image = images.First();
+                var image = this._galleryService.Upload(model.UploadImages);
+
+                if (image != null)
+                {
+                    post.Image = image;
+                }
+            }
+
+            if (post.Image == null)
+            {
+                post.Image = this._galleryService.GetDefaultImage(ImageDefaultType.BlogPost);
             }
 
             try
@@ -304,11 +313,11 @@ namespace Dialog.Services
             post.Content = model.Content;
             post.ModifiedOn = DateTime.UtcNow;
 
-            var images = this._galleryService.Upload(model.UploadImages);
+            var image = this._galleryService.Upload(model.UploadImages);
 
-            if (images != null)
+            if (image != null)
             {
-                post.Image = images.First();
+                post.Image = image;
             }
 
             try

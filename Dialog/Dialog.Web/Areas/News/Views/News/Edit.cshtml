@@ -15,23 +15,32 @@
 
 <section class="ftco-section">
     <div class="container">
-        <form enctype="multipart/form-data" asp-area="Blog" asp-route="Blog/Create" method="post">
-            <label asp-for="Title"></label>
-            <input asp-for="Title" />
-            <br />
-            <label asp-for="Author"></label>
-            <input asp-for="Author.UserName" disabled="disabled" />
-            <br />
-            <label asp-for="Content"></label>
-            <textarea rows="10" asp-for="Content"></textarea>
-            <br />
-            <input asp-for="@Model.UploadImages" multiple />
-            <br />
-
-            <input class="btn btn-primary py-3 px-5" type="submit" />
-        </form>
+        <div class="col-md-12 pr-md-1">
+            <h2 class="mb-4">Edit News</h2>
+            <form asp-area="News" asp-controller="News" asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="@Model.Title"></label>
+                    <input class="form-control" asp-for="@Model.Title" />
+                    <span asp-validation-for="Title"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Content"></label>
+                    <textarea rows="10" asp-for="@Model.Content" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Content"></span>
+                </div>
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <input asp-for="@Model.UploadImages" class="custom-file-input form-control-sm">
+                        <label asp-for="@Model.UploadImages" class="custom-file-label">Choose image or use old one</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
+                </div>
+            </form>
+        </div>
     </div>
 </section>
 
-<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
-<script>tinymce.init({ selector: 'textarea' });</script>
+@*<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+    <script>tinymce.init({ selector: 'textarea' });</script>*@

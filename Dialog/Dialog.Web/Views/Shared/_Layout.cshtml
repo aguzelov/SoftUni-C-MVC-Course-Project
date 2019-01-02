@@ -48,49 +48,11 @@
                     <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="About" class="nav-link">About</a></li>
                     <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Causes" class="nav-link">Causes</a></li>
                     <li class="nav-item dropdown">
-
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
-                                Blog
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="background-color: transparent; margin-top: -20px;">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item">
-                                        <a class="nav-link" style="margin: -10px" asp-area="Blog" asp-controller="Blog" asp-action="All">All</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" style="margin: -10px" asp-area="Blog" asp-controller="Blog" asp-action="Create">Create</a></li>
-                                </ul>
-                            </div>
-
-                        }
-                        else
-                        {
-                            <a asp-area="Blog" asp-controller="Blog" asp-action="All" class="nav-link">Blog</a>
-                        }
+                        <partial name="_DropdownNavBarLinks" model="@("Blog")" />
                     </li>
                     <li class="nav-item"><a asp-area="Gallery" asp-controller="Gallery" asp-action="Index" class="nav-link">Gallery</a></li>
                     <li class="nav-item dropdown">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
-                                News
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="background-color: transparent; margin-top: -20px;">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item">
-                                        <a class="nav-link" style="margin: -10px" asp-area="News" asp-controller="News" asp-action="All">All</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" style="margin: -10px" asp-area="News" asp-controller="News" asp-action="Create">Create</a></li>
-                                </ul>
-                            </div>
-
-                        }
-                        else
-                        {
-                            <a asp-area="News" asp-controller="News" asp-action="All" class="nav-link">News</a>
-
-                        }
+                        <partial name="_DropdownNavBarLinks" model="@("News")" />
                     </li>
                     <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Contact" class="nav-link">Contact</a></li>
                 </ul>
