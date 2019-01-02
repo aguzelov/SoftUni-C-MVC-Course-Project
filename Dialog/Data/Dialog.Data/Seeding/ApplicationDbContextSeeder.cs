@@ -8,6 +8,7 @@ using System.Text;
 using Dialog.Data.Models;
 using Dialog.Data.Models.Blog;
 using Dialog.Data.Models.Chat;
+using Dialog.Data.Models.Gallery;
 using Dialog.Data.Models.News;
 
 namespace Dialog.Data.Seeding

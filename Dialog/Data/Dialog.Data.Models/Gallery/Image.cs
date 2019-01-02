@@ -26,6 +26,8 @@ namespace Dialog.Data.Models.Gallery
 
         public string SecureUri { get; set; }
 
+        public ImageDefaultType DefaultType { get; set; }
+
         public Transformation TransformationType { get; set; }
     }
 }
