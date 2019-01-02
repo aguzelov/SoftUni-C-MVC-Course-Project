@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dialog.Common.Mapping;
 
 namespace Dialog.Services
 {
@@ -77,6 +78,16 @@ namespace Dialog.Services
             }
 
             return images.FirstOrDefault();
+        }
+
+        public IQueryable<T> RecentImages<T>()
+        {
+            var news = this._imageRepository.All()
+                .OrderByDescending(p => p.CreatedOn)
+                .Take(8)
+                .To<T>();
+
+            return news;
         }
 
         public int Count()

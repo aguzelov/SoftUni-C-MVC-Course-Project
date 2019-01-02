@@ -1,4 +1,8 @@
-﻿<div id="page-wrapper">
+﻿@inject Cloudinary Cloudinary
+
+@model ICollection<Image>
+
+<div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Gallery</h1>
@@ -6,7 +10,7 @@
     </div>
     <!-- /.row -->
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Add Images
@@ -39,3 +43,28 @@
     </div>
     <!-- /.row -->
 </div>
+<section class="ftco-section ftco-gallery">
+    <div class="container">
+        <div class="d-md-flex">
+
+            @{ var index = 1;}
+            @foreach (var image in Model)
+            {
+                <a href="@image.SecureUri" class="gallery image-popup d-flex justify-content-center align-items-center img ftco-animate" style="background-image: url(@image.SecureUri);">
+                    <div class="icon d-flex justify-content-center align-items-center">
+                        <span class="icon-search"></span>
+                    </div>
+                </a>
+
+                if (index == 4)
+                {
+                @:</div>
+                @:<div class="d-md-flex">
+                    index = 0;
+                }
+
+                index++;
+            }
+        </div>
+    </div>
+</section>

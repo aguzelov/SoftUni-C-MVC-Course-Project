@@ -1,6 +1,7 @@
 ﻿using Dialog.Data.Models.Gallery;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Dialog.Services.Contracts
 {
@@ -13,5 +14,7 @@ namespace Dialog.Services.Contracts
         int Count();
 
         Image GetDefaultImage(ImageDefaultType type);
+
+        IQueryable<T> RecentImages<T>();
     }
 }

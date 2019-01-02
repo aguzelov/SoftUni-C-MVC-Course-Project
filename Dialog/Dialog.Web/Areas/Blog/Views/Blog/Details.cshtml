@@ -19,10 +19,16 @@
                 <h2 class="mb-3">@Model.Title</h2>
                 <p>@Model.Content</p>
 
-                <div class="about-author d-flex p-2 bg-light">
-                    <div class="desc align-self-md-center">
+                <div class="about-author d-flex justify-content-between p-2 bg-light">
+                    <div class="desc align-self-md-center ">
                         <h3>by @Model.Author.UserName</h3>
                     </div>
+                    @if (User.Identity.Name == Model.Author.UserName)
+                    {
+                        <div class="desc align-self-md-center ">
+                            <a asp-area="Blog" asp-controller="Blog" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                        </div>
+                    }
                 </div>
 
                 <div class="pt-5 mt-5">
@@ -32,31 +38,13 @@
                         {
                             <li class="comment">
                                 <div class="vcard bio">
-                                    <img src="/images/person_1.jpg" alt="Image placeholder">
+                                    <i class="fas fa-user-circle fa-4x"></i>
                                 </div>
                                 <div class="comment-body">
                                     <h3>@(comment.Author)</h3>
                                     <div class="meta">@(comment.CreatedOn)</div>
                                     <p>@(comment.Content)</p>
-                                    <p><a href="#" class="reply">Reply</a></p>
                                 </div>
-                                @foreach (var reply in comment.Replies)
-                                {
-                                    <ul class="children">
-                                        <li class="comment">
-                                            <div class="vcard bio">
-                                                <img src="/images/person_1.jpg" alt="Image placeholder">
-                                            </div>
-                                            <div class="comment-body">
-                                                <h3>(@reply.Author)</h3>
-                                                <div class="meta">@(reply.CreatedOn)</div>
-                                                <p>@(reply.Content)</p>
-                                                <p><a href="#" class="reply">Reply</a></p>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                }
                             </li>
                         }
                         <!-- END comment-list -->

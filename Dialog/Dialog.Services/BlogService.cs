@@ -78,7 +78,7 @@ namespace Dialog.Services
         {
             var blogs = this._postRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
-                .Take(3)
+                .Take(4)
                 .To<T>();
 
             return blogs;

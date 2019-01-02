@@ -167,16 +167,15 @@ namespace Dialog.Services
             return model;
         }
 
-        //public ICollection<T> RecentNews<T>()
-        //{
-        //    var blogs = this._newsRepository.All()
-        //        .OrderByDescending(p => p.CreatedOn)
-        //        .Take(3)
-        //        .To<T>()
-        //        .ToList();
+        public IQueryable<T> RecentNews<T>()
+        {
+            var news = this._newsRepository.All()
+                .OrderByDescending(p => p.CreatedOn)
+                .Take(4)
+                .To<T>();
 
-        //    return blogs;
-        //}
+            return news;
+        }
 
         public AllViewModel<NewsSummaryViewModel> Search(string searchTerm)
         {
