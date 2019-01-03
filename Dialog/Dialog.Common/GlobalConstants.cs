@@ -6,9 +6,10 @@
         public static readonly string UserRole = "User";
 
         //Settings
-
         public static readonly string ApplicationNameKey = "ApplicationName";
+
         public static readonly string ApplicationSloganKey = "ApplicationSlogan";
+
         public static readonly string ApplicationAddressKey = "ApplicationAddress";
         public static readonly string ApplicationPhoneKey = "ApplicationPhone";
         public static readonly string ApplicationEmailKey = "ApplicationEmail";
@@ -21,6 +22,17 @@
 
         public static readonly string DefaultPostImageKey = "DefaultPostImage";
         public static readonly string DefaultNewsImageKey = "DefaultNewsImage";
+
+        //CacheKeys
+
+        public static readonly string ContactInfo = "ContactInfo";
+        public static readonly int ContactInfoCacheExpirationDay = 1;
+        public static readonly string RecentBlogPost = "RecentBlogPost";
+        public static readonly int RecentBlogCacheExpirationDay = 1;
+        public static readonly string ApplicationInfo = "ApplicationInfo";
+        public static readonly int ApplicationInfoCacheExpirationDay = 10;
+        public static readonly string IndexRecentEntities = "IndexRecentEntities";
+        public static readonly int IndexRecentEntitiesCacheExpirationDay = 1;
 
         //
 

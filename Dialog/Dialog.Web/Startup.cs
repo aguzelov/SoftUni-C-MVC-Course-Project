@@ -64,6 +64,8 @@ namespace Dialog.Web
             .AddDefaultUI()
            .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddMemoryCache();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());

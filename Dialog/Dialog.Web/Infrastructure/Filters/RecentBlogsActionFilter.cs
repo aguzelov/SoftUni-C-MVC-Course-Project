@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dialog.Common;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Dialog.Web.Infrastructure.Filters
 {
@@ -13,11 +15,13 @@ namespace Dialog.Web.Infrastructure.Filters
     {
         private readonly IBlogService blogService;
         private readonly ISettingsService _settingsService;
+        private readonly IMemoryCache _memoryCache;
 
-        public RecentBlogsActionFilter(IBlogService blogService, ISettingsService settingsService)
+        public RecentBlogsActionFilter(IBlogService blogService, ISettingsService settingsService, IMemoryCache memoryCache)
         {
             this.blogService = blogService;
             this._settingsService = settingsService;
+            this._memoryCache = memoryCache;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -28,9 +32,19 @@ namespace Dialog.Web.Infrastructure.Filters
         {
             if (context.Controller is Controller controller)
             {
-                var recentBlogs = this.blogService
-                    .RecentBlogs<RecentBlogViewModel>(
-                        int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey)));
+                var recentBlogs = new List<RecentBlogViewModel>();
+
+                if (!this._memoryCache.TryGetValue(GlobalConstants.RecentBlogPost, out recentBlogs))
+                {
+                    recentBlogs = this.blogService
+                        .RecentBlogs<RecentBlogViewModel>(
+                            int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey))).ToList();
+
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.RecentBlogCacheExpirationDay));
+
+                    this._memoryCache.Set(GlobalConstants.RecentBlogPost, recentBlogs, cacheOptions);
+                }
 
                 controller.ViewData["RecentBlogs"] = recentBlogs.ToList();
             }
@@ -50,8 +64,19 @@ namespace Dialog.Web.Infrastructure.Filters
             if (result is PageResult pageResult)
             {
                 var viewData = pageResult.ViewData;
-                var recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>(
-                    int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey)));
+
+                var recentBlogs = new List<RecentBlogViewModel>();
+
+                if (!this._memoryCache.TryGetValue(GlobalConstants.RecentBlogPost, out recentBlogs))
+                {
+                    recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>(
+                        int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey))).ToList();
+
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.RecentBlogCacheExpirationDay));
+
+                    this._memoryCache.Set(GlobalConstants.RecentBlogPost, recentBlogs, cacheOptions);
+                }
 
                 viewData["RecentBlogs"] = recentBlogs.ToList();
             }

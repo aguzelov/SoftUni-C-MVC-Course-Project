@@ -12,7 +12,7 @@
 
 <partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
 @{
-    var info = (ContactViewModel)ViewData["ContactInfo"];
+    var info = (ContactViewModel)ViewData[GlobalConstants.ContactInfo];
 }
 <section class="ftco-section contact-section ftco-degree-bg">
     <div class="container">

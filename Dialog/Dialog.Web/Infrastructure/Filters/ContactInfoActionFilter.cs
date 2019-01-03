@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using Dialog.Common;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
 namespace Dialog.Web.Infrastructure.Filters
@@ -15,11 +16,13 @@ namespace Dialog.Web.Infrastructure.Filters
     {
         private readonly IConfiguration _configuration;
         private readonly ISettingsService _settingsService;
+        private readonly IMemoryCache _memoryCache;
 
-        public ContactInfoActionFilter(IConfiguration configuration, ISettingsService settingsService)
+        public ContactInfoActionFilter(IConfiguration configuration, ISettingsService settingsService, IMemoryCache memoryCache)
         {
             this._configuration = configuration;
             this._settingsService = settingsService;
+            this._memoryCache = memoryCache;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -28,23 +31,28 @@ namespace Dialog.Web.Infrastructure.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var controllerActionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
-            if (controllerActionDescriptor != null)
+            if (context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
             {
                 if (controllerActionDescriptor.MethodInfo.Name == "Contact")
                 {
-                    var model = new ContactViewModel
+                    if (!this._memoryCache.TryGetValue(GlobalConstants.ContactInfo, out ContactViewModel model))
                     {
-                        Address = this._settingsService.Get(GlobalConstants.ApplicationAddressKey),
-                        Phone = this._settingsService.Get(GlobalConstants.ApplicationPhoneKey),
-                        Email = this._settingsService.Get(GlobalConstants.ApplicationEmailKey),
-                        HereAppId = this._configuration.GetSection("HEREMap").GetSection("AppID").Value,
-                        HereAppCode = this._configuration.GetSection("HEREMap").GetSection("AppCode").Value
-                    };
+                        var cacheOption = new MemoryCacheEntryOptions()
+                            .SetSlidingExpiration(TimeSpan.FromDays(GlobalConstants.ContactInfoCacheExpirationDay));
 
-                    var controller = context.Controller as Controller;
+                        model = new ContactViewModel
+                        {
+                            Address = this._settingsService.Get(GlobalConstants.ApplicationAddressKey),
+                            Phone = this._settingsService.Get(GlobalConstants.ApplicationPhoneKey),
+                            Email = this._settingsService.Get(GlobalConstants.ApplicationEmailKey),
+                            HereAppId = this._configuration.GetSection("HEREMap").GetSection("AppID").Value,
+                            HereAppCode = this._configuration.GetSection("HEREMap").GetSection("AppCode").Value
+                        };
 
-                    controller.ViewData["ContactInfo"] = model;
+                        this._memoryCache.Set(GlobalConstants.ContactInfoCacheExpirationDay, model, cacheOption);
+                    }
+
+                    if (context.Controller is Controller controller) controller.ViewData[GlobalConstants.ContactInfo] = model;
                 }
             }
         }

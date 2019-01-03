@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Linq;
 using Dialog.Common;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Dialog.Web.Infrastructure.Filters
 {
     public class ApplicationSettingsActionFilter : Attribute, IActionFilter, IPageFilter
     {
         private readonly ISettingsService _settingsService;
+        private readonly IMemoryCache _memoryCache;
 
-        public ApplicationSettingsActionFilter(ISettingsService settingsService)
+        public ApplicationSettingsActionFilter(ISettingsService settingsService, IMemoryCache memoryCache)
         {
             this._settingsService = settingsService;
+            this._memoryCache = memoryCache;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -26,16 +29,24 @@ namespace Dialog.Web.Infrastructure.Filters
         {
             if (context.Controller is Controller controller)
             {
-                controller.ViewData[GlobalConstants.ApplicationNameKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationNameKey);
-                controller.ViewData[GlobalConstants.ApplicationAboutFooterKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationAboutFooterKey);
-                controller.ViewData[GlobalConstants.ApplicationAddressKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationAddressKey);
-                controller.ViewData[GlobalConstants.ApplicationEmailKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationEmailKey);
-                controller.ViewData[GlobalConstants.ApplicationPhoneKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationPhoneKey);
+                if (!this._memoryCache.TryGetValue(GlobalConstants.ApplicationInfo, out ContactInfoViewModel model))
+                {
+                    model = new ContactInfoViewModel()
+                    {
+                        AppName = this._settingsService.Get(GlobalConstants.ApplicationNameKey),
+                        AppFooterAboutContent = this._settingsService.Get(GlobalConstants.ApplicationAboutFooterKey),
+                        AppAddress = this._settingsService.Get(GlobalConstants.ApplicationAddressKey),
+                        AppEmail = this._settingsService.Get(GlobalConstants.ApplicationEmailKey),
+                        AppPhone = this._settingsService.Get(GlobalConstants.ApplicationPhoneKey)
+                    };
+
+                    var cacheOption = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.ApplicationInfoCacheExpirationDay));
+
+                    this._memoryCache.Set(GlobalConstants.ApplicationInfoCacheExpirationDay, model, cacheOption);
+                }
+
+                controller.ViewData[GlobalConstants.ApplicationInfo] = model;
             }
         }
 
@@ -54,16 +65,24 @@ namespace Dialog.Web.Infrastructure.Filters
             {
                 var viewData = pageResult.ViewData;
 
-                viewData[GlobalConstants.ApplicationNameKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationNameKey);
-                viewData[GlobalConstants.ApplicationAboutFooterKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationAboutFooterKey);
-                viewData[GlobalConstants.ApplicationAddressKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationAddressKey);
-                viewData[GlobalConstants.ApplicationEmailKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationEmailKey);
-                viewData[GlobalConstants.ApplicationPhoneKey] =
-                    this._settingsService.Get(GlobalConstants.ApplicationPhoneKey);
+                if (!this._memoryCache.TryGetValue(GlobalConstants.ApplicationInfo, out ContactInfoViewModel model))
+                {
+                    model = new ContactInfoViewModel()
+                    {
+                        AppName = this._settingsService.Get(GlobalConstants.ApplicationNameKey),
+                        AppFooterAboutContent = this._settingsService.Get(GlobalConstants.ApplicationAboutFooterKey),
+                        AppAddress = this._settingsService.Get(GlobalConstants.ApplicationAddressKey),
+                        AppEmail = this._settingsService.Get(GlobalConstants.ApplicationEmailKey),
+                        AppPhone = this._settingsService.Get(GlobalConstants.ApplicationPhoneKey)
+                    };
+
+                    var cacheOption = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.ApplicationInfoCacheExpirationDay));
+
+                    this._memoryCache.Set(GlobalConstants.ApplicationInfoCacheExpirationDay, model, cacheOption);
+                }
+
+                viewData[GlobalConstants.ApplicationInfo] = model;
             }
         }
     }
