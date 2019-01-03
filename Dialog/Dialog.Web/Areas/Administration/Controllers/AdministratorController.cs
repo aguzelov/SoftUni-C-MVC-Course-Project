@@ -110,9 +110,7 @@ namespace Dialog.Web.Areas.Administration.Controllers
 
         public IActionResult Gallery()
         {
-            var model = this._galleryService.All();
-
-            return this.View(model);
+            return this.View();
         }
 
         public async Task<IActionResult> AnswerQuestion(string id)

@@ -9,9 +9,8 @@
         <div class="text">
             <h3 class="heading"><a asp-area="Blog" asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id">@post.Title</a></h3>
             <div class="meta">
-                <div><a href="#"><span class="icon-calendar"></span>@post.CreatedOn.ToString("dd.MM.yyyy")</a></div>
-                <div><a href="#"><span class="icon-person"></span>@post.ShortAuthorName</a></div>
-                <div><a href="#"><span class="icon-chat"></span> @post.CommmentsCount </a></div>
+                <div><span>@post.CreatedOn.ToString("dd.MM.yyyy")</span></div>
+                <div><a asp-area="Blog" asp-controller="Blog" asp-action="All" asp-route-author="@post.AuthorName" class="meta-chat">@post.ShortAuthorName</a></div>
             </div>
         </div>
     </div>
