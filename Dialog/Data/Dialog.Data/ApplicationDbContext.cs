@@ -27,6 +27,7 @@ namespace Dialog.Data
         public virtual DbSet<Chat> Chats { get; set; }
         public virtual DbSet<ChatLine> ChatLines { get; set; }
         public virtual DbSet<UserChat> UserChats { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

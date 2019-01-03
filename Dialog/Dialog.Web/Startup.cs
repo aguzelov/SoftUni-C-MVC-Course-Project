@@ -67,6 +67,7 @@ namespace Dialog.Web
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(typeof(RecentBlogsActionFilter));
+                options.Filters.Add(typeof(ContactInfoActionFilter));
             }
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -96,6 +97,7 @@ namespace Dialog.Web
             services.AddScoped<IGalleryService, GalleryService>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<IQuestionService, QuestionService>();
 
             services.AddLogging(loggingBuilder =>
             {

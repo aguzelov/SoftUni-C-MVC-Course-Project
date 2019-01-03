@@ -26,6 +26,7 @@ namespace Dialog.Services.Tests
         protected IQueryable<ChatLine> ChatLineData { get; set; }
         protected IQueryable<Image> ImageData { get; set; }
         protected IQueryable<News> NewsData { get; set; }
+        protected IQueryable<Question> QuestionsData { get; set; }
 
         public BaseTests()
         {
@@ -317,10 +318,31 @@ namespace Dialog.Services.Tests
 
             GenerateImageData();
 
-            GenerateNewsDate();
+            GenerateNewsData();
+
+            GenerateQuestionData();
         }
 
-        private void GenerateNewsDate()
+        private void GenerateQuestionData()
+        {
+            var questions = new List<Question>();
+            for (int i = 0; i < DataCount; i++)
+            {
+                var question = new Question()
+                {
+                    Name = "Name" + i,
+                    Email = "Email" + i,
+                    Subject = "Subject" + i,
+                    Message = "Message" + i
+                };
+
+                questions.Add(question);
+            }
+
+            this.QuestionsData = questions.AsQueryable();
+        }
+
+        private void GenerateNewsData()
         {
             var newsData = new List<News>();
 

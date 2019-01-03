@@ -8,6 +8,7 @@ using Dialog.Services.Contracts;
 using Dialog.ViewModels.Blog;
 using Dialog.ViewModels.Gallery;
 using Dialog.ViewModels.News;
+using Dialog.ViewModels.Question;
 
 namespace Dialog.Web.Controllers
 {
@@ -17,13 +18,15 @@ namespace Dialog.Web.Controllers
         private readonly IBlogService _blogService;
         private readonly INewsService _newsService;
         private readonly IGalleryService _galleryService;
+        private readonly IQuestionService _questionService;
 
-        public HomeController(IConfiguration configuration, IBlogService blogService, INewsService newsService, IGalleryService galleryService)
+        public HomeController(IConfiguration configuration, IBlogService blogService, INewsService newsService, IGalleryService galleryService, IQuestionService questionService)
         {
             this._configuration = configuration;
             this._blogService = blogService;
             this._newsService = newsService;
             this._galleryService = galleryService;
+            this._questionService = questionService;
         }
 
         public IActionResult Index()
@@ -47,19 +50,22 @@ namespace Dialog.Web.Controllers
 
         public IActionResult Contact()
         {
-            this.ViewData["Message"] = "Your contact page.";
-            this.ViewData["AppID"] = this._configuration.GetSection("HEREMap").GetSection("AppID").Value;
-            this.ViewData["AppCode"] = this._configuration.GetSection("HEREMap").GetSection("AppCode").Value;
-            var model = new ContactViewModel
-            {
-                Address = "Sredec, 8300, Lilqna Dimitrova 1 str.",
-                Phone = "0888072710",
-                Email = "aguzelov@outlook.com",
-                HereAppId = this._configuration.GetSection("HEREMap").GetSection("AppID").Value,
-                HereAppCode = this._configuration.GetSection("HEREMap").GetSection("AppCode").Value
-            };
+            var model = new QuestionViewModel();
 
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Contact(QuestionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            this._questionService.Add(model);
+
+            return this.RedirectToAction(nameof(Contact));
         }
 
         public IActionResult Privacy()

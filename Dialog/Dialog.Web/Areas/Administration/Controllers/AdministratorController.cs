@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.ViewModels.Question;
 
 namespace Dialog.Web.Areas.Administration.Controllers
 {
@@ -20,13 +21,15 @@ namespace Dialog.Web.Areas.Administration.Controllers
         private readonly IUserService _userService;
         private readonly INewsService _newsService;
         private readonly IGalleryService _galleryService;
+        private readonly IQuestionService _questionService;
 
-        public AdministratorController(IBlogService blogService, IUserService userService, INewsService newsService, IGalleryService galleryService)
+        public AdministratorController(IBlogService blogService, IUserService userService, INewsService newsService, IGalleryService galleryService, IQuestionService questionService)
         {
             this._blogService = blogService;
             this._userService = userService;
             this._newsService = newsService;
             this._galleryService = galleryService;
+            this._questionService = questionService;
         }
 
         public IActionResult Index()
@@ -37,6 +40,7 @@ namespace Dialog.Web.Areas.Administration.Controllers
                 NewsCount = this._newsService.Count(),
                 UsersCount = this._userService.Count(),
                 ImagesCount = this._galleryService.Count(),
+                Questions = this._questionService.All<AdministrationQuestionViewModel>(),
             };
 
             return this.View(model);
@@ -109,6 +113,18 @@ namespace Dialog.Web.Areas.Administration.Controllers
             var model = this._galleryService.All();
 
             return this.View(model);
+        }
+
+        public async Task<IActionResult> AnswerQuestion(string id)
+        {
+            if (id == null)
+            {
+                return this.RedirectToAction(nameof(Index));
+            }
+
+            await this._questionService.Answer(id);
+
+            return this.RedirectToAction(nameof(Index));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model ContactViewModel
+﻿@model QuestionViewModel
 
 @{
     var partialModel = new JumbotronPartialViewModel
@@ -11,40 +11,46 @@
 }
 
 <partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
-
+@{
+    var info = (ContactViewModel)ViewData["ContactInfo"];
+}
 <section class="ftco-section contact-section ftco-degree-bg">
     <div class="container">
-
         <div class="row d-flex mb-5 contact-info">
+
             <div class="col-md-12 mb-4">
                 <h2 class="h4">Contact Information</h2>
             </div>
             <div class="w-100"></div>
             <div class="col-md-4">
-                <p><span>Address:</span> @Model.Address </p>
+                <p><span>Address:</span> @info.Address </p>
             </div>
             <div class="col-md-4 text-center">
-                <p><span>Phone:</span> <a href="tel://@(Model.Phone)">@Model.Phone</a></p>
+                <p><span>Phone:</span> <a href="tel://@(info.Phone)">@info.Phone</a></p>
             </div>
             <div class="col-md-4 text-right">
-                <p><span>Email:</span> <a href="mailto:@(Model.Email)">@Model.Email</a></p>
+                <p><span>Email:</span> <a href="mailto:@(info.Email)">@info.Email</a></p>
             </div>
         </div>
         <div class="row block-9">
             <div class="col-md-6 pr-md-5">
                 <h4 class="mb-4">Do you have any questions?</h4>
-                <form action="" method="get">
+                <form asp-area="" asp-controller="Home" asp-action="Contact" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Name" name="username">
+                        <input class="form-control" asp-for="@Model.Name" placeholder="Your @(nameof(Model.Name))">
+                        <span asp-validation-for="@Model.Name"></span>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Email" name="email">
+                        <input class="form-control" asp-for="@Model.Email" placeholder="Your @(nameof(Model.Email))">
+                        <span asp-validation-for="@Model.Email"></span>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Subject" name="subject">
+                        <input class="form-control" asp-for="@Model.Subject" placeholder="@(nameof(Model.Subject))">
+                        <span asp-validation-for="@Model.Subject"></span>
                     </div>
                     <div class="form-group">
-                        <textarea name="message" id="" cols="30" rows="5" class="form-control" placeholder="Message"></textarea>
+                        <textarea cols="30" rows="5" class="form-control" asp-for="@Model.Message" placeholder="@(nameof(Model.Message))"></textarea>
+                        <span asp-validation-for="@Model.Message"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
@@ -85,8 +91,8 @@
 
 //Step 1: initialize communication with the platform
         var platform = new H.service.Platform({
-            'app_id': '@Model.HereAppId',
-            'app_code': '@Model.HereAppCode',
+            'app_id': '@info.HereAppId',
+            'app_code': '@info.HereAppCode',
             useHTTPS: true
         });
         var pixelRatio = window.devicePixelRatio || 1;

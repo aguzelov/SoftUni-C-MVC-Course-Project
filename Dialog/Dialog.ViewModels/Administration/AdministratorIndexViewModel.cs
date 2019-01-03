@@ -1,4 +1,7 @@
-﻿namespace Dialog.ViewModels.Administration
+﻿using System.Collections.Generic;
+using Dialog.ViewModels.Question;
+
+namespace Dialog.ViewModels.Administration
 {
     public class AdministratorIndexViewModel
     {
@@ -9,5 +12,7 @@
         public int ImagesCount { get; set; }
 
         public int NewsCount { get; set; }
+
+        public ICollection<AdministrationQuestionViewModel> Questions { get; set; }
     }
 }

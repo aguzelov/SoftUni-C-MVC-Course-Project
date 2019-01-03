@@ -98,4 +98,62 @@
             </div>
         </div>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-clock-o fa-fw"></i> Questions
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            @foreach (var question in Model.Questions)
+            {
+                <ul class="timeline">
+
+                    @if (question.IsAnswered)
+                    {
+                        <li>
+                            <div class="timeline-badge">
+                                <i class="fa fa-check"></i>
+                            </div>
+
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">@question.Subject</h4>
+                                    <p>
+                                        <small class="text-muted"><i class="fa fa-clock-o"></i>@question.Name @question.Email</small>
+                                    </p>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>@question.Message</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="timeline-inverted">
+                            <div class="timeline-badge danger">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <a asp-area="Administration" asp-controller="Administrator" asp-action="AnswerQuestion" asp-route-id="@question.Id" class="btn close-button" style="position: absolute; top: 5px; right: 5px;">
+                                        <i class="fas fa-check "></i>
+                                    </a>
+                                    <h4 class="timeline-title">@question.Subject</h4>
+                                    <p>
+                                        <small class="text-muted"><i class="fa fa-clock-o"></i>@question.Name @question.Email</small>
+                                    </p>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>@question.Message</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+        <!-- /.panel-body -->
+    </div>
 </div>
