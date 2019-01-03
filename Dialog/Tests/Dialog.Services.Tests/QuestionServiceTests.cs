@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Dialog.Common;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
 using Dialog.Services.Contracts;
@@ -69,13 +70,13 @@ namespace Dialog.Services.Tests
 
             //Act
             var model = new QuestionViewModel();
-            var expectedErrorMsg = "Invalid question data!";
+            var expectedErrorMsg = GlobalConstants.ModelIsEmpty;
             var expectedCount = this.QuestionsData.Count();
             var result = this.Service.Add(model);
 
             //Assert
             Assert.IsFalse(result.Success);
-            Assert.That(result.Error == expectedErrorMsg);
+            Assert.AreEqual(expectedErrorMsg, result.Error);
             Assert.AreEqual(expectedCount, this.QuestionsData.Count());
         }
 

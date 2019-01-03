@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.DynamicProxy.Generators.Emitters;
 using Dialog.Common;
 
 namespace Dialog.Services.Tests
@@ -406,7 +407,7 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(postRepository.Object, null, null, null);
             //Act
 
-            var expectedMsg = "Post not found!";
+            var expectedMsg = string.Format(GlobalConstants.EntityIsNotFound, "Post");
             string authorName = "Test Author";
             string commentContent = "Test Comment";
 
@@ -426,7 +427,7 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(null, null, null, null);
             //Act
 
-            var expectedMsg = "Invalid data!";
+            var expectedMsg = GlobalConstants.ModelIsEmpty;
             var result = this.Service.AddComment(null, null, null).GetAwaiter().GetResult();
 
             //Assert
@@ -482,7 +483,7 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(null, null, null, null);
 
             //Act
-            var expectedMsg = "Invalid post data!";
+            var expectedMsg = GlobalConstants.ModelIsEmpty;
             var model = new PostViewModel()
             {
             };
@@ -508,7 +509,7 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(postRepository.Object, null, null, null);
 
             //Act
-            var expectedMsg = "Invalid post id!";
+            var expectedMsg = string.Format(GlobalConstants.EntityIsNotFound, "Post");
             var model = new PostViewModel()
             {
                 Id = this.IncorrectTestText,

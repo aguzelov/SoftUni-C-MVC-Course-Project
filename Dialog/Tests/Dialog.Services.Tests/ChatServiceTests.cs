@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using Dialog.Common;
 
 namespace Dialog.Services.Tests
 {
@@ -45,11 +46,12 @@ namespace Dialog.Services.Tests
             this.Service = new ChatService(null, chatRepository.Object, null);
 
             //Act
+            var expectedErrorMsg = string.Format(GlobalConstants.InvalidParameter, "chatName");
 
             //Assert
             var ex = Assert.Throws<ArgumentException>(() =>
                 this.Service.GetChatId(this.IncorrectTestText));
-            Assert.That(ex.Message, Is.EqualTo("Invalid chat name!"));
+            Assert.That(ex.Message, Is.EqualTo(expectedErrorMsg));
         }
 
         [Test]
@@ -125,11 +127,11 @@ namespace Dialog.Services.Tests
             this.Service = new ChatService(null, null, userRepository.Object);
 
             //Act
-
+            var expectedErrorMsg = string.Format(GlobalConstants.InvalidParameter, "username");
             //Assert
             var ex = Assert.Throws<ArgumentException>(() =>
                 this.Service.UserChats<UserChatsViewModel>(this.IncorrectTestText));
-            Assert.That(ex.Message, Is.EqualTo("Invalid username"));
+            Assert.That(ex.Message, Is.EqualTo(expectedErrorMsg));
         }
 
         [Test]
@@ -190,7 +192,7 @@ namespace Dialog.Services.Tests
 
             var result = this.Service.AddMessage(chatToAdd.Name, this.IncorrectTestText, messageToAdd).GetAwaiter()
                 .GetResult();
-            var expectedErrorMsg = "User not found!";
+            var expectedErrorMsg = string.Format(GlobalConstants.EntityIsNotFound, "User"); ;
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
@@ -220,7 +222,7 @@ namespace Dialog.Services.Tests
 
             var result = this.Service.AddMessage(this.IncorrectTestText, userToAdd.UserName, messageToAdd).GetAwaiter()
                 .GetResult();
-            var expectedErrorMsg = "Chat not found!";
+            var expectedErrorMsg = string.Format(GlobalConstants.EntityIsNotFound, "Chat"); ;
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
@@ -250,7 +252,7 @@ namespace Dialog.Services.Tests
 
             var result = this.Service.AddMessage(chatToAdd.Name, userToAdd.UserName, null).GetAwaiter()
                 .GetResult();
-            var expectedErrorMsg = "Message cannot be empty!";
+            var expectedErrorMsg = GlobalConstants.ModelIsEmpty;
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);

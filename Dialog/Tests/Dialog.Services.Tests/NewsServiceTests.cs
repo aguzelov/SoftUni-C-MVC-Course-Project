@@ -278,7 +278,7 @@ namespace Dialog.Services.Tests
             //Act
             var author = this.UserData.First();
             var result = this.Service.Create(author.Id, new CreateViewModel()).GetAwaiter().GetResult();
-            var expectedErrorMsg = "Invalid is parameters!";
+            var expectedErrorMsg = GlobalConstants.ModelIsEmpty;
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
@@ -307,7 +307,7 @@ namespace Dialog.Services.Tests
             var model = new CreateViewModel() { Title = "Test Title", Content = "Test Content" };
 
             var result = this.Service.Create(this.IncorrectTestText, model).GetAwaiter().GetResult();
-            var expectedErrorMsg = "Author not found!";
+            var expectedErrorMsg = string.Format(GlobalConstants.EntityIsNotFound, "Author");
 
             //Assert
             Assert.IsInstanceOf<IServiceResult>(result);
@@ -402,7 +402,7 @@ namespace Dialog.Services.Tests
             this.Service = new NewsService(null, null, null);
 
             //Act
-            var expectedMsg = "Invalid news data!";
+            var expectedMsg = GlobalConstants.ModelIsEmpty;
             var model = new NewsViewModel();
             {
             };
@@ -428,7 +428,7 @@ namespace Dialog.Services.Tests
             this.Service = new NewsService(newsRepository.Object, null, null);
 
             //Act
-            var expectedMsg = "Invalid news id!";
+            var expectedMsg = string.Format(GlobalConstants.EntityIsNotFound, "News");
             var model = new NewsViewModel()
             {
                 Id = this.IncorrectTestText,
