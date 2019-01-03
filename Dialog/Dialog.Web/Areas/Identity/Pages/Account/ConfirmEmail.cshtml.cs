@@ -15,7 +15,7 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
 
         public ConfirmEmailModel(UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
+            this._userManager = userManager;
         }
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
@@ -25,13 +25,13 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
                 return RedirectToPage("/Index");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await this._userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{userId}'.");
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var result = await this._userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");

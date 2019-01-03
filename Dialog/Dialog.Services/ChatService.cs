@@ -6,6 +6,7 @@ using Dialog.Services.Contracts;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common;
 
 namespace Dialog.Services
 {
@@ -33,7 +34,7 @@ namespace Dialog.Services
 
             if (user == null)
             {
-                result.Error = "User not found!";
+                result.Error = string.Format(GlobalConstants.EntityIsNotFound, "User");
                 return result;
             }
 
@@ -41,13 +42,13 @@ namespace Dialog.Services
 
             if (chat == null)
             {
-                result.Error = "Chat not found!";
+                result.Error = string.Format(GlobalConstants.EntityIsNotFound, "Chat");
                 return result;
             }
 
             if (string.IsNullOrWhiteSpace(message))
             {
-                result.Error = "Message cannot be empty!";
+                result.Error = GlobalConstants.ModelIsEmpty;
                 return result;
             }
 
@@ -88,7 +89,7 @@ namespace Dialog.Services
 
             if (chats == null)
             {
-                throw new ArgumentException("Invalid username");
+                throw new ArgumentException(string.Format(GlobalConstants.InvalidParameter, nameof(username)));
             }
 
             return chats;
@@ -100,7 +101,7 @@ namespace Dialog.Services
 
             if (chat == null)
             {
-                throw new ArgumentException("Invalid chat name!");
+                throw new ArgumentException(string.Format(GlobalConstants.InvalidParameter, nameof(chatName)));
             }
 
             return chat.Id;

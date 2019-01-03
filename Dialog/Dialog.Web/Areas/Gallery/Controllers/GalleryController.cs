@@ -20,12 +20,12 @@ namespace Dialog.Web.Areas.Gallery.Controllers
         {
             var model = this._galleryService.All();
 
-            return this.View(model);
+            return View(model);
         }
 
         public IActionResult Upload()
         {
-            return this.View();
+            return View();
         }
 
         [HttpPost]
@@ -33,7 +33,7 @@ namespace Dialog.Web.Areas.Gallery.Controllers
         {
             this._galleryService.Upload(files);
 
-            return this.View();
+            return View();
         }
     }
 }

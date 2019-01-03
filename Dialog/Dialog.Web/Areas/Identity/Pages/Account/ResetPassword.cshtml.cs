@@ -15,7 +15,7 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
 
         public ResetPasswordModel(UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
+            this._userManager = userManager;
         }
 
         [BindProperty]
@@ -48,7 +48,7 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
             }
             else
             {
-                Input = new InputModel
+                this.Input = new InputModel
                 {
                     Code = code
                 };
@@ -58,19 +58,19 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 return Page();
             }
 
-            var user = await _userManager.FindByEmailAsync(Input.Email);
+            var user = await this._userManager.FindByEmailAsync(this.Input.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+            var result = await this._userManager.ResetPasswordAsync(user, this.Input.Code, this.Input.Password);
             if (result.Succeeded)
             {
                 return RedirectToPage("./ResetPasswordConfirmation");
@@ -78,7 +78,7 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
 
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                this.ModelState.AddModelError(string.Empty, error.Description);
             }
             return Page();
         }

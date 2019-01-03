@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common;
 
 namespace Dialog.Services
 {
@@ -79,7 +80,7 @@ namespace Dialog.Services
                 string.IsNullOrEmpty(model.Title) ||
                 string.IsNullOrEmpty(model.Content))
             {
-                result.Error = "Invalid is parameters!";
+                result.Error = GlobalConstants.ModelIsEmpty;
                 return result;
             }
 
@@ -87,7 +88,7 @@ namespace Dialog.Services
 
             if (author == null)
             {
-                result.Error = "Author not found!";
+                result.Error = string.Format(GlobalConstants.EntityIsNotFound, "Author");
                 return result;
             }
 
@@ -231,7 +232,7 @@ namespace Dialog.Services
                 string.IsNullOrEmpty(model.Title) ||
                 string.IsNullOrEmpty(model.Content))
             {
-                result.Error = "Invalid news data!";
+                result.Error = GlobalConstants.ModelIsEmpty;
                 return result;
             }
 
@@ -239,7 +240,7 @@ namespace Dialog.Services
 
             if (news == null)
             {
-                result.Error = "Invalid news id!";
+                result.Error = string.Format(GlobalConstants.EntityIsNotFound, "News");
                 return result;
             }
 

@@ -69,14 +69,14 @@ namespace Dialog.Web.Controllers
         [HttpPost]
         public IActionResult Contact(QuestionViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return View(model);
             }
 
             this._questionService.Add(model);
 
-            return this.RedirectToAction(nameof(Contact));
+            return RedirectToAction(nameof(Contact));
         }
 
         public IActionResult Privacy()

@@ -28,7 +28,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             model = this._blogService.All(model);
 
-            return this.View(model);
+            return View(model);
         }
 
         public IActionResult Details(string id)
@@ -38,11 +38,11 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 var model = this._blogService.Details(id);
                 if (model != null)
                 {
-                    return this.View(model);
+                    return View(model);
                 }
             }
 
-            return this.RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(All));
         }
 
         [Authorize]
@@ -50,7 +50,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             var model = new CreateViewModel();
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
@@ -59,7 +59,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return View(model);
             }
             var user = this.User;
             var authorId = this._userManager.GetUserId(user);
@@ -68,11 +68,11 @@ namespace Dialog.Web.Areas.Blog.Controllers
 
             if (!result.Success)
             {
-                this.ModelState.AddModelError("result", result.Error);
-                return this.View(model);
+                this.ModelState.AddModelError(GlobalConstants.ModelStateServiceResult, result.Error);
+                return View(model);
             }
 
-            return this.RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(All));
         }
 
         //TODO : Add Edit Post Action
@@ -81,24 +81,24 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction(nameof(Details), routeValues: new { Id = model.PostId });
+                return RedirectToAction(nameof(Details), routeValues: new { Id = model.PostId });
             }
 
             var result = await this._blogService.AddComment(model.PostId, model.Author, model.Message);
 
             if (!result.Success)
             {
-                return this.RedirectToAction(nameof(Details), model.PostId);
+                return RedirectToAction(nameof(Details), model.PostId);
             }
 
-            return this.RedirectToAction(actionName: nameof(Details), routeValues: new { id = model.PostId });
+            return RedirectToAction(actionName: nameof(Details), routeValues: new { id = model.PostId });
         }
 
         public IActionResult Search(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                return this.RedirectToAction(nameof(All));
+                return RedirectToAction(nameof(All));
             }
 
             var model = this._blogService.Search(searchTerm);
@@ -106,10 +106,10 @@ namespace Dialog.Web.Areas.Blog.Controllers
             if (model == null ||
                 !model.Entities.Any())
             {
-                return this.RedirectToAction(nameof(All));
+                return RedirectToAction(nameof(All));
             }
 
-            return this.View("All", model);
+            return View(nameof(All), model);
         }
 
         [Authorize(Roles = GlobalConstants.AdminRole)]
@@ -120,7 +120,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
                 await this._blogService.Delete(id);
             }
 
-            return RedirectToAction("Blog", "Administrator", new { area = "Administration" });
+            return RedirectToAction("Blog", GlobalConstants.AdministratorController, new { area = GlobalConstants.AdministrationArea });
         }
 
         [Authorize]
@@ -128,7 +128,7 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             var post = this._blogService.Details(id);
 
-            return this.View(post);
+            return View(post);
         }
 
         [HttpPost]
@@ -137,17 +137,17 @@ namespace Dialog.Web.Areas.Blog.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return View(model);
             }
 
             var result = await this._blogService.Edit(model);
 
             if (!result.Success)
             {
-                return this.View(model);
+                return View(model);
             }
 
-            return this.RedirectToAction(nameof(Details), new { Id = model.Id });
+            return RedirectToAction(nameof(Details), new { Id = model.Id });
         }
     }
 }

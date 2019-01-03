@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dialog.Common;
 using Dialog.Common.Mapping;
 using Dialog.Data.Common.Repositories;
 using Dialog.Data.Models;
@@ -32,7 +33,7 @@ namespace Dialog.Services
                 string.IsNullOrEmpty(model.Subject) ||
                 string.IsNullOrEmpty(model.Message))
             {
-                result.Error = "Invalid question data!";
+                result.Error = GlobalConstants.ModelIsEmpty;
                 return result;
             }
 
@@ -66,6 +67,11 @@ namespace Dialog.Services
         public async Task Answer(string id)
         {
             var question = await this._questionRepository.GetByIdAsync(id);
+
+            if (question == null)
+            {
+                return;
+            }
 
             question.IsAnswered = true;
 

@@ -75,7 +75,7 @@ namespace Dialog.Web.Hubs
             var chats = this._chatService.UserChats<UserChatsViewModel>(name).ToList();
             foreach (var chat in chats)
             {
-                await this.AddToGroup(chat.ChatName);
+                await AddToGroup(chat.ChatName);
             }
 
             await base.OnConnectedAsync();

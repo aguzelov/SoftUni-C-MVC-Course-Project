@@ -6,6 +6,7 @@ using Dialog.Web.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Dialog.Common;
 
 namespace Dialog.Web.Areas.News.Controllers
 {
@@ -25,7 +26,7 @@ namespace Dialog.Web.Areas.News.Controllers
         {
             model = this._newsService.All(model);
 
-            return this.View(model);
+            return View(model);
         }
 
         public IActionResult Details(string id)
@@ -34,25 +35,25 @@ namespace Dialog.Web.Areas.News.Controllers
 
             if (model != null)
             {
-                return this.View(model);
+                return View(model);
             }
 
-            return this.RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(All));
         }
 
         public IActionResult Create()
         {
             var model = new CreateViewModel();
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return View(model);
             }
             var user = this.User;
             var authorId = this._userManager.GetUserId(user);
@@ -61,17 +62,17 @@ namespace Dialog.Web.Areas.News.Controllers
 
             if (!result.Success)
             {
-                return this.View(model);
+                return View(model);
             }
 
-            return this.RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(All));
         }
 
         public IActionResult Search(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                return this.RedirectToAction(nameof(All));
+                return RedirectToAction(nameof(All));
             }
 
             var model = this._newsService.Search(searchTerm);
@@ -79,42 +80,42 @@ namespace Dialog.Web.Areas.News.Controllers
             if (model == null ||
                 model.Entities.Count == 0)
             {
-                return this.RedirectToAction(nameof(All));
+                return RedirectToAction(nameof(All));
             }
 
-            return this.View("All", model);
+            return View("All", model);
         }
 
         public async Task<IActionResult> Delete(string id)
         {
             await this._newsService.Delete(id);
 
-            return RedirectToAction("News", "Administrator", new { area = "Administration" });
+            return RedirectToAction("News", GlobalConstants.AdministratorController, new { area = GlobalConstants.AdministrationArea });
         }
 
         public IActionResult Edit(string id)
         {
             var post = this._newsService.Details(id);
 
-            return this.View(post);
+            return View(post);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(NewsViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return View(model);
             }
 
             var result = await this._newsService.Edit(model);
 
             if (!result.Success)
             {
-                return this.View(model);
+                return View(model);
             }
 
-            return this.RedirectToAction(nameof(Details), new { Id = model.Id });
+            return RedirectToAction(nameof(Details), new { Id = model.Id });
         }
     }
 }

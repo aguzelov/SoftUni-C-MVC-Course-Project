@@ -21,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using Dialog.Common;
 
 namespace Dialog.Web
 {
@@ -57,7 +58,7 @@ namespace Dialog.Web
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
+                options.User.AllowedUserNameCharacters = GlobalConstants.AllowedUserNameCharacters;
             })
             .AddDefaultTokenProviders()
             .AddDefaultUI()

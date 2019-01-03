@@ -64,7 +64,7 @@ namespace Dialog.Services
 
             var roles = await this._userManager.GetRolesAsync(user);
 
-            return string.Join("; ", roles);
+            return string.Join(GlobalConstants.JoinSeparator, roles);
         }
 
         public async Task Approve(string id)

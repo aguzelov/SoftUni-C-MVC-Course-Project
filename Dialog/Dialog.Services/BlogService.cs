@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common;
 
 namespace Dialog.Services
 {
@@ -138,7 +139,7 @@ namespace Dialog.Services
             if (model.Title == null ||
                 model.Content == null)
             {
-                result.Error = "Model is empty!";
+                result.Error = GlobalConstants.ModelIsEmpty;
                 return result;
             }
 
@@ -146,7 +147,7 @@ namespace Dialog.Services
 
             if (author == null)
             {
-                result.Error = "Author is not found!";
+                result.Error = string.Format(GlobalConstants.EntityIsNotFound, "Author");
                 return result;
             }
 
@@ -180,7 +181,7 @@ namespace Dialog.Services
                 var affectedRows = await this._postRepository.SaveChangesAsync();
                 if (affectedRows != 1)
                 {
-                    throw new InvalidOperationException("Post not saved in database!");
+                    throw new InvalidOperationException(string.Format(GlobalConstants.EntityNotSaved, "Post"));
                 }
             }
             catch (Exception e)
@@ -202,14 +203,14 @@ namespace Dialog.Services
                 authorName == null ||
                 message == null)
             {
-                result.Error = "Invalid data!";
+                result.Error = GlobalConstants.ModelIsEmpty;
                 return result;
             }
 
             var post = await this._postRepository.GetByIdAsync(postId);
             if (post == null)
             {
-                result.Error = "Post not found!";
+                result.Error = string.Format(GlobalConstants.EntityIsNotFound, "Post");
                 return result;
             }
 
@@ -228,7 +229,7 @@ namespace Dialog.Services
                 var affectedRows = await this._commentRepository.SaveChangesAsync();
                 if (affectedRows != 1)
                 {
-                    throw new InvalidOperationException("Comment not saved in database!");
+                    throw new InvalidOperationException(string.Format(GlobalConstants.EntityNotSaved, "Comment"));
                 }
             }
             catch (Exception e)
@@ -297,7 +298,7 @@ namespace Dialog.Services
                 model.Content == null ||
                 model.Title == null)
             {
-                result.Error = "Invalid post data!";
+                result.Error = GlobalConstants.ModelIsEmpty;
                 return result;
             }
 
@@ -305,7 +306,7 @@ namespace Dialog.Services
 
             if (post == null)
             {
-                result.Error = "Invalid post id!";
+                result.Error = string.Format(GlobalConstants.EntityIsNotFound, "Post");
                 return result;
             }
 

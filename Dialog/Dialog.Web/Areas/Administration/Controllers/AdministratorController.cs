@@ -46,7 +46,7 @@ namespace Dialog.Web.Areas.Administration.Controllers
                 Questions = this._questionService.All<AdministrationQuestionViewModel>(),
             };
 
-            return this.View(model);
+            return View(model);
         }
 
         public IActionResult Blog()
@@ -56,7 +56,7 @@ namespace Dialog.Web.Areas.Administration.Controllers
                 Entities = this._blogService.All<PostSummaryViewModel>(),
                 Authors = this._userService.AuthorWithPostsCount<AuthorsWithPostsCountViewModel>()
             };
-            return this.View(model);
+            return View(model);
         }
 
         public IActionResult News()
@@ -66,7 +66,7 @@ namespace Dialog.Web.Areas.Administration.Controllers
                 Entities = this._newsService.All<NewsSummaryViewModel>(),
                 Authors = this._userService.AuthorWithNewsCount<AuthorsWithNewsCountViewModel>()
             };
-            return this.View(model);
+            return View(model);
         }
 
         public IActionResult Users()
@@ -80,47 +80,47 @@ namespace Dialog.Web.Areas.Administration.Controllers
                 Users = users
             };
 
-            return this.View(model);
+            return View(model);
         }
 
         public async Task<IActionResult> ApproveUser(string id)
         {
             await this._userService.Approve(id);
 
-            return this.RedirectToAction(nameof(Users));
+            return RedirectToAction(nameof(Users));
         }
 
         public async Task<IActionResult> PromoteUser(string id)
         {
             await this._userService.Promote(id);
 
-            return this.RedirectToAction(nameof(Users));
+            return RedirectToAction(nameof(Users));
         }
 
         public async Task<IActionResult> DemoteUser(string id)
         {
             await this._userService.Demote(id);
 
-            return this.RedirectToAction(nameof(Users));
+            return RedirectToAction(nameof(Users));
         }
 
         public async Task<IActionResult> DeleteUser(string id)
         {
             await this._userService.DeleteUser(id);
 
-            return this.RedirectToAction(nameof(Users));
+            return RedirectToAction(nameof(Users));
         }
 
         public IActionResult Gallery()
         {
-            return this.View();
+            return View();
         }
 
         public IActionResult Settings()
         {
             var settings = this._settingsService.All<AdministrationSettingsViewModel>();
 
-            return this.View(settings);
+            return View(settings);
         }
 
         [HttpPost]
@@ -128,24 +128,24 @@ namespace Dialog.Web.Areas.Administration.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction(nameof(Settings));
+                return RedirectToAction(nameof(Settings));
             }
 
             this._settingsService.Change(name, value);
 
-            return this.RedirectToAction(nameof(Settings));
+            return RedirectToAction(nameof(Settings));
         }
 
         public async Task<IActionResult> AnswerQuestion(string id)
         {
             if (id == null)
             {
-                return this.RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
 
             await this._questionService.Answer(id);
 
-            return this.RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
     }
 }
