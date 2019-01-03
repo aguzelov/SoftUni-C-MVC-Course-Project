@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Linq;
+using Dialog.Common;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 
@@ -13,10 +14,12 @@ namespace Dialog.Web.Infrastructure.Filters
     public class ContactInfoActionFilter : Attribute, IActionFilter
     {
         private readonly IConfiguration _configuration;
+        private readonly ISettingsService _settingsService;
 
-        public ContactInfoActionFilter(IConfiguration configuration)
+        public ContactInfoActionFilter(IConfiguration configuration, ISettingsService settingsService)
         {
             this._configuration = configuration;
+            this._settingsService = settingsService;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -32,9 +35,9 @@ namespace Dialog.Web.Infrastructure.Filters
                 {
                     var model = new ContactViewModel
                     {
-                        Address = "Sredec, 8300, Lilqna Dimitrova 1 str.",
-                        Phone = "0888072710",
-                        Email = "aguzelov@outlook.com",
+                        Address = this._settingsService.Get(GlobalConstants.ApplicationAddressKey),
+                        Phone = this._settingsService.Get(GlobalConstants.ApplicationPhoneKey),
+                        Email = this._settingsService.Get(GlobalConstants.ApplicationEmailKey),
                         HereAppId = this._configuration.GetSection("HEREMap").GetSection("AppID").Value,
                         HereAppCode = this._configuration.GetSection("HEREMap").GetSection("AppCode").Value
                     };

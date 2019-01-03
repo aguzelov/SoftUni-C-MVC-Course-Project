@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 
@@ -55,6 +56,116 @@ namespace Dialog.Data.Seeding
             SeedNews(dbContext, userManager);
 
             SeedChatRoom(dbContext);
+
+            SeedSettings(dbContext);
+        }
+
+        private static void SeedSettings(ApplicationDbContext dbContext)
+        {
+            if (!dbContext.Settings.Any())
+            {
+                var appNameSetting = new Setting()
+                {
+                    Name = GlobalConstants.ApplicationNameKey,
+                    Value = "Dialog",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appNameSetting);
+
+                var appSloganSetting = new Setting()
+                {
+                    Name = GlobalConstants.ApplicationSloganKey,
+                    Value = "Doing Nothing is Not An Option of Our Life",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appSloganSetting);
+
+                var appAddressSetting = new Setting()
+                {
+                    Name = GlobalConstants.ApplicationAddressKey,
+                    Value = "Sredec, 8300, Lilqna Dimitrova 1 str.",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appAddressSetting);
+
+                var appPhoneSetting = new Setting()
+                {
+                    Name = GlobalConstants.ApplicationPhoneKey,
+                    Value = "0888072710",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appPhoneSetting);
+
+                var appEmailSetting = new Setting()
+                {
+                    Name = GlobalConstants.ApplicationEmailKey,
+                    Value = "aguzelov@outlook.com",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appEmailSetting);
+
+                var appAboutFooterSetting = new Setting()
+                {
+                    Name = GlobalConstants.ApplicationAboutFooterKey,
+                    Value =
+                        "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appAboutFooterSetting);
+
+                var indexPostsCountSetting = new Setting()
+                {
+                    Name = GlobalConstants.IndexPostsCountKey,
+                    Value = "4",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(indexPostsCountSetting);
+
+                var indexNewsCountSetting = new Setting()
+                {
+                    Name = GlobalConstants.IndexNewsCountKey,
+                    Value = "4",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(indexNewsCountSetting);
+
+                var recentPostsCountSetting = new Setting()
+                {
+                    Name = GlobalConstants.RecentPostsCountKey,
+                    Value = "3",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(recentPostsCountSetting);
+
+                var defaultPostImageSetting = new Setting()
+                {
+                    Name = GlobalConstants.DefaultPostImageKey,
+                    Value = "https://res.cloudinary.com/aguzelov/image/upload/v1544704888/pesdqm5dvy1qpcnnvin5.jpg",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(defaultPostImageSetting);
+
+                var defaultNewsImageSetting = new Setting()
+                {
+                    Name = GlobalConstants.DefaultNewsImageKey,
+                    Value = "https://res.cloudinary.com/aguzelov/image/upload/v1544704896/rdc9ezgkeratzej3otlx.jpg",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(defaultNewsImageSetting);
+
+                dbContext.SaveChanges();
+            }
         }
 
         private static void SeedChatRoom(ApplicationDbContext dbContext)

@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Dialog</title>
+    <title>@ViewData[GlobalConstants.ApplicationNameKey]</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -71,7 +71,7 @@
                     <div class="col-md-3">
                         <div class="ftco-footer-widget mb-4">
                             <h2 class="ftco-heading-2">About Us</h2>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                            <p>@ViewData[GlobalConstants.ApplicationAboutFooterKey]</p>
                             <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                                 <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                                 <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
@@ -92,7 +92,7 @@
                                 <li><a asp-controller="Home" asp-action="Index" class="py-2 d-block">Home</a></li>
                                 <li><a asp-controller="Home" asp-action="About" class="py-2 d-block">About</a></li>
                                 <li><a asp-area="Blog" asp-controller="Blog" asp-action="All" class="py-2 d-block">Blog</a></li>
-                                <li><a href="/Home/Gallery" class="py-2 d-block">Gallery</a></li>
+                                <li><a asp-area="Gallery" asp-controller="Gallery" asp-action="Index" class="py-2 d-block">Gallery</a></li>
                                 <li><a asp-area="News" asp-controller="News" asp-action="All" class="py-2 d-block">News</a></li>
                                 <li><a asp-controller="Home" asp-action="Contact" class="py-2 d-block">Contact</a></li>
                             </ul>
@@ -103,9 +103,9 @@
                             <h2 class="ftco-heading-2">Have a Questions?</h2>
                             <div class="block-23 mb-3">
                                 <ul>
-                                    <li><span class="icon icon-map-marker"></span><span class="text">8300, Sredets, str. Lilqna Dimitrova 1</span></li>
-                                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">+359 888 07 27 10</span></a></li>
-                                    <li><a href="mailto:someone@example.com" target="_top"><span class="icon icon-envelope"></span><span class="text">aguzelov@outlook.com</span></a></li>
+                                    <li><span class="icon icon-map-marker"></span><span class="text">@ViewData[GlobalConstants.ApplicationAddressKey]</span></li>
+                                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">@ViewData[GlobalConstants.ApplicationPhoneKey]</span></a></li>
+                                    <li><a href="mailto:someone@example.com" target="_top"><span class="icon icon-envelope"></span><span class="text">@ViewData[GlobalConstants.ApplicationEmailKey]</span></a></li>
                                 </ul>
                             </div>
                         </div>

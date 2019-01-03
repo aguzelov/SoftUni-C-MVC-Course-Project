@@ -27,6 +27,7 @@ namespace Dialog.Services.Tests
         protected IQueryable<Image> ImageData { get; set; }
         protected IQueryable<News> NewsData { get; set; }
         protected IQueryable<Question> QuestionsData { get; set; }
+        protected IQueryable<Setting> SettingsData { get; set; }
 
         public BaseTests()
         {
@@ -321,6 +322,27 @@ namespace Dialog.Services.Tests
             GenerateNewsData();
 
             GenerateQuestionData();
+
+            GenerateSettingsData();
+        }
+
+        private void GenerateSettingsData()
+        {
+            var settings = new List<Setting>();
+
+            for (int i = 0; i < DataCount; i++)
+            {
+                var setting = new Setting
+                {
+                    Name = "Name" + i,
+                    Value = "Value" + i,
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                settings.Add(setting);
+            }
+
+            this.SettingsData = settings.AsQueryable();
         }
 
         private void GenerateQuestionData()

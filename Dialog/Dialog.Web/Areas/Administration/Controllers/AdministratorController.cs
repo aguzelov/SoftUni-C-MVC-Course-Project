@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using Dialog.ViewModels.Question;
+using Dialog.ViewModels.Settings;
 
 namespace Dialog.Web.Areas.Administration.Controllers
 {
@@ -22,14 +23,16 @@ namespace Dialog.Web.Areas.Administration.Controllers
         private readonly INewsService _newsService;
         private readonly IGalleryService _galleryService;
         private readonly IQuestionService _questionService;
+        private readonly ISettingsService _settingsService;
 
-        public AdministratorController(IBlogService blogService, IUserService userService, INewsService newsService, IGalleryService galleryService, IQuestionService questionService)
+        public AdministratorController(IBlogService blogService, IUserService userService, INewsService newsService, IGalleryService galleryService, IQuestionService questionService, ISettingsService settingsService)
         {
             this._blogService = blogService;
             this._userService = userService;
             this._newsService = newsService;
             this._galleryService = galleryService;
             this._questionService = questionService;
+            this._settingsService = settingsService;
         }
 
         public IActionResult Index()
@@ -111,6 +114,26 @@ namespace Dialog.Web.Areas.Administration.Controllers
         public IActionResult Gallery()
         {
             return this.View();
+        }
+
+        public IActionResult Settings()
+        {
+            var settings = this._settingsService.All<AdministrationSettingsViewModel>();
+
+            return this.View(settings);
+        }
+
+        [HttpPost]
+        public IActionResult ChangeSetting(string name, string value)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(Settings));
+            }
+
+            this._settingsService.Change(name, value);
+
+            return this.RedirectToAction(nameof(Settings));
         }
 
         public async Task<IActionResult> AnswerQuestion(string id)
