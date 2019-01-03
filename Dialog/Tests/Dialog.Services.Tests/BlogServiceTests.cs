@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common;
 
 namespace Dialog.Services.Tests
 {
@@ -84,8 +85,8 @@ namespace Dialog.Services.Tests
             this.Service = new BlogService(postRepository.Object, null, null, null);
 
             //Act
-            var posts = this.Service.RecentBlogs<RecentBlogViewModel>().ToList();
             var expectingCount = 3;
+            var posts = this.Service.RecentBlogs<RecentBlogViewModel>(expectingCount).ToList();
 
             //Assert
             Assert.AreEqual(expectingCount, posts.Count);

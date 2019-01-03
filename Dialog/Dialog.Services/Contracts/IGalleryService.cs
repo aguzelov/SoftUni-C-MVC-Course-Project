@@ -15,6 +15,6 @@ namespace Dialog.Services.Contracts
 
         Image GetDefaultImage(ImageDefaultType type);
 
-        IQueryable<T> RecentImages<T>();
+        IQueryable<T> RecentImages<T>(int count);
     }
 }

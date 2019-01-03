@@ -5,16 +5,19 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Linq;
+using Dialog.Common;
 
 namespace Dialog.Web.Infrastructure.Filters
 {
     public class RecentBlogsActionFilter : Attribute, IActionFilter, IPageFilter
     {
         private readonly IBlogService blogService;
+        private readonly ISettingsService _settingsService;
 
-        public RecentBlogsActionFilter(IBlogService blogService)
+        public RecentBlogsActionFilter(IBlogService blogService, ISettingsService settingsService)
         {
             this.blogService = blogService;
+            this._settingsService = settingsService;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -25,7 +28,9 @@ namespace Dialog.Web.Infrastructure.Filters
         {
             if (context.Controller is Controller controller)
             {
-                var recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>();
+                var recentBlogs = this.blogService
+                    .RecentBlogs<RecentBlogViewModel>(
+                        int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey)));
 
                 controller.ViewData["RecentBlogs"] = recentBlogs.ToList();
             }
@@ -45,7 +50,8 @@ namespace Dialog.Web.Infrastructure.Filters
             if (result is PageResult pageResult)
             {
                 var viewData = pageResult.ViewData;
-                var recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>();
+                var recentBlogs = this.blogService.RecentBlogs<RecentBlogViewModel>(
+                    int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey)));
 
                 viewData["RecentBlogs"] = recentBlogs.ToList();
             }

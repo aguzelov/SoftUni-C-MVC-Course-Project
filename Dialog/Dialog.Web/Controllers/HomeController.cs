@@ -34,14 +34,21 @@ namespace Dialog.Web.Controllers
 
         public IActionResult Index()
         {
-            this.ViewData["Title"] = "Dialog";
-
             var model = new IndexViewModel<PostSummaryViewModel, ImageViewModel, NewsSummaryViewModel>
             {
                 Slogan = this._settingsService.Get(GlobalConstants.ApplicationSloganKey),
-                Posts = this._blogService.RecentBlogs<PostSummaryViewModel>().ToList(),
-                News = this._newsService.RecentNews<NewsSummaryViewModel>().ToList(),
-                Images = this._galleryService.RecentImages<ImageViewModel>().ToList()
+                Posts = this._blogService
+                    .RecentBlogs<PostSummaryViewModel>(
+                        int.Parse(this._settingsService.Get(GlobalConstants.IndexPostsCountKey)))
+                    .ToList(),
+                News = this._newsService
+                    .RecentNews<NewsSummaryViewModel>(
+                        int.Parse(this._settingsService.Get(GlobalConstants.IndexNewsCountKey)))
+                    .ToList(),
+                Images = this._galleryService
+                    .RecentImages<ImageViewModel>(
+                        int.Parse(this._settingsService.Get(GlobalConstants.IndexImagesCountKey)))
+                    .ToList()
             };
 
             return View(model);
@@ -49,8 +56,6 @@ namespace Dialog.Web.Controllers
 
         public IActionResult About()
         {
-            this.ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 

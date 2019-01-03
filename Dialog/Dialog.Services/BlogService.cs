@@ -74,11 +74,11 @@ namespace Dialog.Services
             return posts;
         }
 
-        public IQueryable<T> RecentBlogs<T>()
+        public IQueryable<T> RecentBlogs<T>(int count)
         {
             var blogs = this._postRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
-                .Take(4)
+                .Take(count)
                 .To<T>();
 
             return blogs;

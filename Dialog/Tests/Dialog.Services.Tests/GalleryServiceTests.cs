@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dialog.Common;
 using Dialog.ViewModels.Gallery;
 using NUnit.Framework.Interfaces;
 
@@ -63,8 +64,8 @@ namespace Dialog.Services.Tests
             this.Service = new GalleryService(null, imageRepository.Object);
 
             //Act
-            var expectedCount = this.ImageData.Count();
-            var result = this.Service.RecentImages<ImageViewModel>().ToList();
+            var expectedCount = 8;
+            var result = this.Service.RecentImages<ImageViewModel>(expectedCount).ToList();
 
             //Assert
             Assert.That(result.Count() <= 8);

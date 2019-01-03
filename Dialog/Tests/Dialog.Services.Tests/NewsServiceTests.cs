@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dialog.Common;
 
 namespace Dialog.Services.Tests
 {
@@ -86,8 +87,8 @@ namespace Dialog.Services.Tests
             this.Service = new NewsService(newsRepository.Object, null, null);
 
             //Act
-            var news = this.Service.RecentNews<NewsSummaryViewModel>().ToList();
             var expectingCount = 4;
+            var news = this.Service.RecentNews<NewsSummaryViewModel>(expectingCount).ToList();
 
             //Assert
             Assert.AreEqual(expectingCount, news.Count);

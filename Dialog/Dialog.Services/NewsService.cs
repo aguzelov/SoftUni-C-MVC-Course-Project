@@ -167,11 +167,11 @@ namespace Dialog.Services
             return model;
         }
 
-        public IQueryable<T> RecentNews<T>()
+        public IQueryable<T> RecentNews<T>(int count)
         {
             var news = this._newsRepository.All()
                 .OrderByDescending(n => n.CreatedOn)
-                .Take(4)
+                .Take(count)
                 .To<T>();
 
             return news;

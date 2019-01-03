@@ -18,7 +18,7 @@ namespace Dialog.Services.Contracts
 
         Task<IServiceResult> AddComment(string postId, string authorName, string message);
 
-        IQueryable<T> RecentBlogs<T>();
+        IQueryable<T> RecentBlogs<T>(int count);
 
         AllViewModel<PostSummaryViewModel> Search(string searchTerm);
 

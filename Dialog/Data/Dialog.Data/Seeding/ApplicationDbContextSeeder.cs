@@ -146,6 +146,15 @@ namespace Dialog.Data.Seeding
 
                 dbContext.Settings.Add(recentPostsCountSetting);
 
+                var recentImagesCountSetting = new Setting()
+                {
+                    Name = GlobalConstants.IndexImagesCountKey,
+                    Value = "8",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(recentImagesCountSetting);
+
                 var defaultPostImageSetting = new Setting()
                 {
                     Name = GlobalConstants.DefaultPostImageKey,

@@ -14,6 +14,7 @@
 
         public static readonly string IndexPostsCountKey = "IndexPostsCount";
         public static readonly string IndexNewsCountKey = "IndexNewsCount";
+        public static readonly string IndexImagesCountKey = "IndexImagesCount";
         public static readonly string RecentPostsCountKey = "RecentPostsCount";
 
         public static readonly string DefaultPostImageKey = "DefaultPostImage";

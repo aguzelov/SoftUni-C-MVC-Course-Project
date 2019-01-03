@@ -80,11 +80,11 @@ namespace Dialog.Services
             return images.FirstOrDefault();
         }
 
-        public IQueryable<T> RecentImages<T>()
+        public IQueryable<T> RecentImages<T>(int count)
         {
             var news = this._imageRepository.All()
                 .OrderByDescending(p => p.CreatedOn)
-                .Take(8)
+                .Take(count)
                 .To<T>();
 
             return news;
