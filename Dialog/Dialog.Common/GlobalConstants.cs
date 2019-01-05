@@ -1,4 +1,6 @@
-﻿namespace Dialog.Common
+﻿using System.Collections.Generic;
+
+namespace Dialog.Common
 {
     public static class GlobalConstants
     {
@@ -23,6 +25,8 @@
         public static readonly string DefaultPostImageKey = "DefaultPostImage";
         public static readonly string DefaultNewsImageKey = "DefaultNewsImage";
 
+        public static readonly string AllEntitiesPageSizeKey = "AllEntitiesPageSize";
+
         //CacheKeys
 
         public static readonly string ContactInfo = "ContactInfo";
@@ -33,6 +37,11 @@
         public static readonly int ApplicationInfoCacheExpirationDay = 10;
         public static readonly string IndexRecentEntities = "IndexRecentEntities";
         public static readonly int IndexRecentEntitiesCacheExpirationDay = 1;
+
+        //Chat
+
+        public static readonly string GlobalChatRoomName = "Global";
+        public static readonly int RecentMessageCount = 10;
 
         //
 

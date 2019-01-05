@@ -17,15 +17,19 @@ namespace Dialog.Web.Areas.Blog.Controllers
     {
         private readonly IBlogService _blogService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ISettingsService _settingsService;
 
-        public BlogController(IBlogService blogService, UserManager<ApplicationUser> userManager)
+        public BlogController(IBlogService blogService, UserManager<ApplicationUser> userManager, ISettingsService settingsService)
         {
             this._blogService = blogService;
             this._userManager = userManager;
+            this._settingsService = settingsService;
         }
 
         public IActionResult All(AllViewModel<PostSummaryViewModel> model)
         {
+            model.PageSize = int.Parse(this._settingsService.Get(GlobalConstants.AllEntitiesPageSizeKey));
+
             model = this._blogService.All(model);
 
             return View(model);

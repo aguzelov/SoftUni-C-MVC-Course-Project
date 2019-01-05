@@ -5,9 +5,11 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Dialog.Web.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
         private readonly IChatService _chatService;
@@ -28,7 +30,7 @@ namespace Dialog.Web.Hubs
                 throw new ArgumentException(result.Error);
             }
 
-            await this.Clients.OthersInGroup(chatName).SendAsync("ReceiveMessage", chatName, name, message);
+            await this.Clients.OthersInGroup(chatName).SendAsync("ReceiveMessage", chatName, name, message, DateTime.UtcNow);
             //await this.Clients.Others.SendAsync("ReceiveMessage", name, message);
         }
 

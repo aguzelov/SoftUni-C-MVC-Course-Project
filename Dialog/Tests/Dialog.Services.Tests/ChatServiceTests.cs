@@ -23,7 +23,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.ChatData);
 
-            this.Service = new ChatService(null, chatRepository.Object, null);
+            this.Service = new ChatService(null, chatRepository.Object, null, null);
 
             var expectedChat = this.ChatData.First();
 
@@ -43,7 +43,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.ChatData);
 
-            this.Service = new ChatService(null, chatRepository.Object, null);
+            this.Service = new ChatService(null, chatRepository.Object, null, null);
 
             //Act
             var expectedErrorMsg = string.Format(GlobalConstants.InvalidParameter, "chatName");
@@ -63,7 +63,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.ChatLineData);
 
-            this.Service = new ChatService(chatLineRepository.Object, null, null);
+            this.Service = new ChatService(chatLineRepository.Object, null, null, null);
 
             //Act
             var searchedChat = this.ChatData.First();
@@ -84,7 +84,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.ChatLineData);
 
-            this.Service = new ChatService(chatLineRepository.Object, null, null);
+            this.Service = new ChatService(chatLineRepository.Object, null, null, null);
 
             //Act
 
@@ -103,7 +103,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.UserData);
 
-            this.Service = new ChatService(null, null, userRepository.Object);
+            this.Service = new ChatService(null, null, userRepository.Object, null);
 
             //Act
             var user = this.UserData.First();
@@ -124,7 +124,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.UserData);
 
-            this.Service = new ChatService(null, null, userRepository.Object);
+            this.Service = new ChatService(null, null, userRepository.Object, null);
 
             //Act
             var expectedErrorMsg = string.Format(GlobalConstants.InvalidParameter, "username");
@@ -159,7 +159,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.UserData);
 
-            this.Service = new ChatService(chatLineRepository.Object, chatRepository.Object, userRepository.Object);
+            this.Service = new ChatService(chatLineRepository.Object, chatRepository.Object, userRepository.Object, null);
 
             //Act
             var chatToAdd = this.ChatData.First();
@@ -184,7 +184,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.UserData);
 
-            this.Service = new ChatService(null, null, userRepository.Object);
+            this.Service = new ChatService(null, null, userRepository.Object, null);
 
             //Act
             var chatToAdd = this.ChatData.First();
@@ -214,7 +214,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.UserData);
 
-            this.Service = new ChatService(null, chatRepository.Object, userRepository.Object);
+            this.Service = new ChatService(null, chatRepository.Object, userRepository.Object, null);
 
             //Act
             var userToAdd = this.UserData.First();
@@ -244,7 +244,7 @@ namespace Dialog.Services.Tests
                 .Setup(c => c.All())
                 .Returns(this.UserData);
 
-            this.Service = new ChatService(null, chatRepository.Object, userRepository.Object);
+            this.Service = new ChatService(null, chatRepository.Object, userRepository.Object, null);
 
             //Act
             var chatToAdd = this.ChatData.First();

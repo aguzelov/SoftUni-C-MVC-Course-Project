@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Dialog.Common;
 
 namespace Dialog.ViewModels.Base
 {
     public class AllViewModel<T>
     {
-        public int PageSize { get; } = 3;
+        public int PageSize { get; set; } = 3;
 
         public int CurrentPage { get; set; } = 1;
 

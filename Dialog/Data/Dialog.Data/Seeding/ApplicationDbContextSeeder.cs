@@ -119,6 +119,15 @@ namespace Dialog.Data.Seeding
 
                 dbContext.Settings.Add(appAboutFooterSetting);
 
+                var allEntitiesPageSizeSetting = new Setting()
+                {
+                    Name = GlobalConstants.AllEntitiesPageSizeKey,
+                    Value = "3",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(allEntitiesPageSizeSetting);
+
                 var indexPostsCountSetting = new Setting()
                 {
                     Name = GlobalConstants.IndexPostsCountKey,
@@ -196,14 +205,14 @@ namespace Dialog.Data.Seeding
                     userChats.Add(userChat);
                 }
 
-                var globarChatRoom = new Chat
+                var globalChatRoom = new Chat
                 {
-                    Name = "Global",
+                    Name = GlobalConstants.GlobalChatRoomName,
                     CreatedOn = DateTime.UtcNow,
                     UserChats = userChats
                 };
 
-                dbContext.Chats.Add(globarChatRoom);
+                dbContext.Chats.Add(globalChatRoom);
 
                 dbContext.SaveChanges();
             }

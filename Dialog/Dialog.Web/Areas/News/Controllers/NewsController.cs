@@ -15,15 +15,19 @@ namespace Dialog.Web.Areas.News.Controllers
     {
         private readonly INewsService _newsService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ISettingsService _settingsService;
 
-        public NewsController(INewsService newsService, UserManager<ApplicationUser> userManager)
+        public NewsController(INewsService newsService, UserManager<ApplicationUser> userManager, ISettingsService settingsService)
         {
             this._newsService = newsService;
             this._userManager = userManager;
+            this._settingsService = settingsService;
         }
 
         public IActionResult All(AllViewModel<NewsSummaryViewModel> model)
         {
+            model.PageSize = int.Parse(this._settingsService.Get(GlobalConstants.AllEntitiesPageSizeKey));
+
             model = this._newsService.All(model);
 
             return View(model);

@@ -2,7 +2,7 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
-connection.on("ReceiveMessage", function (chatName, user, message) {
+connection.on("ReceiveMessage", function (chatName, user, message, date) {
     var currentOpenChatName = document.getElementById("chatInput").value;
 
     if (currentOpenChatName !== chatName) {
@@ -14,10 +14,10 @@ connection.on("ReceiveMessage", function (chatName, user, message) {
     var incomingDiv = document.createElement("div");
     incomingDiv.className = "incoming_msg";
 
-    var imgDiv = document.createElement("div");
-    imgDiv.className = "incoming_msg_img";
-    imgDiv.innerHTML = '<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">';
-    incomingDiv.appendChild(imgDiv);
+    //var imgDiv = document.createElement("div");
+    //imgDiv.className = "incoming_msg_img";
+    //imgDiv.innerHTML = '<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">';
+    //incomingDiv.appendChild(imgDiv);
 
     var receivedDiv = document.createElement("div");
     receivedDiv.className = "received_msg";
@@ -31,8 +31,7 @@ connection.on("ReceiveMessage", function (chatName, user, message) {
     var span = document.createElement("span");
     span.className = "time_date";
 
-    var date = new Date();
-    span.innerHTML = date.toLocaleString() + " | " + user;
+    span.innerHTML = convertUTCDateToLocalDate(new Date(date)) + " | " + user;
     receivedMsgDiv.appendChild(span);
 
     receivedDiv.appendChild(receivedMsgDiv);
@@ -82,10 +81,10 @@ connection.on("GetRecentMessages", function (messages) {
             var incomingDiv = document.createElement("div");
             incomingDiv.className = "incoming_msg";
 
-            var imgDiv = document.createElement("div");
-            imgDiv.className = "incoming_msg_img";
-            imgDiv.innerHTML = '<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">';
-            incomingDiv.appendChild(imgDiv);
+            //var imgDiv = document.createElement("div");
+            //imgDiv.className = "incoming_msg_img";
+            //imgDiv.innerHTML = '<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">';
+            //incomingDiv.appendChild(imgDiv);
 
             var receivedDiv = document.createElement("div");
             receivedDiv.className = "received_msg";
@@ -116,6 +115,8 @@ connection.on("GetUserChats", function (chats) {
 
     var chatsJson = JSON.parse(chats);
 
+    document.getElementById("inbox_chats").innerHTML = "";
+
     chatsJson.forEach((item) => {
         var chatId = item["ChatId"];
         var chatName = item["ChatName"];
@@ -131,22 +132,28 @@ connection.on("GetUserChats", function (chats) {
         var chatPeopleDiv = document.createElement("div");
         chatPeopleDiv.className = "chat_people";
 
-        var imgDiv = document.createElement("div");
-        imgDiv.className = "chat_img";
-        imgDiv.innerHTML = '<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">';
-        chatPeopleDiv.appendChild(imgDiv);
-
         var chatIbDiv = document.createElement("div");
         chatIbDiv.className = "chat_ib";
 
         var h = document.createElement("h");
         h.innerHTML = chatName;
         chatIbDiv.appendChild(h);
-        var p = document.createElement("p");
-        p.innerHTML = chatId;
-        chatIbDiv.appendChild(p);;
 
         chatPeopleDiv.appendChild(chatIbDiv);
+
+        var closeDiv = document.createElement("div");
+        closeDiv.className = "chat_img";
+
+        var closeButton = document.createElement("button");
+        closeButton.innerHTML = "&times;";
+
+        closeButton.onclick = function () {
+            removeFromChat(chatName, user);
+        };
+
+        closeDiv.appendChild(closeButton);
+        chatPeopleDiv.appendChild(closeDiv);
+
         chatListDiv.appendChild(chatPeopleDiv);
 
         document.getElementById("inbox_chats").appendChild(chatListDiv);
@@ -158,10 +165,10 @@ connection.start().catch(function (err) {
 });
 
 window.onload = function () {
-    var user = document.getElementById("userInput").value;
-    connection.invoke("SendUserChats", user).catch(function (err) {
-        return console.error(err.toString());
-    });
+    //var user = document.getElementById("userInput").value;
+    //connection.invoke("SendUserChats", user).catch(function (err) {
+    //    return console.error(err.toString());
+    //});
 
     getRecentMessages("Global");
 };

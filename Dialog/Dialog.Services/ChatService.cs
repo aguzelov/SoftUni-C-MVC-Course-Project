@@ -15,12 +15,14 @@ namespace Dialog.Services
         private readonly IRepository<ChatLine> _chatLineRepository;
         private readonly IDeletableEntityRepository<Chat> _chatRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> _userRepository;
+        private readonly IDeletableEntityRepository<UserChat> _userChatsRepository;
 
-        public ChatService(IRepository<ChatLine> chatLineRepository, IDeletableEntityRepository<Chat> chatRepository, IDeletableEntityRepository<ApplicationUser> userRepository)
+        public ChatService(IRepository<ChatLine> chatLineRepository, IDeletableEntityRepository<Chat> chatRepository, IDeletableEntityRepository<ApplicationUser> userRepository, IDeletableEntityRepository<UserChat> userChatsRepository)
         {
             this._chatLineRepository = chatLineRepository;
             this._chatRepository = chatRepository;
             this._userRepository = userRepository;
+            this._userChatsRepository = userChatsRepository;
         }
 
         public async Task<IServiceResult> AddMessage(string chatName, string username, string message)
@@ -69,10 +71,15 @@ namespace Dialog.Services
 
         public IQueryable<T> RecentMessage<T>(string chatName)
         {
+            var messageCount = this._chatLineRepository
+                .All()
+                .Count(m => m.Chat.Name == chatName);
+
             var message = this._chatLineRepository.All()
                 .Where(m => m.Chat.Name == chatName)
                 .OrderBy(m => m.CreatedOn)
-                .Take(4)
+                .Skip(messageCount - GlobalConstants.RecentMessageCount)
+                .Take(GlobalConstants.RecentMessageCount)
                 .To<T>();
 
             return message;
@@ -83,6 +90,7 @@ namespace Dialog.Services
             var chats = this._userRepository.All()
                 .FirstOrDefault(u => u.UserName == username)?
                 .UserChats
+                .Where(c => !c.IsDeleted)
                 .Select(uc => uc.Chat)
                 .AsQueryable()
                 .To<T>();
