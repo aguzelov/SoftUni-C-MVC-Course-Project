@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using Dialog.Common;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Dialog.Web
 {
@@ -95,6 +96,8 @@ namespace Dialog.Web
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
+
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IUserService, UserService>();
@@ -117,7 +120,6 @@ namespace Dialog.Web
         {
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
-            // Seed data on application startup
             app.UseDatabaseMigration(env);
 
             if (env.IsDevelopment())

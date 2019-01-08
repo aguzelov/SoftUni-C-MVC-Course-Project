@@ -85,7 +85,7 @@ namespace Dialog.Data.Seeding
                 var appAddressSetting = new Setting()
                 {
                     Name = GlobalConstants.ApplicationAddressKey,
-                    Value = "Sredec, 8300, Lilqna Dimitrova 1 str.",
+                    Value = "гр. Средец, 8300, ул. Лиляна Димитрова 1.",
                     CreatedOn = DateTime.UtcNow
                 };
 
@@ -131,7 +131,7 @@ namespace Dialog.Data.Seeding
                 {
                     Name = GlobalConstants.ApplicationAboutFooterKey,
                     Value =
-                        "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
+                        "Сдружение с нестопанска цел \"Диалог\"",
                     CreatedOn = DateTime.UtcNow
                 };
 

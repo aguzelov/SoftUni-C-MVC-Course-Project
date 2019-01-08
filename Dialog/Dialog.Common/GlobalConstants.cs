@@ -43,6 +43,10 @@ namespace Dialog.Common
         public static readonly string GlobalChatRoomName = "Global";
         public static readonly int RecentMessageCount = 10;
 
+        //SendGrid
+        public static readonly string SendEmailFromName = "SendEmailFromName";
+
+        public static readonly string SendEmailFromAdress = "SendEmailFromAdress";
         //
 
         public static readonly string ModelStateServiceResult = "Result";

@@ -33,7 +33,7 @@ namespace Dialog.Services
         {
             var images = new List<Image>();
 
-            if (files.Any())
+            if (files != null && files.Any())
             {
                 foreach (var file in files)
                 {
