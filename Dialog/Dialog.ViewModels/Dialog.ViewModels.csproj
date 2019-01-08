@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Data\Dialog.Data.Models\Dialog.Data.Models.csproj" />
     <ProjectReference Include="..\Dialog.Common\Dialog.Common.csproj" />
   </ItemGroup>

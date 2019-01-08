@@ -3,8 +3,9 @@
 @{
     var partialModel = new JumbotronPartialViewModel
     {
-        Title = "Contact Us",
+        Title = "За връзка с нас",
         Current = "Contact",
+        CurrentName = "Контакти",
         HasSearchField = false,
         ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704896/jwebhaqkfcubfboaktko.jpg"
     };
@@ -19,41 +20,41 @@
         <div class="row d-flex mb-5 contact-info">
 
             <div class="col-md-12 mb-4">
-                <h2 class="h4">Contact Information</h2>
+                <h2 class="h4">Информация за връзка с нас</h2>
             </div>
             <div class="w-100"></div>
             <div class="col-md-4">
-                <p><span>Address:</span> @info.Address </p>
+                <p><span>Адрес:</span> @info.Address </p>
             </div>
             <div class="col-md-4 text-center">
-                <p><span>Phone:</span> <a href="tel://@(info.Phone)">@info.Phone</a></p>
+                <p><span>Телефон:</span> <a href="tel://@(info.Phone)">@info.Phone</a></p>
             </div>
             <div class="col-md-4 text-right">
-                <p><span>Email:</span> <a href="mailto:@(info.Email)">@info.Email</a></p>
+                <p><span>Имейл:</span> <a href="mailto:@(info.Email)">@info.Email</a></p>
             </div>
         </div>
         <div class="row block-9">
             <div class="col-md-6 pr-md-5">
-                <h4 class="mb-4">Do you have any questions?</h4>
+                <h4 class="mb-4">Имате ли въпроси?</h4>
                 <form asp-area="" asp-controller="Home" asp-action="Contact" method="post">
                     <div class="form-group">
-                        <input class="form-control" asp-for="@Model.Name" placeholder="Your @(nameof(Model.Name))">
+                        <input class="form-control" asp-for="@Model.Name" placeholder="Вашето име">
                         <span asp-validation-for="@Model.Name"></span>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" asp-for="@Model.Email" placeholder="Your @(nameof(Model.Email))">
+                        <input class="form-control" asp-for="@Model.Email" placeholder="Вашият имейл">
                         <span asp-validation-for="@Model.Email"></span>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" asp-for="@Model.Subject" placeholder="@(nameof(Model.Subject))">
+                        <input class="form-control" asp-for="@Model.Subject" placeholder="Заглавие">
                         <span asp-validation-for="@Model.Subject"></span>
                     </div>
                     <div class="form-group">
-                        <textarea cols="30" rows="5" class="form-control" asp-for="@Model.Message" placeholder="@(nameof(Model.Message))"></textarea>
+                        <textarea cols="30" rows="5" class="form-control" asp-for="@Model.Message" placeholder="Вашият въпрос"></textarea>
                         <span asp-validation-for="@Model.Message"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
+                        <input type="submit" value="Задай" class="btn btn-primary py-3 px-5">
                     </div>
                 </form>
             </div>

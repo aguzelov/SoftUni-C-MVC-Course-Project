@@ -38,9 +38,7 @@ namespace Dialog.Web.Controllers
 
         public IActionResult Index()
         {
-            IndexViewModel<PostSummaryViewModel, ImageViewModel, NewsSummaryViewModel> model;
-
-            if (!this._memoryCache.TryGetValue(GlobalConstants.IndexRecentEntities, out model))
+            if (!this._memoryCache.TryGetValue(GlobalConstants.IndexRecentEntities, out IndexViewModel<PostSummaryViewModel, ImageViewModel, NewsSummaryViewModel> model))
             {
                 model = new IndexViewModel<PostSummaryViewModel, ImageViewModel, NewsSummaryViewModel>
                 {

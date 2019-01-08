@@ -3419,7 +3419,7 @@ input[type="button"].btn-block {
     color: #212529;
     text-align: left;
     list-style: none;
-    background-color: #fff;
+    background-color: transparent;
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 0.25rem;
@@ -10201,10 +10201,12 @@ h1, h2, h3, h4, h5,
 
 .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu {
     border: none;
-    background: #fff;
+    background-color: transparent;
+    margin-top: -30px;
+    margin-left: 0px;
     -webkit-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
     -moz-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
-    box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
+    /*box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);*/
 }
 
 .ftco-navbar-light .navbar-nav > .nav-item.ftco-seperator {

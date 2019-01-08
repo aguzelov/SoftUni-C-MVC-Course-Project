@@ -94,6 +94,9 @@ namespace Dialog.Services.Tests
                     return question;
                 });
 
+            questionRepository.Setup(q => q.SaveChangesAsync())
+                .ReturnsAsync(1);
+
             this.Service = new QuestionService(questionRepository.Object);
 
             //Act
@@ -103,6 +106,7 @@ namespace Dialog.Services.Tests
 
             //Assert
             Assert.IsTrue(expectedquestion.IsAnswered);
+            questionRepository.Verify(mock => mock.SaveChangesAsync(), Times.Once);
         }
 
         [Test]

@@ -5,7 +5,9 @@
     {
         Title = Model.Title,
         Parent = "News",
+        ParentName = "Новини",
         Current = "News Details",
+        CurrentName = "Новина",
         HasSearchField = false,
         ImageUri = Model.Image?.SecureUri ?? "https://res.cloudinary.com/aguzelov/image/upload/v1544704896/rdc9ezgkeratzej3otlx.jpg"
     };
@@ -21,7 +23,7 @@
 
                 <div class="about-author d-flex p-2 bg-light">
                     <div class="desc align-self-md-center">
-                        <h3>by @Model.Author.UserName</h3>
+                        <h5>от @Model.Author.UserName</h5>
                     </div>
                     @if (User.Identity.Name == Model.Author.UserName)
                     {
@@ -38,13 +40,13 @@
                     <form asp-area="News" asp-controller="News" asp-action="Search" method="get" class="search-form">
                         <div class="form-group">
                             <span class="icon fa fa-search"></span>
-                            <input type="text" name="searchTerm" class="form-control" placeholder="Type a keyword and hit enter">
+                            <input type="text" name="searchTerm" class="form-control" placeholder="Търсене">
                         </div>
                     </form>
                 </div>
 
                 <div class="sidebar-box ftco-animate">
-                    <h3>Recent Blog</h3>
+                    <h3>Последни постове</h3>
                     <partial name="~/Views/Shared/_RecentBlogPartial.cshtml" />
                 </div>
             </div>

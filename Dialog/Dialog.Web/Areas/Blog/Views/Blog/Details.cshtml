@@ -5,7 +5,9 @@
     {
         Title = Model.Title,
         Parent = "Blog",
+        ParentName = "Блог",
         Current = "Blog Details",
+        CurrentName = "Пост",
         HasSearchField = false,
         ImageUri = Model.Image?.SecureUri ?? "https://res.cloudinary.com/aguzelov/image/upload/v1544704888/pesdqm5dvy1qpcnnvin5.jpg"
     };
@@ -21,7 +23,7 @@
 
                 <div class="about-author d-flex justify-content-between p-2 bg-light">
                     <div class="desc align-self-md-center ">
-                        <h3>by @Model.Author.UserName</h3>
+                        <h5>от @Model.Author.UserName</h5>
                     </div>
                     @if (User.Identity.Name == Model.Author.UserName)
                     {
@@ -30,9 +32,16 @@
                         </div>
                     }
                 </div>
-
+                @{
+                    var commentsCount = Model.Comments.Count();
+                    var commentsText = "Коментари";
+                    if (commentsCount == 1)
+                    {
+                        commentsText = "Коментар";
+                    }
+                }
                 <div class="pt-5 mt-5">
-                    <h3 class="mb-5">@Model.Comments.Count() Comments</h3>
+                    <h4 class="mb-5">@commentsCount @commentsText</h4>
                     <ul class="comment-list">
                         @foreach (var comment in Model.Comments)
                         {
@@ -51,8 +60,8 @@
                     </ul>
 
                     <div class="comment-form-wrap pt-5">
-                        <h3 class="mb-5">Leave a comment</h3>
-                        <form asp-area="Blog" asp-controller="Blog" asp-action="AddComment" method="post" class="p-5 bg-light">
+                        <h4 class="mb-5">Оставете коментар</h4>
+                        <form asp-area="Blog" asp-controller="Blog" asp-action="AddComment" method="post" class="p-1 ">
                             <input type="text" name="PostId" value="@Model.Id" hidden />
 
                             <div class="form-group">
@@ -84,12 +93,12 @@
                     <form asp-area="Blog" asp-controller="Blog" asp-action="Search" method="get" class="search-form">
                         <div class="form-group">
                             <span class="icon fa fa-search"></span>
-                            <input type="text" name="searchTerm" class="form-control" placeholder="Type a keyword and hit enter">
+                            <input type="text" name="searchTerm" class="form-control" placeholder="Търсене">
                         </div>
                     </form>
                 </div>
                 <div class="sidebar-box ftco-animate">
-                    <h3>Recent Blog</h3>
+                    <h3>Последни постове</h3>
                     <partial name="~/Views/Shared/_RecentBlogPartial.cshtml" />
                 </div>
             </div>

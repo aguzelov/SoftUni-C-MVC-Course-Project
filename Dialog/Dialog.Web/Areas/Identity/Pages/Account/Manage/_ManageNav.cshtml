@@ -3,12 +3,12 @@
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <div class="list-group">
-    <a class="list-group-item list-group-item-action @ManageNavPages.IndexNavClass(ViewContext)" asp-page="./Index">Profile</a>
-    <a class="list-group-item list-group-item-action @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a>
+    <a class="list-group-item list-group-item-action @ManageNavPages.IndexNavClass(ViewContext)" asp-page="./Index">Профил</a>
+    <a class="list-group-item list-group-item-action @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Парола</a>
     @if (hasExternalLogins)
     {
-        <a class="list-group-item list-group-item-action @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login" asp-page="./ExternalLogins">External logins</a>
+        <a class="list-group-item list-group-item-action @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login" asp-page="./ExternalLogins">Вход с външни данни </a>
     }
-    <a class="list-group-item list-group-item-action @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" asp-page="./TwoFactorAuthentication">Two-factor authentication</a>
-    <a class="list-group-item list-group-item-action @ManageNavPages.PersonalDataNavClass(ViewContext)" asp-page="./PersonalData">Personal data</a>
+    @*<a class="list-group-item list-group-item-action @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" asp-page="./TwoFactorAuthentication">Удостоверяване</a>*@
+    <a class="list-group-item list-group-item-action @ManageNavPages.PersonalDataNavClass(ViewContext)" asp-page="./PersonalData">Лични данни</a>
 </div>

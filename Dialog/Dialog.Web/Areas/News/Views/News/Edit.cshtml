@@ -3,9 +3,11 @@
 @{
     var partialModel = new JumbotronPartialViewModel
     {
-        Title = "Edit News",
+        Title = "Редактиране на новина",
         Current = "Edit",
+        CurrentName = "Редактиране",
         Parent = "News",
+        ParentName = "Новини",
         ImageUri = Model.Image?.SecureUri
     };
 
@@ -16,31 +18,28 @@
 <section class="ftco-section">
     <div class="container">
         <div class="col-md-12 pr-md-1">
-            <h2 class="mb-4">Edit News</h2>
+            <h2 class="mb-4">Редактиране на новина</h2>
             <form asp-area="News" asp-controller="News" asp-action="Edit" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label asp-for="@Model.Title"></label>
+                    <label asp-for="@Model.Title">Заглавие</label>
                     <input class="form-control" asp-for="@Model.Title" />
                     <span asp-validation-for="Title"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.Content"></label>
+                    <label asp-for="@Model.Content">Съдържание</label>
                     <textarea rows="10" asp-for="@Model.Content" class="form-control"></textarea>
                     <span asp-validation-for="@Model.Content"></span>
                 </div>
                 <div class="form-group">
                     <div class="input-group input-group-sm">
                         <input asp-for="@Model.UploadImages" class="custom-file-input form-control-sm">
-                        <label asp-for="@Model.UploadImages" class="custom-file-label">Choose image or use old one</label>
+                        <label asp-for="@Model.UploadImages" class="custom-file-label">Избери изображение</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
+                    <input type="submit" value="Редактирай" class="btn btn-primary py-3 px-5">
                 </div>
             </form>
         </div>
     </div>
 </section>
-
-@*<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
-    <script>tinymce.init({ selector: 'textarea' });</script>*@

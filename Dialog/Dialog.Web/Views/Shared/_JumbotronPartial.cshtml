@@ -1,4 +1,4 @@
-@model JumbotronPartialViewModel
+﻿@model JumbotronPartialViewModel
 
 <div class="hero-wrap" style="background-image: url('@Model.ImageUri');" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
@@ -7,16 +7,16 @@
             <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
                 <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
                     <span class="mr-2">
-                        <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
                     </span>
                     @if (!string.IsNullOrEmpty(Model.Parent))
                     {
                         <span class="mr-2">
-                            <a asp-area=@Model.Parent asp-controller=@Model.Parent asp-action="All">@Model.Parent</a>
+                            <a asp-area=@Model.Parent asp-controller=@Model.Parent asp-action="All">@Model.ParentName</a>
                         </span>
                     }
 
-                    <span>@Model.Current</span>
+                    <span>@Model.CurrentName</span>
                 </p>
                 <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">@Model.Title</h1>
             </div>
@@ -26,7 +26,7 @@
                     <form asp-area=@Model.Current asp-controller=@Model.Current asp-action="Search" method="get">
                         <div class="form-group">
                             <span class="icon fa fa-search"></span>
-                            <input type="text" class="form-control" name="searchTerm" placeholder="Type a keyword and hit enter" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                            <input type="text" class="form-control" name="searchTerm" placeholder="Търсене" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
                         </div>
                     </form>
                 </div>

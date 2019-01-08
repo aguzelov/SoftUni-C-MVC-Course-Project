@@ -51,9 +51,9 @@ namespace Dialog.Data.Seeding
 
             SeedRoles(roleManager);
 
-            SeedPosts(dbContext, userManager);
+            //SeedPosts(dbContext, userManager);
 
-            SeedNews(dbContext, userManager);
+            //SeedNews(dbContext, userManager);
 
             SeedChatRoom(dbContext);
 
@@ -76,7 +76,7 @@ namespace Dialog.Data.Seeding
                 var appSloganSetting = new Setting()
                 {
                     Name = GlobalConstants.ApplicationSloganKey,
-                    Value = "Doing Nothing is Not An Option of Our Life",
+                    Value = "Големият ти шанс може да бъде точно там, където си сега",
                     CreatedOn = DateTime.UtcNow
                 };
 
@@ -108,6 +108,24 @@ namespace Dialog.Data.Seeding
                 };
 
                 dbContext.Settings.Add(appEmailSetting);
+
+                var appEmailSendAddressSetting = new Setting()
+                {
+                    Name = GlobalConstants.SendEmailFromAdress,
+                    Value = "aguzelov@outlook.com",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appEmailSendAddressSetting);
+
+                var appEmailSendNameSetting = new Setting()
+                {
+                    Name = GlobalConstants.SendEmailFromName,
+                    Value = "Dialog",
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                dbContext.Settings.Add(appEmailSendNameSetting);
 
                 var appAboutFooterSetting = new Setting()
                 {

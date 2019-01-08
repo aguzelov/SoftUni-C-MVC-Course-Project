@@ -149,10 +149,10 @@ namespace Dialog.Web.Areas.Identity.Pages.Account.Manage
                 protocol: this.Request.Scheme);
             await this._emailSender.SendEmailAsync(
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                "Потвърдете Вашият емайл адрес",
+                $"Моля потвърдете като кликните на следния адрес: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Натисни тук</a>.");
 
-            this.StatusMessage = "Verification email sent. Please check your email.";
+            this.StatusMessage = "Беше изпрате имайл за потвърждение. Моля проверете Вашата поща.";
             return RedirectToPage();
         }
     }
