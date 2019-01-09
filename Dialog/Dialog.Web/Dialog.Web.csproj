@@ -4,11 +4,14 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
 	<AspNetCoreHostringModel>InProcess</AspNetCoreHostringModel>
     <UserSecretsId>aspnet-Dialog.Web-E33A3229-9A88-4021-9217-551D33CAD9D9</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/60dc7bb1-64dc-4101-8b68-70d793cb1d4d/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Dialog.Web</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/60dc7bb1-64dc-4101-8b68-70d793cb1d4d/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Dialog.Web</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="CloudinaryDotNet" Version="1.6.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
@@ -74,6 +77,10 @@
     <Content Update="Views\Shared\_RecentBlogPartial.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>
