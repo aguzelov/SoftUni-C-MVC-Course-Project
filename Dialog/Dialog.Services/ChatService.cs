@@ -75,10 +75,14 @@ namespace Dialog.Services
                 .All()
                 .Count(m => m.Chat.Name == chatName);
 
+            var skipCount = messageCount <= GlobalConstants.RecentMessageCount
+                ? 0
+                : messageCount - GlobalConstants.RecentMessageCount;
+
             var message = this._chatLineRepository.All()
                 .Where(m => m.Chat.Name == chatName)
                 .OrderBy(m => m.CreatedOn)
-                .Skip(messageCount - GlobalConstants.RecentMessageCount)
+                .Skip(skipCount)
                 .Take(GlobalConstants.RecentMessageCount)
                 .To<T>();
 

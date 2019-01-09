@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Dialog.Common;
 
 namespace Dialog.Web.Hubs
 {
@@ -23,7 +24,7 @@ namespace Dialog.Web.Hubs
         {
             string name = this.Context.User.Identity.Name;
 
-            var result = await this._chatService.AddMessage(chatName, username: name, message: message);
+            var result = await this._chatService.AddMessage(chatName, name, message);
 
             if (!result.Success)
             {
@@ -74,11 +75,7 @@ namespace Dialog.Web.Hubs
         {
             string name = this.Context.User.Identity.Name;
 
-            var chats = this._chatService.UserChats<UserChatsViewModel>(name).ToList();
-            foreach (var chat in chats)
-            {
-                await AddToGroup(chat.ChatName);
-            }
+            await AddToGroup(GlobalConstants.GlobalChatRoomName);
 
             await base.OnConnectedAsync();
         }
@@ -87,11 +84,7 @@ namespace Dialog.Web.Hubs
         {
             string name = this.Context.User.Identity.Name;
 
-            var chats = this._chatService.UserChats<UserChatsViewModel>(name).ToList();
-            foreach (var chat in chats)
-            {
-                await RemoveFromGroup(chat.ChatName);
-            }
+            await RemoveFromGroup(GlobalConstants.GlobalChatRoomName);
 
             await base.OnDisconnectedAsync(exception);
         }

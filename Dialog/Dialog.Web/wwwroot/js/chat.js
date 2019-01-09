@@ -1,6 +1,7 @@
 ﻿"use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+var connectionStatus = false;
 
 connection.on("ReceiveMessage", function (chatName, user, message, date) {
     var currentOpenChatName = document.getElementById("chatInput").value;
@@ -170,6 +171,16 @@ window.onload = function () {
     //    return console.error(err.toString());
     //});
 
+    //if (!connectionStatus) {
+    //    connection.start()
+    //        .then(function () {
+    //            connectionStatus = true;
+    //        })
+    //        .catch(function (err) {
+    //            return console.error(err.toString());
+    //        });
+    //}
+
     getRecentMessages("Global");
 };
 
@@ -223,10 +234,8 @@ document.getElementById("messageInput")
     });
 
 function getRecentMessages(chatName) {
-    connection.start().then(() => {
-        connection.invoke("SendRecentMessages", chatName).catch(function (err) {
-            return console.error(err.toString());
-        })
+    connection.invoke("SendRecentMessages", chatName).catch(function (err) {
+        return console.error(err.toString());
     });
 
     scrollToBottom("messagesList");

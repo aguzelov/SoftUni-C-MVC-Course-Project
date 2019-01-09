@@ -78,7 +78,10 @@ namespace Dialog.Web
             }
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSignalR();
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+            });
 
             var account = new Account(
                 this._configuration.GetSection("Cloudinary").GetSection("CloudName").Value,
