@@ -19,7 +19,13 @@
         <div class="row">
             <div class="col-md-8 ftco-animate">
                 <h2 class="mb-3">@Model.Title</h2>
-                <p>@Model.Content</p>
+                @{
+                    var para = Model.Content.Split(Environment.NewLine);
+                }
+                @foreach (var p in para)
+                {
+                    <p style="text-indent: 2em;">@p</p>
+                }
 
                 <div class="about-author d-flex justify-content-between p-2 bg-light">
                     <div class="desc align-self-md-center">
