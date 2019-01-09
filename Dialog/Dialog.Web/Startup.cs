@@ -49,7 +49,7 @@ namespace Dialog.Web
             {
                 options.UseLazyLoadingProxies();
                 options.UseSqlServer(
-                    this._configuration.GetConnectionString("DefaultConnection"));
+                    this._configuration.GetConnectionString("DevelepmentConnection"));
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

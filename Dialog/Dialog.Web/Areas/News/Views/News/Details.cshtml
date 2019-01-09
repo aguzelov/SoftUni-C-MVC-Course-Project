@@ -21,14 +21,14 @@
                 <h2 class="mb-3">@Model.Title</h2>
                 <p>@Model.Content</p>
 
-                <div class="about-author d-flex p-2 bg-light">
+                <div class="about-author d-flex justify-content-between p-2 bg-light">
                     <div class="desc align-self-md-center">
                         <h5>от @Model.Author.UserName</h5>
                     </div>
                     @if (User.Identity.Name == Model.Author.UserName)
                     {
                         <div class="desc align-self-md-center ">
-                            <a asp-area="News" asp-controller="News" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                            <a asp-area="Blog" asp-controller="Blog" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
                         </div>
                     }
                 </div>
