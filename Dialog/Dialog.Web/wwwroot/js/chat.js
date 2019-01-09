@@ -223,8 +223,10 @@ document.getElementById("messageInput")
     });
 
 function getRecentMessages(chatName) {
-    connection.invoke("SendRecentMessages", chatName).catch(function (err) {
-        return console.error(err.toString());
+    connection.start().then(() => {
+        connection.invoke("SendRecentMessages", chatName).catch(function (err) {
+            return console.error(err.toString());
+        })
     });
 
     scrollToBottom("messagesList");
