@@ -58,7 +58,7 @@ namespace Dialog.Web.Controllers
                 };
 
                 var cacheOption = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.IndexRecentEntitiesCacheExpirationDay));
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(GlobalConstants.IndexRecentEntitiesCacheExpirationDay));
 
                 this._memoryCache.Set(GlobalConstants.IndexRecentEntities, model, cacheOption);
             }

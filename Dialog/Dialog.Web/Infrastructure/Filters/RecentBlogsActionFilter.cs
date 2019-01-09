@@ -41,7 +41,7 @@ namespace Dialog.Web.Infrastructure.Filters
                             int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey))).ToList();
 
                     var cacheOptions = new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.RecentBlogCacheExpirationDay));
+                        .SetAbsoluteExpiration(TimeSpan.FromHours(GlobalConstants.RecentBlogCacheExpirationDay));
 
                     this._memoryCache.Set(GlobalConstants.RecentBlogPost, recentBlogs, cacheOptions);
                 }
@@ -73,7 +73,7 @@ namespace Dialog.Web.Infrastructure.Filters
                         int.Parse(this._settingsService.Get(GlobalConstants.RecentPostsCountKey))).ToList();
 
                     var cacheOptions = new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.RecentBlogCacheExpirationDay));
+                        .SetAbsoluteExpiration(TimeSpan.FromHours(GlobalConstants.RecentBlogCacheExpirationDay));
 
                     this._memoryCache.Set(GlobalConstants.RecentBlogPost, recentBlogs, cacheOptions);
                 }

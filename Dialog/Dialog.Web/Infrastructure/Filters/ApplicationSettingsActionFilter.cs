@@ -41,7 +41,7 @@ namespace Dialog.Web.Infrastructure.Filters
                     };
 
                     var cacheOption = new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.ApplicationInfoCacheExpirationDay));
+                        .SetAbsoluteExpiration(TimeSpan.FromHours(GlobalConstants.ApplicationInfoCacheExpirationDay));
 
                     this._memoryCache.Set(GlobalConstants.ApplicationInfoCacheExpirationDay, model, cacheOption);
                 }
@@ -77,7 +77,7 @@ namespace Dialog.Web.Infrastructure.Filters
                     };
 
                     var cacheOption = new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromDays(GlobalConstants.ApplicationInfoCacheExpirationDay));
+                        .SetAbsoluteExpiration(TimeSpan.FromHours(GlobalConstants.ApplicationInfoCacheExpirationDay));
 
                     this._memoryCache.Set(GlobalConstants.ApplicationInfoCacheExpirationDay, model, cacheOption);
                 }

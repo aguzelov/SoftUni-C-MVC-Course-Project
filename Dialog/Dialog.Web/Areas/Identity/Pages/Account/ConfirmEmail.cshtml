@@ -1,9 +1,30 @@
 ﻿@page
 @model ConfirmEmailModel
 
-<h2>Потвърждаване на емайл адрес</h2>
-<div>
-    <p>
-        Благодаря, че потвърдихте имайл адреса си.
-    </p>
-</div>
+@{
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = "Потвърждаване на емайл адрес",
+        Current = "Confirmation",
+        CurrentName = "Потвърждение",
+        HasSearchField = false,
+        ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704896/jwebhaqkfcubfboaktko.jpg"
+    };
+}
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-md-4">
+                <section>
+                    <div>
+                        <p>
+                            Благодаря, че потвърдихте имайл адреса си.
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

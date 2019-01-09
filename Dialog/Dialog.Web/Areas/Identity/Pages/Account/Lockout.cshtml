@@ -1,10 +1,29 @@
 ﻿@page
 @model LockoutModel
-@{
-    ViewData["Title"] = "Locked out";
-}
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+@{
+    var partialModel = new JumbotronPartialViewModel
+    {
+        Title = "Заключен",
+        Current = "Lockout",
+        CurrentName = "",
+        HasSearchField = false,
+        ImageUri = "https://res.cloudinary.com/aguzelov/image/upload/v1544704896/jwebhaqkfcubfboaktko.jpg"
+    };
+}
+<partial name="~/Views/Shared/_JumbotronPartial.cshtml" model=@partialModel />
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-md-4">
+                <section>
+                    <h1 class="text-danger">Заключен</h1>
+                    <p class="text-danger">
+                        Този потребител беше заключен, моля пробвайте пак по-късно.
+                    </p>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

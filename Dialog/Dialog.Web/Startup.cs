@@ -49,7 +49,7 @@ namespace Dialog.Web
             {
                 options.UseLazyLoadingProxies();
                 options.UseSqlServer(
-                    this._configuration.GetConnectionString("DevelepmentConnection"));
+                    this._configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -66,6 +66,8 @@ namespace Dialog.Web
            .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMemoryCache();
+
+            services.AddResponseCompression();
 
             services.AddMvc(options =>
             {
@@ -134,6 +136,9 @@ namespace Dialog.Web
             }
 
             app.UseHttpsRedirection();
+
+            app.UseResponseCompression();
+
             app.UseStaticFiles();
 
             app.UseCookiePolicy();
