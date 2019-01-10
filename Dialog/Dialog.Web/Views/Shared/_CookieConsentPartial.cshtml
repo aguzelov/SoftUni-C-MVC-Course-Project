@@ -8,33 +8,31 @@
 
 @if (showBanner)
 {
-    <nav id="cookieConsent" class="navbar navbar-default navbar-fixed-top" role="alert">
+
+    <div class="fixed-bottom" data-scrollax-parent="true" id="cookieConsent" style=" background-color: rgba(0, 0, 0, 0.9);">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cookieConsent .navbar-collapse">
-                    <span class="sr-only">Toggle cookie consent banner</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <span class="navbar-brand"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></span>
-            </div>
-            <div class="collapse navbar-collapse">
-                <p class="navbar-text">
-                    Use this space to summarize your privacy and cookie use policy.
-                </p>
-                <div class="navbar-right">
-                    <a asp-controller="Home" asp-action="Privacy" class="btn btn-info navbar-btn">Научи повече</a>
-                    <button type="button" class="btn btn-default navbar-btn" data-cookie-string="@cookieString">Приемам</button>
+            <div class="d-flex justify-content-between ">
+                <div class="desc align-self-md-center ">
+                    <p class="text-info">
+                        Този сайт използва бисквитки, за да ви даде възможно най-добрия опит. Приемайки, вие се съгласявате, че можем да запазваме „бисквитки“ на вашето устройство. Бисквитките са малки текстови файлове, поставени на вашето устройство, които помнят вашите предпочитания и някои подробности за вашето посещение. Бисквитките ни не събират лична информация. За повече информация и подробности, моля, прочетете <span><a asp-controller="Home" asp-action="Privacy">политиката</a></span> ни за поверителност и бисквитки.
+                    </p>
+                </div>
+                <div class="desc align-self-md-center ">
+
+                    <a class="btn btn-outline-info  text-info" data-cookie-string="@cookieString">
+                        Приемам
+                    </a>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+
     <script>
+
         (function () {
-            document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
+            document.querySelector("#cookieConsent a[data-cookie-string]").addEventListener("click", function (el) {
                 document.cookie = el.target.dataset.cookieString;
-                document.querySelector("#cookieConsent").classList.add("hidden");
+                document.querySelector("#cookieConsent").style.display = "none";
             }, false);
         })();
     </script>
