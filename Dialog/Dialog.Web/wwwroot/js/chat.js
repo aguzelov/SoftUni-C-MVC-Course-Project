@@ -3,7 +3,7 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 var connectionStatus = false;
 
-connection.on("ReceiveMessage", function (chatName, user, message, date) {
+connection.on("ReceiveMessage", function (chatName, user, message) {
     var currentOpenChatName = document.getElementById("chatInput").value;
 
     if (currentOpenChatName !== chatName) {
@@ -32,7 +32,7 @@ connection.on("ReceiveMessage", function (chatName, user, message, date) {
     var span = document.createElement("span");
     span.className = "time_date";
 
-    span.innerHTML = convertUTCDateToLocalDate(new Date(date)) + " | " + user;
+    span.innerHTML = convertUTCDateToLocalDate(new Date(), false) + " | " + user;
     receivedMsgDiv.appendChild(span);
 
     receivedDiv.appendChild(receivedMsgDiv);
@@ -55,7 +55,7 @@ connection.on("GetRecentMessages", function (messages) {
         var text = item["Text"];
         var datetime = item["CreatedOn"];
 
-        var date = convertUTCDateToLocalDate(new Date(datetime));
+        var date = convertUTCDateToLocalDate(new Date(datetime), true);
 
         //var date = item["Date"];
 
@@ -161,7 +161,7 @@ connection.on("GetUserChats", function (chats) {
     });
 });
 
-connection.start().catch(function (err) {
+connection.start().then(function () { connectionStatus = true }).catch(function (err) {
     return console.error(err.toString());
 });
 
@@ -171,17 +171,20 @@ window.onload = function () {
     //    return console.error(err.toString());
     //});
 
-    //if (!connectionStatus) {
-    //    connection.start()
-    //        .then(function () {
-    //            connectionStatus = true;
-    //        })
-    //        .catch(function (err) {
-    //            return console.error(err.toString());
-    //        });
-    //}
+    delay(function () {
+        console.log('Is Connected: ' + connectionStatus);
+        if (!connectionStatus) {
+            connection.start()
+                .then(function () {
+                    connectionStatus = true;
+                })
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+        }
 
-    getRecentMessages("Global");
+        getRecentMessages("Global");
+    }, 1500);
 };
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
@@ -261,19 +264,39 @@ function scrollToBottom(id) {
     messagesList.scrollTop = messagesList.scrollHeight;
 }
 
-function convertUTCDateToLocalDate(date) {
-    var newDate = new Date(date.toString() + " UTC");
+function convertUTCDateToLocalDate(date, needConvert) {
+    var newDate;
+
+    if (needConvert) {
+        newDate = new Date(date.toString() + " UTC");
+    } else {
+        newDate = new Date(date.toString());
+    }
 
     var currentDate = new Date();
 
     var dateString;
 
     if (newDate.getDate() !== currentDate.getDate()) {
-        dateString = newDate.getDate() + "." + (newDate.getMonth() + 1) + "." + newDate.getFullYear() + " " +
-            newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds();
+        dateString = (newDate.getDay() < 10 ? '0' : '') + newDate.getDay() + "." +
+            newDate.getMonth() + 1 + "." +
+            (newDate.getFullYear() < 10 ? '0' : '') + newDate.getFullYear() + " " +
+            (newDate.getHours() < 10 ? '0' : '') + newDate.getHours() + ":" +
+            (newDate.getMinutes() < 10 ? '0' : '') + newDate.getMinutes() + ":" +
+            (newDate.getSeconds() < 10 ? '0' : '') + newDate.getSeconds();
     } else {
-        dateString = newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds();
+        dateString = (newDate.getHours() < 10 ? '0' : '') + newDate.getHours() + ":" +
+            (newDate.getMinutes() < 10 ? '0' : '') + newDate.getMinutes() + ":" +
+            (newDate.getSeconds() < 10 ? '0' : '') + newDate.getSeconds();
     }
 
     return dateString;
 }
+
+var delay = (function () {
+    var timer = 0;
+    return function (callback, ms) {
+        clearTimeout(timer);
+        timer = setTimeout(callback, ms);
+    };
+})();

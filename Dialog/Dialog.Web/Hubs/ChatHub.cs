@@ -31,7 +31,7 @@ namespace Dialog.Web.Hubs
                 throw new ArgumentException(result.Error);
             }
 
-            await this.Clients.OthersInGroup(chatName).SendAsync("ReceiveMessage", chatName, name, message, DateTime.UtcNow);
+            await this.Clients.OthersInGroup(chatName).SendAsync("ReceiveMessage", chatName, name, message);
             //await this.Clients.Others.SendAsync("ReceiveMessage", name, message);
         }
 
