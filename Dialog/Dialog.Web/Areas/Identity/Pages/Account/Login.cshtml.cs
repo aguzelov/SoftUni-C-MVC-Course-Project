@@ -57,6 +57,8 @@ namespace Dialog.Web.Areas.Identity.Pages.Account
 
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
+            Response.Cookies.Delete(".AspNetCore.Identity.Application");
+
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 

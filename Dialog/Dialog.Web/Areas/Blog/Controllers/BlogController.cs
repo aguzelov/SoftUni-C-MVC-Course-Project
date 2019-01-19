@@ -79,8 +79,6 @@ namespace Dialog.Web.Areas.Blog.Controllers
             return RedirectToAction(nameof(All));
         }
 
-        //TODO : Add Edit Post Action
-
         public async Task<IActionResult> AddComment(CreateCommentViewModel model)
         {
             if (!this.ModelState.IsValid)
